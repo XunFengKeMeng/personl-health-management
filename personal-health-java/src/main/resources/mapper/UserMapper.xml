@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：命名空间，将XML映射文件于Mapper接口绑定。 -->
+<mapper namespace="com.example.health.mapper.UserMapper">
+    <!--  parameterType：指定需要传入数据库的数据类型（因为MyBatis的反射机制，其实不强制需求写）  -->
+    <insert id="insert" parameterType="com.example.health.pojo.entity.UserDO">
+        INSERT INTO user(user_account,
+                         user_name,
+                         user_password,
+                         user_email,
+                         user_role,
+                         is_active,
+                         user_create_time)
+        VALUES(#{userAccount},
+               #{userName},
+               #{userPassword},
+               #{userEmail},
+               #{userRole},
+               #{isActive},
+               #{userCreateTime})
+    </insert>
+
+    <!--  根据ID查询用户是否存在。  -->
+    <!--  resultMap：指定从数据库中提取出来的返回数据类型。  -->
+    <!--  拓展：resultType用途与其一致，但要求字段名与数据库列名一致，比较鸡肋。  -->
+    <select id="getById" resultMap="UserResultMap">
+        SELECT u.*
+        FROM user u
+        <where>
+            <if test="userId != null">
+                AND u.user_id = #{userId}
+            </if>
+        </where>
+
+    </select>
+
+
+    <!-- 查询映射结果 -->
+    <resultMap id="UserResultMap" type="com.example.health.pojo.entity.UserDO">
+        <!-- id标签与result标签的不同点：id标签对应元素会被标记为对象的标识符 -->
+        <id column="user_id" property="userId"/>
+        <result column="user_account" property="userAccount"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_role" property="userRole"/>
+        <result column="is_active" property="active"/>
+        <result column="user_create_time" property="userCreateTime"/>
+    </resultMap>
+</mapper>

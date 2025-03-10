@@ -1,2 +1,15 @@
 server:
   port: 21090
+# MySQL配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # useSSL=false:禁用SSL加密链接，若数据库在公网或需要高安全性，建议启用SSL并配置证书
+    # serverTimezone=GMT%2B8:设置数据库连接的时区为GMT+8（东八区）
+    # allowPublicKeyRetrieval=true:允许客户端从服务器获取公钥
+    url: jdbc:mysql://localhost:3306/personal_health?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password:
+# 指定MyBatis扫描的Mapper XML文件路径，以实现SQL映射
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
