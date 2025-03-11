@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace：命名空间，将XML映射文件于Mapper接口绑定。 -->
 <mapper namespace="com.example.health.mapper.UserMapper">
+    <!--  新增用户信息  -->
     <!--  parameterType：指定需要传入数据库的数据类型（因为MyBatis的反射机制，其实不强制需求写）  -->
-    <insert id="insert" parameterType="com.example.health.pojo.entity.UserDO">
+    <insert id="insertUser" parameterType="com.example.health.pojo.entity.UserDO">
         INSERT INTO user(user_account,
                          user_name,
                          user_password,
@@ -16,19 +17,133 @@
                #{userPassword},
                #{userEmail},
                #{userRole},
-               #{isActive},
+               #{active},
                #{userCreateTime})
     </insert>
 
-    <!--  根据ID查询用户是否存在。  -->
+    <!--  模糊查询用户（分页）  -->
+    <select id="queryUsers" resultMap="UserResultMap">
+        SELECT
+            user_id,
+            user_account,
+            user_name,
+            user_password,
+            user_email,
+            user_role,
+            is_active,
+            user_create_time
+        FROM user u
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                AND u.user_account LIKE concat('%',#{userAccount},'%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.user_name LIKE concat('%',#{userName},'%')
+            </if>
+            <if test="userEmail != null and userEmail != ''">
+                AND u.user_email LIKE concat('%',#{userEmail},'%')
+            </if>
+            <if test="userRole != null">
+                AND u.user_role = #{userRole}
+            </if>
+            <if test="active != null">
+                AND u.is_active = #{active}
+            </if>
+            <if test="startTime != null and endTime != null">
+                AND u.create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        ORDER BY u.id DESC
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+    </select>
+
+    <!--  获取符合分页查询条件的用户记录总数  -->
+    <select id="queryCount" resultType="integer">
+        SELECT COUNT(*)
+        FROM user u
+        <where>
+            <if test="userAccount != null and userAccount != ''">
+                AND u.user_account LIKE concat('%',#{userAccount},'%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.user_name LIKE concat('%',#{userName},'%')
+            </if>
+            <if test="userEmail != null and userEmail != ''">
+                AND u.user_email LIKE concat('%',#{userEmail},'%')
+            </if>
+            <if test="userRole != null">
+                AND u.user_role = #{userRole}
+            </if>
+            <if test="active != null">
+                AND u.is_active = #{active}
+            </if>
+            <if test="startTime != null and endTime != null">
+                AND u.create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <!--  更新用户信息  -->
+    <update id="updateUser" parameterType="com.example.health.pojo.entity.UserDO">
+        UPDATE user
+        <set>
+            <if test="userAccount != null">
+                AND user_account = #{userAccount},
+            </if>
+            <if test="userName != null">
+                AND user_name = #{userName},
+            </if>
+            <if test="userPassword != null">
+                AND user_password = #{userPassword},
+            </if>
+            <if test="userEmail != null">
+                AND user_email = #{userEmail},
+            </if>
+            <if test="userRole != null">
+                AND user_role = #{userRole},
+            </if>
+            <if test="active != null">
+                AND is_active = #{active}
+            </if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+    <!--  根据用户ID,批量删除用户信息  -->
+    <delete id="deleteUsers" parameterType="list">
+        DELETE FROM user WHERE user_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+    <!--  根据ID/用户账号/用户名查询用户  -->
     <!--  resultMap：指定从数据库中提取出来的返回数据类型。  -->
     <!--  拓展：resultType用途与其一致，但要求字段名与数据库列名一致，比较鸡肋。  -->
-    <select id="getById" resultMap="UserResultMap">
-        SELECT u.*
+    <select id="getByCondition" resultMap="UserResultMap">
+        SELECT
+            user_id,
+            user_account,
+            user_name,
+            user_password,
+            user_email,
+            user_role,
+            is_active,
+            user_create_time
         FROM user u
         <where>
             <if test="userId != null">
                 AND u.user_id = #{userId}
+            </if>
+            <if test="userAccount != null and userAccount != ''">
+                AND u.user_account = #{userAccount}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.user_name = #{userName}
             </if>
         </where>
 

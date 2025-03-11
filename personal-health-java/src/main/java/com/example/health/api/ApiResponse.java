@@ -1,8 +1,8 @@
 package com.example.health.api;
 
+import com.example.health.em.HttpStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -51,14 +51,22 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> success() {
-        return new ApiResponse<T>(200, "OK", null);
+        return new ApiResponse<T>(HttpStatusEnum.OK.getHttpStatusCode(), HttpStatusEnum.OK.getHttpStatusDescription(), null);
+    }
+
+    public static <T> ApiResponse<T> success(String msg) {
+        return new ApiResponse<T>(HttpStatusEnum.OK.getHttpStatusCode(), msg, null);
     }
 
     public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<T>(200, "OK", data);
+        return new ApiResponse<T>(HttpStatusEnum.OK.getHttpStatusCode(), HttpStatusEnum.OK.getHttpStatusDescription(), data);
+    }
+
+    public static <T> ApiResponse<T> success(String msg,T data) {
+        return new ApiResponse<T>(HttpStatusEnum.OK.getHttpStatusCode(), msg, data);
     }
 
     public static <T> ApiResponse<T> error(String msg) {
-        return new ApiResponse<T>(404, msg);
+        return new ApiResponse<T>(HttpStatusEnum.BAD_REQUEST.getHttpStatusCode(), msg);
     }
 }

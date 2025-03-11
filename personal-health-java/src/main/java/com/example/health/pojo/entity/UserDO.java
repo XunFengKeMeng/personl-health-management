@@ -47,7 +47,7 @@ public class UserDO {
      * 用户角色（0：普通用户，1：管理员）
      * 默认为普通用户
      */
-    private Boolean userRole;
+    private Integer userRole;
 
     /**
      * 用户账号状态（0：待激活，1：已激活）
