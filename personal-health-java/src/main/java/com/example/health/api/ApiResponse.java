@@ -66,6 +66,18 @@ public class ApiResponse<T> {
         return new ApiResponse<T>(HttpStatusEnum.OK.getHttpStatusCode(), msg, data);
     }
 
+    /**
+     * 分页数据响应
+     *
+     * @param data 列表数据
+     * @param total 总分页数
+     * @return 创建响应
+     * @param <T> VO类
+     */
+    public static <T> ApiResponse<T> success(T data, Integer total) {
+        return new ApiResponse<T>(HttpStatusEnum.OK.getHttpStatusCode(), HttpStatusEnum.OK.getHttpStatusDescription(), data, total);
+    }
+
     public static <T> ApiResponse<T> error(String msg) {
         return new ApiResponse<T>(HttpStatusEnum.BAD_REQUEST.getHttpStatusCode(), msg);
     }

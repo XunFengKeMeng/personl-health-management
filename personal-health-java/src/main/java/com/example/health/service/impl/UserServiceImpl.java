@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author huanghaiming
@@ -35,8 +37,9 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     /**
-     * 用户注册
-     * @param userRegisterDTO 用户注册信息
+     * 用户注册（用户）
+     *
+     * @param userRegisterDTO 用户注册信息（账号、密码、用户名、邮箱）
      * @return 注册结果提示信息
      */
     @Override
@@ -68,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 后台新增用户
+     * 新增用户（管理员）
      *
      * @param userRegisterDTO 管理员输入注册用户信息
      * @return 用户新增响应结果
@@ -106,33 +109,89 @@ public class UserServiceImpl implements UserService {
                 }).orElseGet(() -> ApiResponse.error("用户不存在"));
     }
 
-    @Override
-    public ApiResponse<List<UserDO>> queryUsers(UserQueryDTO userQueryDTO) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<String> updateSelf(UserUpdateDTO userUpdateDTO) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<String> updatePassword(Map<String, String> map) {
-        return null;
-    }
-
-    @Override
-    public ApiResponse<String> updateByAdmin(UserUpdateDTO userUpdateDTO) {
-        return null;
-    }
-
+    /**
+     * 批量删除用户信息（管理员）
+     *
+     * @param ids 若干需删除用户的ID
+     * @return 删除操作响应结果
+     */
     @Override
     public ApiResponse<String> deleteUsers(List<Integer> ids) {
-        return null;
+        userMapper.deleteUsers(ids);
+        return ApiResponse.success("删除成功");
+    }
+
+    /**
+     * 修改用户信息（用户）
+     *
+     * @param userUpdateDTO 修改后的用户数据用户账号、用户名、用户邮箱）
+     * @return 修改操作响应结果
+     */
+    @Override
+    public ApiResponse<String> updateSelf(UserUpdateDTO userUpdateDTO) {
+        UserDO userDO = userMapper.getByCondition(
+                UserDO.builder().userId(userUpdateDTO.getUserId()).build()
+        );
+        BeanUtils.copyProperties(userUpdateDTO, userDO);
+        userMapper.updateUser(userDO);
+        return ApiResponse.success("用户信息修改成功");
+    }
+
+    /**
+     * 修改密码（用户）
+     *
+     * @param map 用户账号及修改后的密码信息
+     * @return 修改操作响应结果
+     */
+    @Override
+    public ApiResponse<String> updatePassword(Map<String, String> map) {
+        String userAccount = map.get("userAccount");
+        String newPassword = map.get("newPassword");
+        // 获取用户原数据
+        UserDO userDO = userMapper.getByCondition(
+                UserDO.builder().userAccount(userAccount).build()
+        );
+        // 修改数据库数据
+        userDO.setUserPassword(newPassword);
+        userMapper.updateUser(userDO);
+        return ApiResponse.success("密码修改成功");
+    }
+
+    /**
+     * 修改用户信息（管理员）
+     * 比用户修改信息多出 用户角色、用户账号激活状态 信息
+     *
+     * @param userUpdateDTO 修改后的用户数据
+     * @return 修改操作响应结果
+     */
+    @Override
+    public ApiResponse<String> updateByAdmin(UserUpdateDTO userUpdateDTO) {
+        return updateSelf(userUpdateDTO);
+    }
+
+
+    /**
+     * 分页+模糊查询用户（管理员）
+     *
+     * @param userQueryDTO 用户模糊查询参数
+     * @return 查询响应结果
+     */
+    @Override
+    public ApiResponse<List<UserVO>> queryUsers(UserQueryDTO userQueryDTO) {
+        List<UserDO> userDOList = userMapper.queryUsers(userQueryDTO);
+        Integer count = userMapper.queryCount(userQueryDTO);
+        List<UserVO> userVOList = new ArrayList<>();
+        for (UserDO userDO : userDOList) {
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(userDO, userVO);
+            userVOList.add(userVO);
+        }
+        return ApiResponse.success(userVOList, count);
     }
 
     /**
      * 根据用户ID查询用户信息
+     *
      * @param userId 用户ID
      * @return 若用户存在则返回用户信息，若不存在则返回error
      */

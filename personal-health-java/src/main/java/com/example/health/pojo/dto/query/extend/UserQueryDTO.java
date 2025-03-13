@@ -42,6 +42,6 @@ public class UserQueryDTO extends QueryDTO {
     /**
      * 用户账号状态（0：可用，1：未激活）
      */
-    private Boolean isActive;
+    private Boolean active;
 
 }

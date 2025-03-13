@@ -53,7 +53,7 @@
                 AND u.create_time BETWEEN #{startTime} AND #{endTime}
             </if>
         </where>
-        ORDER BY u.id DESC
+        ORDER BY u.user_id DESC
         <if test="current != null and size != null">
             LIMIT #{current},#{size}
         </if>
@@ -90,22 +90,22 @@
         UPDATE user
         <set>
             <if test="userAccount != null">
-                AND user_account = #{userAccount},
+                user_account = #{userAccount},
             </if>
-            <if test="userName != null">
-                AND user_name = #{userName},
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
             </if>
-            <if test="userPassword != null">
-                AND user_password = #{userPassword},
+            <if test="userPassword != null and userPassword != ''">
+                user_password = #{userPassword},
             </if>
-            <if test="userEmail != null">
-                AND user_email = #{userEmail},
+            <if test="userEmail != null and userEmail != ''">
+                user_email = #{userEmail},
             </if>
-            <if test="userRole != null">
-                AND user_role = #{userRole},
+            <if test="userRole != null and userRole != ''">
+                user_role = #{userRole},
             </if>
-            <if test="active != null">
-                AND is_active = #{active}
+            <if test="active != null and active != ''">
+                is_active = #{active}
             </if>
         </set>
         WHERE user_id = #{userId}
@@ -146,7 +146,6 @@
                 AND u.user_name = #{userName}
             </if>
         </where>
-
     </select>
 
 
