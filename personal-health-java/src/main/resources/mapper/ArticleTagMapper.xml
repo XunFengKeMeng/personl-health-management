@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.health.mapper.ArticleTagMapper">
+    <!--  新增标签  -->
+    <insert id="saveArticleTag" parameterType="com.example.health.pojo.entity.ArticleTagDO">
+        INSERT INTO health_article_tag(tag_id,
+                                       tag_name)
+        VALUES(#{tagId},
+               #{tagName})
+    </insert>
+
+    <!--  批量删除标签  -->
+    <delete id="deleteArticleTags" parameterType="list">
+        DELETE FROM health_article_tag WHERE tag_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--  更新标签信息  -->
+    <update id="updateArticleTag" parameterType="com.example.health.pojo.entity.ArticleTagDO">
+        UPDATE health_article_tag
+        <set>
+            <if test="tagName != null and tagName != ''">
+                tag_name = #{tagName}
+            </if>
+        </set>
+        WHERE tag_id = #{tagId}
+    </update>
+
+    <!--  模糊查询标签（分页）  -->
+    <select id="queryArticleTags" resultMap="TagResultMap">
+        SELECT tag_id, tag_name
+        FROM health_article_tag t
+        <where>
+            <if test="tag.tagName != null and tag.tagName != ''">
+                t.tag_name LIKE concat('%', #{tag.tagName}, '%')
+            </if>
+        </where>
+        ORDER BY t.tag_id ASC
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+    </select>
+
+    <!--  满足模糊查询条件的标签数  -->
+    <select id="queryCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM health_article_tag t
+        <where>
+            <if test="tagName != null and tagName != ''">
+                t.tag_name LIKE concat('%', #{tagName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!--  根据标签ID/标签名查询  -->
+    <select id="getByCondition" resultMap="TagResultMap">
+        SELECT t.tag_id, t.tag_name
+        FROM health_article_tag t
+        <where>
+            <if test="tagId != null and tagId != ''">
+                AND t.tag_id = #{tagId}
+            </if>
+            <if test="tagName != null and tagName != ''">
+                AND t.tag_name = #{tagName}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询映射结果 -->
+    <resultMap id="TagResultMap" type="com.example.health.pojo.entity.ArticleTagDO">
+        <id column="tag_id" property="tagId"/>
+        <result column="tag_name" property="tagName"/>
+    </resultMap>
+</mapper>

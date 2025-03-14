@@ -1,4 +1,4 @@
-package com.example.health.pojo.entity;
+package com.example.health.pojo.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author huanghaiming
- * @date 2025/3/5 00:36
- * @description: 资讯标签实体类，对应数据库表health_article_tag
+ * @date 2025/3/13 22:57
+ * @description: 健康资讯标签VO
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HealthArticleTagDO {
+public class ArticleTagVO {
     /**
      * 标签ID
      */

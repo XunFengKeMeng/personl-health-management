@@ -18,9 +18,8 @@ public interface UserMapper {
     /**
      * 用户信息新增
      * @param userDO 用户信息
-     * @return 受影响的行数
      */
-    int insertUser(UserDO userDO);
+    void insertUser(UserDO userDO);
 
     /**
      * 模糊查询用户（分页）
@@ -42,9 +41,8 @@ public interface UserMapper {
      * 更新用户信息
      *
      * @param userDO 用户信息
-     * @return 受更新操作影响的行数
      */
-    int updateUser(UserDO userDO);
+    void updateUser(UserDO userDO);
 
     /**
      * 批量删除用户信息

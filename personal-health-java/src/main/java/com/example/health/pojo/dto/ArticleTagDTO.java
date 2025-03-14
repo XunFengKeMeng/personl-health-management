@@ -1,19 +1,19 @@
-package com.example.health.pojo.dto.query.extend;
+package com.example.health.pojo.dto;
 
 import com.example.health.pojo.dto.query.base.QueryDTO;
 import lombok.*;
 
 /**
  * @author huanghaiming
- * @date 2025/3/5 14:49
- * @description: 健康资讯标签查询DTO
+ * @date 2025/3/14 10:04
+ * @description: 健康资讯标签数据传输对象
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HealthArticleTagQueryDTO extends QueryDTO {
+public class ArticleTagDTO extends QueryDTO {
     /**
      * 标签ID
      */
@@ -23,5 +23,4 @@ public class HealthArticleTagQueryDTO extends QueryDTO {
      * 标签名
      */
     private String tagName;
-
 }

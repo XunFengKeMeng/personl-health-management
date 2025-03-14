@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author huanghaiming
@@ -134,7 +133,7 @@ public class UserServiceImpl implements UserService {
         );
         BeanUtils.copyProperties(userUpdateDTO, userDO);
         userMapper.updateUser(userDO);
-        return ApiResponse.success("用户信息修改成功");
+        return ApiResponse.success("修改成功");
     }
 
     /**

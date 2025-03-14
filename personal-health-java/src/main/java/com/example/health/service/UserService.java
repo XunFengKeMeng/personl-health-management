@@ -46,16 +46,16 @@ public interface UserService {
     /**
      * 管理员批量删除用户
      *
-     * @param ids 若干需删除用户的ID
-     * @return 删除结果
+     * @param ids 待删除的用户ID集合
+     * @return 删除操作响应结果
      */
     ApiResponse<String> deleteUsers(List<Integer> ids);
 
     /**
      * 用户更新用户信息
      *
-     * @param userUpdateDTO 修改后的用户数据
-     * @return 更新响应结果
+     * @param userUpdateDTO 修改后的用户信息
+     * @return 更新操作响应结果
      */
     ApiResponse<String> updateSelf(UserUpdateDTO userUpdateDTO);
 
@@ -78,8 +78,8 @@ public interface UserService {
     /**
      * 管理员分页+模糊查询用户
      *
-     * @param userQueryDTO 用户的模糊数据
-     * @return 符合数据要求的若干用户数据
+     * @param userQueryDTO 用户模糊查询参数
+     * @return 符合要求的用户信息列表
      */
     ApiResponse<List<UserVO>> queryUsers(UserQueryDTO userQueryDTO);
 

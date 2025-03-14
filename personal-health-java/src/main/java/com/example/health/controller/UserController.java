@@ -66,7 +66,7 @@ public class UserController {
      * 管理员批量删除用户
      *
      * @param ids 用户ID集合
-     * @return 删除响应结果
+     * @return 删除操作响应结果
      */
     @PostMapping(value = "/deleteUsers")
     @ResponseBody
@@ -114,7 +114,7 @@ public class UserController {
      * 分页+模糊查询用户（管理员）
      *
      * @param userQueryDTO 查询参数
-     * @return 满足参数的查询结果
+     * @return 查询操作响应结果 + 满足查询参数的用户信息列表
      */
 //    @Pager
     @PostMapping(value = "/queryUsers")
