@@ -17,12 +17,12 @@ import java.util.Optional;
 /**
  * @author huanghaiming
  * @date 2025/3/14 10:16
- * @description: 健康资讯服务实现类
+ * @description: 健康资讯标签服务实现类
  */
 @Service
 public class ArticleTagServiceImpl implements ArticleTagService {
     /**
-     * Mapper自动装配
+     * 持久层接口注入
      */
     @Resource
     private ArticleTagMapper articleTagMapper;

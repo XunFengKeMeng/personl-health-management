@@ -1,4 +1,4 @@
-package com.example.health.pojo.entity;
+package com.example.health.pojo.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 
 /**
  * @author huanghaiming
- * @date 2025/3/5 00:35
- * @description: 健康资讯实体类，对应数据库表health_article
+ * @date 2025/3/14 19:52
+ * @description: 健康资讯更新数据传输对象（与DO类一致）
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HealthArticleDO {
+public class HealthArticleDTO {
     /**
      * 健康资讯ID
      */

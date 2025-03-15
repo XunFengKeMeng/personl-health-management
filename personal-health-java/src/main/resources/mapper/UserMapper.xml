@@ -21,6 +21,40 @@
                #{userCreateTime})
     </insert>
 
+    <!--  根据用户ID,批量删除用户信息  -->
+    <delete id="deleteUsers" parameterType="list">
+        DELETE FROM user WHERE user_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--  更新用户信息  -->
+    <update id="updateUser" parameterType="com.example.health.pojo.entity.UserDO">
+        UPDATE user
+        <set>
+            <if test="userAccount != null and userAccount != ''">
+                user_account = #{userAccount}
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName}
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                user_password = #{userPassword}
+            </if>
+            <if test="userEmail != null and userEmail != ''">
+                user_email = #{userEmail}
+            </if>
+            <if test="userRole != null and userRole != ''">
+                user_role = #{userRole}
+            </if>
+            <if test="active != null and active != ''">
+                is_active = #{active}
+            </if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
     <!--  模糊查询用户（分页）  -->
     <select id="queryUsers" resultMap="UserResultMap">
         SELECT
@@ -84,40 +118,6 @@
             </if>
         </where>
     </select>
-
-    <!--  更新用户信息  -->
-    <update id="updateUser" parameterType="com.example.health.pojo.entity.UserDO">
-        UPDATE user
-        <set>
-            <if test="userAccount != null and userAccount != ''">
-                user_account = #{userAccount},
-            </if>
-            <if test="userName != null and userName != ''">
-                user_name = #{userName},
-            </if>
-            <if test="userPassword != null and userPassword != ''">
-                user_password = #{userPassword},
-            </if>
-            <if test="userEmail != null and userEmail != ''">
-                user_email = #{userEmail},
-            </if>
-            <if test="userRole != null and userRole != ''">
-                user_role = #{userRole},
-            </if>
-            <if test="active != null and active != ''">
-                is_active = #{active}
-            </if>
-        </set>
-        WHERE user_id = #{userId}
-    </update>
-
-    <!--  根据用户ID,批量删除用户信息  -->
-    <delete id="deleteUsers" parameterType="list">
-        DELETE FROM user WHERE user_id IN
-        <foreach collection="ids" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
 
     <!--  根据ID/用户账号/用户名查询用户  -->
     <!--  resultMap：指定从数据库中提取出来的返回数据类型。  -->

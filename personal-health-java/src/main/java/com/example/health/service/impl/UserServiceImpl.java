@@ -30,7 +30,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     /**
-     * Mapper自动装配
+     * 持久层接口注入
      */
     @Resource
     private UserMapper userMapper;
@@ -62,8 +62,7 @@ public class UserServiceImpl implements UserService {
                             .userEmail(userRegisterDTO.getUserEmail())
                             .userRole(RoleEnum.USER.getRoleCode())
                             .active(ActiveStatusEnum.INACTIVE.getStatusCode())
-                            .userCreateTime(LocalDateTime.now())
-                            .build();
+                            .userCreateTime(LocalDateTime.now()).build();
                     userMapper.insertUser(user);
                     return ApiResponse.success("注册成功");
         });

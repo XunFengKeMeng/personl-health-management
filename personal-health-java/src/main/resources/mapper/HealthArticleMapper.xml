@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.health.mapper.HealthArticleMapper">
+    <!--  新增健康资讯  -->
+    <insert id="saveArticle" parameterType="com.example.health.pojo.entity.HealthArticleDO">
+        INSERT INTO health_article(health_article_title,
+                                   health_article_content,
+                                   health_article_tag_id,
+                                   health_article_cover,
+                                   health_article_reader_ids,
+                                   is_top,
+                                   health_article_create_time)
+        VALUES(#{healthArticleTitle},
+               #{healthArticleContent},
+               #{healthArticleTagId},
+               #{healthArticleCover},
+               #{healthArticleReaderIds},
+               #{top},
+               #{healthArticleCreateTime})
+    </insert>
+
+    <!--  批量删除健康资讯  -->
+    <delete id="deleteArticles" parameterType="list">
+        DELETE FROM health_article WHERE health_article_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--  更新健康资讯信息  -->
+    <update id="updateArticle" parameterType="com.example.health.pojo.entity.HealthArticleDO">
+        UPDATE health_article
+        <set>
+            <if test="healthArticleTitle != null and healthArticleTitle != ''">
+                health_article_title = #{healthArticleTitle},
+            </if>
+            <if test="healthArticleContent != null and healthArticleContent != ''">
+                health_article_content = #{healthArticleContent},
+            </if>
+            <if test="healthArticleTagId != null and healthArticleTagId != ''">
+                health_article_tag_id = #{healthArticleTagId},
+            </if>
+            <if test="healthArticleCover != null and healthArticleCover != ''">
+                health_article_cover = #{healthArticleCover},
+            </if>
+            <if test="top != null">
+                is_top = #{top},
+            </if>
+            <if test="healthArticleCreateTime != null and healthArticleCreateTime != ''">
+                health_article_create_time = #{healthArticleCreateTime}
+            </if>
+        </set>
+        WHERE health_article_id = #{healthArticleId}
+    </update>
+
+    <!--  分页查询健康资讯  -->
+    <select id="queryArticles" resultMap="ArticleResultMap">
+        SELECT
+            health_article_id,
+            health_article_title,
+            health_article_content,
+            health_article_tag_id,
+            health_article_cover,
+            health_article_reader_ids,
+            is_top,
+            health_article_create_time
+        FROM health_article a
+        <where>
+            <if test="article.healthArticleTitle != null and article.healthArticleTitle != ''">
+                AND a.health_article_title LIKE concat('%', #{article.healthArticleTitle} ,'%')
+            </if>
+            <if test="article.healthArticleTagId != null and article.healthArticleTagId != ''">
+                AND a.health_article_tag_id = #{article.healthArticleTagId}
+            </if>
+            <if test="article.top != null">
+                AND a.is_top = #{article.top}
+            </if>
+        </where>
+        ORDER BY a.health_article_id DESC
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+    </select>
+
+    <!--  获取以上查询得到的数据个数  -->
+    <select id="queryArticlesCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM health_article a
+        <where>
+            <if test="healthArticleTitle != null and healthArticleTitle != ''">
+                AND a.health_article_title LIKE concat('%', #{healthArticleTitle} ,'%')
+            </if>
+            <if test="healthArticleTagId != null and healthArticleTagId != ''">
+                AND a.health_article_tag_id = #{healthArticleTagId}
+            </if>
+            <if test="top != null">
+                AND a.is_top = #{top}
+            </if>
+        </where>
+    </select>
+
+    <!--  根据资讯ID获取资讯信息  -->
+    <select id="getByArticleId" resultMap="ArticleResultMap">
+        SELECT
+            health_article_id,
+            health_article_title,
+            health_article_content,
+            health_article_tag_id,
+            health_article_cover,
+            health_article_reader_ids,
+            is_top,
+            health_article_create_time
+        FROM health_article a
+        <where>
+            <if test="healthArticleId != null and healthArticleId != ''">
+                AND health_article_id = #{healthArticleId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询映射结果 -->
+    <resultMap id="ArticleResultMap" type="com.example.health.pojo.entity.HealthArticleDO">
+        <id column="health_article_id" property="healthArticleId"/>
+        <result column="health_article_title" property="healthArticleTitle"/>
+        <result column="health_article_content" property="healthArticleContent"/>
+        <result column="health_article_tag_id" property="healthArticleTagId"/>
+        <result column="health_article_cover" property="healthArticleCover"/>
+        <result column="health_article_reader_ids" property="healthArticleReaderIds"/>
+        <result column="is_top" property="top"/>
+        <result column="health_article_create_time" property="healthArticleCreateTime"/>
+    </resultMap>
+</mapper>

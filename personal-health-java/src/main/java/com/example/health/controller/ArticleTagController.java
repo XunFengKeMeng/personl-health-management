@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/tag")
 public class ArticleTagController {
-
     /**
      * 自动装配服务
      */

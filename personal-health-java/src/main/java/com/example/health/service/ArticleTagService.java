@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public interface ArticleTagService {
     /**
-     *  新增标签
+     * 新增标签
      *
      * @param articleTagDTO 新增标签信息
      * @return 新增操作响应结果

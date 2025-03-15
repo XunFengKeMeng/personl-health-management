@@ -1,4 +1,4 @@
-package com.example.health.pojo.entity;
+package com.example.health.pojo.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 
 /**
  * @author huanghaiming
- * @date 2025/3/5 00:35
- * @description: 健康资讯实体类，对应数据库表health_article
+ * @date 2025/3/14 19:23
+ * @description: 健康资讯展示对象（与DO一样）
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HealthArticleDO {
+public class HealthArticleVO {
     /**
      * 健康资讯ID
      */
@@ -52,7 +52,7 @@ public class HealthArticleDO {
      * 是否推荐
      * 注意：其对应的数据库字段为is_top，但是在POJO类中任何布尔类型的变量都不要加is前缀
      */
-    private Boolean top;
+    private Boolean Top;
 
     /**
      * 健康资讯发布时间
