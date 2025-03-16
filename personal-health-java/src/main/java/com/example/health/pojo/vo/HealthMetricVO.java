@@ -1,4 +1,4 @@
-package com.example.health.pojo.entity;
+package com.example.health.pojo.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author huanghaiming
- * @date 2025/3/5 00:34
- * @description: 健康指标实体类，对应数据库表health_metric
+ * @date 2025/3/16 14:44
+ * @description: 健康指标展示对象（与DO一致）
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HealthMetricDO {
+public class HealthMetricVO {
     /**
      * 健康指标编号
      */

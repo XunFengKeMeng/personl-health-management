@@ -83,7 +83,10 @@ public class ArticleTagServiceImpl implements ArticleTagService {
     public ApiResponse<List<ArticleTagVO>> queryArticleTags(ArticleTagDTO articleTagDTO) {
         ArticleTagDO articleTagDO = ArticleTagDO.builder()
                 .tagName(articleTagDTO.getTagName()).build();
-        List<ArticleTagDO> articleTagDOList = articleTagMapper.queryArticleTags(articleTagDO, articleTagDTO.getCurrent(), articleTagDTO.getSize());
+        List<ArticleTagDO> articleTagDOList = articleTagMapper.queryArticleTags(
+                articleTagDO,
+                articleTagDTO.getCurrent(),
+                articleTagDTO.getSize());
         Integer count = articleTagMapper.queryCount(articleTagDO);
         List<ArticleTagVO> articleTagVOList = new ArrayList<>();
         for (ArticleTagDO tag : articleTagDOList) {

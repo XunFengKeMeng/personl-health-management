@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.health.mapper.HealthMetricMapper">
+    <!--  新增健康指标  -->
+    <insert id="save" parameterType="com.example.health.pojo.entity.HealthMetricDO">
+        INSERT INTO health_metric(health_metric_name,
+                                  health_metric_description,
+                                  health_metric_cover,
+                                  health_metric_unit,
+                                  health_metric_range)
+        VALUES(#{healthMetricName},
+               #{healthMetricDescription},
+               #{healthMetricCover},
+               #{healthMetricUnit},
+               #{healthMetricRange})
+    </insert>
+
+    <!--  批量删除健康指标  -->
+    <delete id="deleteMetrics" parameterType="com.example.health.pojo.entity.HealthMetricDO">
+        DELETE FROM health_metric WHERE health_metric_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--  修改健康指标信息  -->
+    <update id="update" parameterType="com.example.health.pojo.entity.HealthMetricDO">
+        UPDATE health_metric
+        <set>
+            <if test="healthMetricName != null and healthMetricName != ''">
+                health_metric_name = #{healthMetricName},
+            </if>
+            <if test="healthMetricDescription != null and healthMetricDescription != ''">
+                health_metric_description = #{healthMetricDescription},
+            </if>
+            <if test="healthMetricCover != null and healthMetricCover != ''">
+                health_metric_cover = #{healthMetricCover},
+            </if>
+            <if test="healthMetricUnit != null and healthMetricUnit != ''">
+                health_metric_unit = #{healthMetricUnit},
+            </if>
+            <if test="healthMetricRange != null and healthMetricRange != ''">
+                health_metric_range = #{healthMetricRange},
+            </if>
+        </set>
+        WHERE health_metric_id = #{healthMetricId}
+    </update>
+
+    <!--  根据指标ID查询健康指标信息  -->
+    <select id="queryById" resultMap="MetricDOResultMap">
+        SELECT
+            health_metric_id,
+            health_metric_name,
+            health_metric_description,
+            health_metric_cover,
+            health_metric_unit,
+            health_metric_range
+        FROM health_metric
+        WHERE health_metric_id = #{metricId}
+    </select>
+
+    <!--  模糊查询健康指标  -->
+    <select id="queryHealthMetrics" resultMap="MetricVOResultMap">
+        SELECT
+            m.health_metric_id,
+            m.health_metric_name,
+            m.health_metric_description,
+            m.health_metric_cover,
+            m.health_metric_unit,
+            m.health_metric_range
+        FROM health_metric m
+        <where>
+            <if test="metric.healthMetricName != null and metric.healthMetricName != ''">
+                m.health_metric_name LIKE concat('%', #{metric.healthMetricName}, '%')
+            </if>
+        </where>
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+        ORDER BY m.health_metric_id ASC
+    </select>
+    <!--  满足模糊查询条件的指标数  -->
+    <select id="queryHealthMetricsCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM health_metric m
+        <where>
+            <if test="healthMetricName != null and healthMetricName != ''">
+                m.health_metric_name LIKE concat('%', #{healthMetricName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!--  查询映射结果（DO）  -->
+    <resultMap id="MetricDOResultMap" type="com.example.health.pojo.entity.HealthMetricDO">
+        <id column="health_metric_id" property="healthMetricId"/>
+        <result column="health_metric_name" property="healthMetricName"/>
+        <result column="health_metric_description" property="healthMetricDescription"/>
+        <result column="health_metric_cover" property="healthMetricCover"/>
+        <result column="health_metric_unit" property="healthMetricUnit"/>
+        <result column="health_metric_range" property="healthMetricRange"/>
+    </resultMap>
+    <!--  查询映射结果（VO）  -->
+    <resultMap id="MetricVOResultMap" type="com.example.health.pojo.vo.HealthMetricVO">
+        <id column="health_metric_id" property="healthMetricId"/>
+        <result column="health_metric_name" property="healthMetricName"/>
+        <result column="health_metric_description" property="healthMetricDescription"/>
+        <result column="health_metric_cover" property="healthMetricCover"/>
+        <result column="health_metric_unit" property="healthMetricUnit"/>
+        <result column="health_metric_range" property="healthMetricRange"/>
+    </resultMap>
+</mapper>

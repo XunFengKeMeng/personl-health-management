@@ -56,7 +56,7 @@
         <if test="current != null and size != null">
             LIMIT #{current}, #{size}
         </if>
-#         ORDER BY s.saved_create_time
+        ORDER BY s.saved_create_time DESC
     </select>
     <select id="queryCount" resultType="Integer">
         SELECT COUNT(*)

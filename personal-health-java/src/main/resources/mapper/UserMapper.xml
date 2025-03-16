@@ -34,22 +34,22 @@
         UPDATE user
         <set>
             <if test="userAccount != null and userAccount != ''">
-                user_account = #{userAccount}
+                user_account = #{userAccount},
             </if>
             <if test="userName != null and userName != ''">
-                user_name = #{userName}
+                user_name = #{userName},
             </if>
             <if test="userPassword != null and userPassword != ''">
-                user_password = #{userPassword}
+                user_password = #{userPassword},
             </if>
             <if test="userEmail != null and userEmail != ''">
-                user_email = #{userEmail}
+                user_email = #{userEmail},
             </if>
             <if test="userRole != null and userRole != ''">
-                user_role = #{userRole}
+                user_role = #{userRole},
             </if>
             <if test="active != null and active != ''">
-                is_active = #{active}
+                is_active = #{active},
             </if>
         </set>
         WHERE user_id = #{userId}
