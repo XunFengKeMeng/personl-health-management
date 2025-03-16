@@ -1,19 +1,21 @@
-package com.example.health.pojo.dto.query.extend;
+package com.example.health.pojo.dto;
 
 import com.example.health.pojo.dto.query.base.QueryDTO;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
  * @author huanghaiming
- * @date 2025/3/5 14:47
- * @description: 用户收藏健康资讯记录查询DTO
+ * @date 2025/3/15 22:17
+ * @description: 用户收藏健康资讯的数据传输对象
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserSavedArticleQueryDTO extends QueryDTO {
+public class UserSavedArticleDTO extends QueryDTO {
     /**
      * 资讯收藏记录编号
      */
@@ -28,5 +30,4 @@ public class UserSavedArticleQueryDTO extends QueryDTO {
      * 健康资讯ID
      */
     private Integer articleId;
-
 }

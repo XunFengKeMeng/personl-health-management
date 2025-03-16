@@ -1,5 +1,6 @@
 package com.example.health.pojo.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,5 +36,6 @@ public class UserSavedArticleDO {
     /**
      * 用户收藏健康资讯的时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime savedCreateTime;
 }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.health.mapper.UserSavedArticleMapper">
+    <!--  新增收藏记录  -->
+    <insert id="save" parameterType="com.example.health.pojo.entity.UserSavedArticleDO">
+        INSERT INTO user_saved_article(user_id,
+                                       article_id,
+                                       saved_create_time)
+        VALUES (#{userId},
+                #{articleId},
+                #{savedCreateTime})
+    </insert>
+
+    <!--  批量删除收藏记录  -->
+    <delete id="deleteSavedArticles" parameterType="com.example.health.pojo.entity.UserSavedArticleDO">
+        DELETE FROM user_saved_article WHERE saved_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--  根据用户ID和资讯ID查询记录信息  -->
+    <select id="querySavedArticle" resultMap="SavedResultMap">
+        SELECT user_id, article_id FROM user_saved_article
+        <where>
+            <if test="userId != null and articleId != null">
+                user_id = #{userId} AND article_id = #{articleId}
+            </if>
+        </where>
+    </select>
+
+    <!--  根据用户ID/资讯ID查询记录信息  -->
+    <select id="querySavedArticles" resultMap="SavedVOResultMap">
+        SELECT
+            s.saved_id,
+            s.article_id,
+            s.saved_create_time,
+            u.user_name,
+            a.health_article_cover,
+            a.health_article_title,
+            a.health_article_content,
+            t.tag_name,
+            a.health_article_create_time
+        FROM user_saved_article s
+        LEFT JOIN user u ON u.user_id = s.user_id
+        LEFT JOIN health_article a ON a.health_article_id = s.article_id
+        LEFT JOIN health_article_tag t ON t.tag_id = a.health_article_tag_id
+        <where>
+            <if test="saved.userId != null">
+                AND s.user_id = #{saved.userId}
+            </if>
+            <if test="saved.articleId != null">
+                AND s.article_id = #{saved.articleId}
+            </if>
+        </where>
+        <if test="current != null and size != null">
+            LIMIT #{current}, #{size}
+        </if>
+#         ORDER BY s.saved_create_time
+    </select>
+    <select id="queryCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM user_saved_article s
+        <where>
+            <if test="userId != null">
+                s.user_id = #{userId}
+            </if>
+            <if test="articleId != null">
+                AND s.article_id = #{articleId}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询映射结果 -->
+    <resultMap id="SavedResultMap" type="com.example.health.pojo.entity.UserSavedArticleDO">
+        <id column="saved_id" property="savedId"/>
+        <result column="user_id" property="userId"/>
+        <result column="article_id" property="articleId"/>
+    </resultMap>
+
+    <resultMap id="SavedVOResultMap" type="com.example.health.pojo.vo.UserSavedArticleVO">
+        <id column="saved_id" property="savedId"/>
+        <result column="article_id" property="articleId"/>
+        <result column="saved_create_time" property="savedCreateTime"/>
+        <result column="user_name" property="userName"/>
+        <result column="health_article_cover" property="healthArticleCover"/>
+        <result column="health_article_title" property="healthArticleTitle"/>
+        <result column="health_article_content" property="healthArticleContent"/>
+        <result column="tag_name" property="healthArticleTagName"/>
+        <result column="health_article_create_time" property="healthArticleCreateTime"/>
+    </resultMap>
+
+
+</mapper>
