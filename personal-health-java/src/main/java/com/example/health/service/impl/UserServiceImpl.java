@@ -157,7 +157,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 修改用户信息（管理员）
-     * 比用户修改信息多出 用户角色、用户账号激活状态 信息
+     * 比用户修改信息多出用户角色、用户账号激活状态信息
      *
      * @param userUpdateDTO 修改后的用户数据
      * @return 修改操作响应结果
@@ -176,14 +176,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ApiResponse<List<UserVO>> queryUsers(UserQueryDTO userQueryDTO) {
-        List<UserDO> userDOList = userMapper.queryUsers(userQueryDTO);
+        List<UserVO> userVOList = userMapper.queryUsers(userQueryDTO);
         Integer count = userMapper.queryCount(userQueryDTO);
-        List<UserVO> userVOList = new ArrayList<>();
-        for (UserDO userDO : userDOList) {
-            UserVO userVO = new UserVO();
-            BeanUtils.copyProperties(userDO, userVO);
-            userVOList.add(userVO);
-        }
         return ApiResponse.success(userVOList, count);
     }
 

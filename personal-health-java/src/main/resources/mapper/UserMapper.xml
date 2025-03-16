@@ -55,8 +55,35 @@
         WHERE user_id = #{userId}
     </update>
 
+    <!--  根据ID/用户账号/用户名查询用户  -->
+    <!--  resultMap：指定从数据库中提取出来的返回数据类型。  -->
+    <!--  拓展：resultType用途与其一致，但要求字段名与数据库列名一致，比较鸡肋。  -->
+    <select id="getByCondition" resultMap="UserResultDOMap">
+        SELECT
+        user_id,
+        user_account,
+        user_name,
+        user_password,
+        user_email,
+        user_role,
+        is_active,
+        user_create_time
+        FROM user u
+        <where>
+            <if test="userId != null">
+                AND u.user_id = #{userId}
+            </if>
+            <if test="userAccount != null and userAccount != ''">
+                AND u.user_account = #{userAccount}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.user_name = #{userName}
+            </if>
+        </where>
+    </select>
+
     <!--  模糊查询用户（分页）  -->
-    <select id="queryUsers" resultMap="UserResultMap">
+    <select id="queryUsers" resultMap="UserResultVOMap">
         SELECT
             user_id,
             user_account,
@@ -119,36 +146,20 @@
         </where>
     </select>
 
-    <!--  根据ID/用户账号/用户名查询用户  -->
-    <!--  resultMap：指定从数据库中提取出来的返回数据类型。  -->
-    <!--  拓展：resultType用途与其一致，但要求字段名与数据库列名一致，比较鸡肋。  -->
-    <select id="getByCondition" resultMap="UserResultMap">
-        SELECT
-            user_id,
-            user_account,
-            user_name,
-            user_password,
-            user_email,
-            user_role,
-            is_active,
-            user_create_time
-        FROM user u
-        <where>
-            <if test="userId != null">
-                AND u.user_id = #{userId}
-            </if>
-            <if test="userAccount != null and userAccount != ''">
-                AND u.user_account = #{userAccount}
-            </if>
-            <if test="userName != null and userName != ''">
-                AND u.user_name = #{userName}
-            </if>
-        </where>
-    </select>
-
     <!-- 查询映射结果 -->
-    <resultMap id="UserResultMap" type="com.example.health.pojo.entity.UserDO">
+    <resultMap id="UserResultDOMap" type="com.example.health.pojo.entity.UserDO">
         <!-- id标签与result标签的不同点：id标签对应元素会被标记为对象的标识符 -->
+        <id column="user_id" property="userId"/>
+        <result column="user_account" property="userAccount"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="user_role" property="userRole"/>
+        <result column="is_active" property="active"/>
+        <result column="user_create_time" property="userCreateTime"/>
+    </resultMap>
+
+    <resultMap id="UserResultVOMap" type="com.example.health.pojo.vo.UserVO">
         <id column="user_id" property="userId"/>
         <result column="user_account" property="userAccount"/>
         <result column="user_name" property="userName"/>

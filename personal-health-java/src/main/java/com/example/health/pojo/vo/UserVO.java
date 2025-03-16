@@ -35,6 +35,11 @@ public class UserVO {
     private String userName;
 
     /**
+     * 用户密码
+     */
+    private String userPassword;
+
+    /**
      * 用户邮箱
      */
     private String userEmail;
