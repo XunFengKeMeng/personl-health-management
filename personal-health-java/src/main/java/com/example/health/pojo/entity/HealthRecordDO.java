@@ -31,12 +31,12 @@ public class HealthRecordDO {
     /**
      * 健康指标ID
      */
-    private Integer HealthMetricId;
+    private Integer healthMetricId;
 
     /**
      * 用户的指标输入值
      */
-    private String HealthMetricValue;
+    private String healthMetricValue;
 
     /**
      * 健康记录生成时间

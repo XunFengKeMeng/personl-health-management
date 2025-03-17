@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * @author huanghaiming
  * @date 2025/3/17 09:44
- * @description: 用户健康记录视图对象（与DO一致）
+ * @description: 用户健康记录视图对象（于DO相比，多出用户名、指标名字段）
  */
 @Data
 @Builder
@@ -29,14 +29,19 @@ public class HealthRecordVO {
     private Integer userId;
 
     /**
-     * 健康指标ID
+     * 用户名
      */
-    private Integer HealthMetricId;
+    private String userName;
 
     /**
-     * 用户的指标输入值
+     * 健康指标名
      */
-    private String HealthMetricValue;
+    private String healthMetricName;
+
+    /**
+     * 指标值
+     */
+    private String healthMetricValue;
 
     /**
      * 健康记录生成时间

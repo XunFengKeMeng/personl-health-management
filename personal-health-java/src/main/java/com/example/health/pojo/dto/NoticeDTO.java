@@ -48,5 +48,4 @@ public class NoticeDTO extends QueryDTO {
      * 关联信息ID（如哪个指标数据异常通知...）
      */
     private Integer contentId;
-
 }

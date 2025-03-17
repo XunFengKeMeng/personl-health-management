@@ -20,6 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/notice")
 public class NoticeController {
+    /**
+     * 注入服务
+     */
     @Resource
     private NoticeService noticeService;
 
@@ -59,6 +62,12 @@ public class NoticeController {
         return noticeService.updateNotice(noticeDTO);
     }
 
+    /**
+     * 分页查询通知信息
+     *
+     * @param noticeDTO 查询参数 + 页参数
+     * @return 满足条件的通知视图对象列表 + 查询操作响应结果
+     */
     @RequestMapping(value = "/query")
     @ResponseBody
     public ApiResponse<List<NoticeVO>> queryNotices(@RequestBody NoticeDTO noticeDTO) {

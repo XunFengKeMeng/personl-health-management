@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.health.mapper.HealthRecordMapper">
+    <!--  新增若干健康记录  -->
+    <insert id="saveRecords">
+        INSERT INTO user_health_record(user_id,
+                                       health_metric_id,
+                                       health_metric_value,
+                                       record_create_time)
+        VALUES
+        <foreach collection="list" item="record" index="index" separator=",">
+            (#{record.userId},
+             #{record.healthMetricId},
+             #{record.healthMetricValue},
+             #{record.recordCreateTime})
+        </foreach>
+    </insert>
+
+    <!--  批量删除健康记录  -->
+    <delete id="deleteRecords" parameterType="list">
+        DELETE FROM user_health_record WHERE record_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--  更新健康记录信息  -->
+    <update id="update" parameterType="com.example.health.pojo.entity.HealthRecordDO">
+        UPDATE user_health_record
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="healthMetricId != null">
+                health_metric_id = #{healthMetricId},
+            </if>
+            <if test="healthMetricValue != null and healthMetricValue != ''">
+                health_metric_value = #{healthMetricValue}
+            </if>
+        </set>
+        WHERE record_id = #{recordId}
+    </update>
+
+    <!-- 分页查询健康记录 -->
+    <select id="queryRecords" resultMap="RecordVOResultMap">
+        SELECT r.record_id,
+               r.user_id,
+               u.user_name,
+               m.health_metric_name,
+               r.health_metric_value,
+               r.record_create_time
+        FROM user_health_record r
+        LEFT JOIN user u ON u.user_id = r.user_id
+        LEFT JOIN health_metric m ON m.health_metric_id = r.health_metric_id
+        <where>
+            <if test="record.userId != null">
+                r.user_id = #{record.userId}
+            </if>
+            <if test="record.healthMetricId != null">
+                AND r.health_metric_id = #{record.healthMetricId}
+            </if>
+        </where>
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+        ORDER BY r.record_create_time DESC
+    </select>
+    <!--  满足分页查询条件的数据数  -->
+    <select id="queryRecordsCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM user_health_record
+        <where>
+            <if test="userId != null">
+                user_id = #{userId}
+            </if>
+            <if test="healthMetricId != null">
+                AND health_metric_id = #{healthMetricId}
+            </if>
+        </where>
+    </select>
+
+    <!--  健康记录视图对象映射  -->
+    <resultMap id="RecordVOResultMap" type="com.example.health.pojo.vo.HealthRecordVO">
+        <id column="record_id" property="recordId"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="health_metric_name" property="healthMetricName"/>
+        <result column="health_metric_value" property="healthMetricValue"/>
+        <result column="record_create_time" property="recordCreateTime"/>
+    </resultMap>
+</mapper>

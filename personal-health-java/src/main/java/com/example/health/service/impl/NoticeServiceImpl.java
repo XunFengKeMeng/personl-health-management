@@ -23,7 +23,7 @@ import java.util.List;
 @Service
 public class NoticeServiceImpl implements NoticeService {
     /**
-     * 持久层接口自动装配
+     * 注入持久层接口
      */
     @Resource
     private NoticeMapper noticeMapper;
@@ -46,7 +46,7 @@ public class NoticeServiceImpl implements NoticeService {
             noticeDOList.add(noticeDO);
         }
         noticeMapper.insertNotices(noticeDOList);
-        return ApiResponse.success("通知新增成功");
+        return ApiResponse.success("新增成功");
     }
 
     /**
@@ -58,7 +58,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public ApiResponse<String> deleteNotices(List<Integer> ids) {
         noticeMapper.deleteNotices(ids);
-        return ApiResponse.success("通知删除成功");
+        return ApiResponse.success("删除成功");
     }
 
     /**
@@ -72,7 +72,7 @@ public class NoticeServiceImpl implements NoticeService {
         NoticeDO noticeDO = new NoticeDO();
         BeanUtils.copyProperties(noticeDTO, noticeDO);
         noticeMapper.updateNotice(noticeDO);
-        return ApiResponse.success("通知修改成功");
+        return ApiResponse.success("修改成功");
     }
 
     /**
