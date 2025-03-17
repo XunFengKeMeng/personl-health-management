@@ -146,7 +146,7 @@
         </where>
     </select>
 
-    <!-- 查询映射结果 -->
+    <!-- 用户查询映射结果 -->
     <resultMap id="UserResultDOMap" type="com.example.health.pojo.entity.UserDO">
         <!-- id标签与result标签的不同点：id标签对应元素会被标记为对象的标识符 -->
         <id column="user_id" property="userId"/>

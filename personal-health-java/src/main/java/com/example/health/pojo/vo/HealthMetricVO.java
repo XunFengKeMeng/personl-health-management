@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author huanghaiming
  * @date 2025/3/16 14:44
- * @description: 健康指标展示对象（与DO一致）
+ * @description: 健康指标视图对象（与DO一致）
  */
 @Data
 @Builder

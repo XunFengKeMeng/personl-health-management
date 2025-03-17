@@ -71,7 +71,7 @@
         </where>
     </select>
 
-    <!-- 查询映射结果 -->
+    <!-- 收藏记录映射结果 -->
     <resultMap id="SavedResultMap" type="com.example.health.pojo.entity.UserSavedArticleDO">
         <id column="saved_id" property="savedId"/>
         <result column="user_id" property="userId"/>

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserHealthRecordDO {
+public class HealthRecordDO {
     /**
      * 用户健康记录编号
      */

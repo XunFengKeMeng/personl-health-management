@@ -1,4 +1,4 @@
-package com.example.health.pojo.dto.query.extend;
+package com.example.health.pojo.dto;
 
 import com.example.health.pojo.dto.query.base.QueryDTO;
 import lombok.*;
@@ -6,14 +6,14 @@ import lombok.*;
 /**
  * @author huanghaiming
  * @date 2025/3/5 14:54
- * @description: 通知查询DTO
+ * @description: 通知查询数据传输对象
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticeQueryDTO extends QueryDTO {
+public class NoticeDTO extends QueryDTO {
     /**
      * 消息ID
      */
@@ -42,7 +42,7 @@ public class NoticeQueryDTO extends QueryDTO {
     /**
      * 消息是否已读
      */
-    private Boolean isRead;
+    private Boolean read;
 
     /**
      * 关联信息ID（如哪个指标数据异常通知...）

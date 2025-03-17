@@ -1,19 +1,19 @@
-package com.example.health.pojo.dto.query.extend;
+package com.example.health.pojo.dto;
 
 import com.example.health.pojo.dto.query.base.QueryDTO;
 import lombok.*;
 
 /**
  * @author huanghaiming
- * @date 2025/3/5 14:43
- * @description: 用户健康记录查询DTO
+ * @date 2025/3/17 09:41
+ * @description: 用户健康记录数据传输对象
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserHealthRecordQueryDTO extends QueryDTO {
+public class HealthRecordDTO extends QueryDTO {
     /**
      * 用户健康记录编号
      */
@@ -29,4 +29,8 @@ public class UserHealthRecordQueryDTO extends QueryDTO {
      */
     private Integer HealthMetricId;
 
+    /**
+     * 用户的指标输入值
+     */
+    private String HealthMetricValue;
 }

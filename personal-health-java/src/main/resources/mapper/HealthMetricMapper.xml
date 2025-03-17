@@ -90,7 +90,7 @@
         </where>
     </select>
 
-    <!--  查询映射结果（DO）  -->
+    <!--  指标映射结果  -->
     <resultMap id="MetricDOResultMap" type="com.example.health.pojo.entity.HealthMetricDO">
         <id column="health_metric_id" property="healthMetricId"/>
         <result column="health_metric_name" property="healthMetricName"/>
@@ -99,7 +99,7 @@
         <result column="health_metric_unit" property="healthMetricUnit"/>
         <result column="health_metric_range" property="healthMetricRange"/>
     </resultMap>
-    <!--  查询映射结果（VO）  -->
+    <!--  指标视图对象映射结果  -->
     <resultMap id="MetricVOResultMap" type="com.example.health.pojo.vo.HealthMetricVO">
         <id column="health_metric_id" property="healthMetricId"/>
         <result column="health_metric_name" property="healthMetricName"/>

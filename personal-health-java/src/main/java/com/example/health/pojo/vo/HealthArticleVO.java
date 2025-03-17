@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * @author huanghaiming
  * @date 2025/3/14 19:23
- * @description: 健康资讯展示对象（与DO一样）
+ * @description: 健康资讯视图对象（与DO一样）
  */
 @Data
 @Builder

@@ -118,7 +118,7 @@
         </where>
     </select>
 
-    <!-- 查询映射结果 -->
+    <!-- 资讯实体映射结果 -->
     <resultMap id="ArticleResultMap" type="com.example.health.pojo.entity.HealthArticleDO">
         <id column="health_article_id" property="healthArticleId"/>
         <result column="health_article_title" property="healthArticleTitle"/>

@@ -68,7 +68,7 @@
         </where>
     </select>
 
-    <!-- 查询映射结果 -->
+    <!-- 标签实体映射结果 -->
     <resultMap id="TagResultMap" type="com.example.health.pojo.entity.ArticleTagDO">
         <id column="tag_id" property="tagId"/>
         <result column="tag_name" property="tagName"/>

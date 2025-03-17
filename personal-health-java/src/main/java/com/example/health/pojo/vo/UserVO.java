@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * @author huanghaiming
  * @date 2025/3/9 17:54
- * @description: 用户VO，用于返回前端
+ * @description: 用户视图对象
  */
 @Data
 @Builder

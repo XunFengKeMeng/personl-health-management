@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * @author huanghaiming
  * @date 2025/3/16 00:20
- * @description: 用户收藏资讯展示对象（与DO相比，多出了资讯的相关信息）
+ * @description: 用户收藏资讯视图对象（与DO相比，多出了资讯的相关信息）
  */
 @Data
 @Builder
