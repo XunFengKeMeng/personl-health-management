@@ -1,5 +1,7 @@
 server:
   port: 21090
+  servlet:
+    context-path: /api/health-management
 # MySQL配置
 spring:
   datasource:
