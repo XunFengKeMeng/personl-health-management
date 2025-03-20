@@ -3,7 +3,6 @@
     <!-- 顶部区域 -->
     <div class="header">
       <AppLogo
-        :bag="colorLogo"
         sysName="员工健康管理系统"
       />
     </div>
@@ -39,11 +38,11 @@
           <span
             class="login-btn"
             @click="login"
-          >立即登录</span>
+          >登&emsp;录</span>
         </div>
         <div class="tip">
           <p>没有账号？<span
-              class="no-act"
+              class="act-tip"
               @click="toDoRegister"
             >点此注册</span></p>
         </div>
@@ -66,7 +65,6 @@ export default {
     return {
       act: '',
       pwd: '',
-      colorLogo: 'rgb(38, 38, 38)',
     }
   },
   methods: {
@@ -253,26 +251,22 @@ export default {
   }
 
   .tip {
-    margin: 20px 0;
+    margin: 12px 0;
 
     p {
       padding: 3px 0;
       margin: 0;
       font-size: 14px;
-      color: #647897;
+      color: #a0a0a0;
 
       i {
         margin-right: 3px;
       }
-
-      span {
-        color: #3b3c3e;
+      .act-tip {
+        color: #2d76d5;
+        cursor: pointer;
         border-radius: 2px;
         margin: 0 6px;
-      }
-      .no-act:hover {
-        color: #3e77c2;
-        cursor: pointer;
       }
     }
   }
