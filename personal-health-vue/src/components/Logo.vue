@@ -1,8 +1,8 @@
 <template>
     <span class="logo">
         <el-image style="width:25px; height: 25px" src="/logo.png" fit="fill"></el-image>
-        <div v-if="!flag">
-            <span :style="{ color: bag, display: 'block' }">{{ sysName }}</span>
+        <div class="sysName" v-if="!flag">
+            <span :style="{ color: bag}">{{ sysName }}</span>
         </div>
     </span>
 </template>
@@ -46,9 +46,14 @@ export default {
     flex-wrap: wrap;
     user-select: none;
 
+    // .sysName {
+    //     display: flex;
+    //     align-content: center;
+    // }
+
     span {
         margin-left: 8px;
-        color: #666;
+        line-height: 27px;
     }
 }
 </style>

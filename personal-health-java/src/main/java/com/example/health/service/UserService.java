@@ -41,7 +41,14 @@ public interface UserService {
      * @param userLoginDTO 用户登录信息
      * @return 响应登录是否成功
      */
-    ApiResponse<UserDO> login(UserLoginDTO userLoginDTO);
+    ApiResponse<Object> login(UserLoginDTO userLoginDTO);
+
+    /**
+     * 令牌校验，认证成功则返回用户信息
+     *
+     * @return 用户信息 + 响应结果
+     */
+    public ApiResponse<UserVO> auth(String token);
 
     /**
      * 管理员批量删除用户

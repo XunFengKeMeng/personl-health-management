@@ -1,5 +1,6 @@
 package com.example.health.service.impl;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.example.health.api.ApiResponse;
 import com.example.health.em.ActiveStatusEnum;
 import com.example.health.em.RoleEnum;
@@ -11,15 +12,14 @@ import com.example.health.pojo.dto.update.UserUpdateDTO;
 import com.example.health.pojo.entity.UserDO;
 import com.example.health.pojo.vo.UserVO;
 import com.example.health.service.UserService;
+import com.example.health.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author huanghaiming
@@ -34,6 +34,12 @@ public class UserServiceImpl implements UserService {
      */
     @Resource
     private UserMapper userMapper;
+
+    /**
+     * 注入JWT
+     */
+    @Resource
+    private JwtUtil jwtUtil;
 
     /**
      * 用户注册（用户）
@@ -86,7 +92,7 @@ public class UserServiceImpl implements UserService {
      * @return 用户登录响应结果
      */
     @Override
-    public ApiResponse<UserDO> login(UserLoginDTO userLoginDTO) {
+    public ApiResponse<Object> login(UserLoginDTO userLoginDTO) {
         // 根据用户账号查询数据库得到对应的用户数据
         UserDO userDO = userMapper.getByCondition(
                 UserDO.builder().userAccount(userLoginDTO.getUserAccount()).build()
@@ -96,15 +102,38 @@ public class UserServiceImpl implements UserService {
                 .map(user -> {
                     // 检查密码是否正常
                     if (!user.getUserPassword().equals(userLoginDTO.getUserPassword())) {
-                        return ApiResponse.<UserDO>error("密码错误");
+                        return ApiResponse.<Object>error("密码错误");
                     }
                     // 检查账号是否已激活
                     if (!user.getActive()) {
-                        return ApiResponse.<UserDO>error("账号未激活，请联系管理员");
+                        return ApiResponse.<Object>error("账号未激活，请联系管理员");
                     }
                     // 用户登录成功
-                    return ApiResponse.success("登录成功",user);
-                }).orElseGet(() -> ApiResponse.error("用户不存在"));
+                    String token = jwtUtil.toToken(user.getUserId(), user.getUserRole());
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("token", token);
+                    map.put("role", user.getUserRole());
+                    return ApiResponse.<Object>success("登录成功",map);
+                }).orElseGet(() -> ApiResponse.<Object>error("用户不存在"));
+    }
+
+    /**
+     * 令牌校验，认证成功则返回用户信息
+     *
+     * @return 用户信息 + 响应结果
+     */
+    @Override
+    public ApiResponse<UserVO> auth(String token) {
+        Claims claims = jwtUtil.fromToken(token);
+        return Optional.ofNullable(claims)
+                .map(c -> {
+                    Integer userId = c.get("id", Integer.class);
+                    UserDO userDO = UserDO.builder().userId(userId).build();
+                    UserDO user = userMapper.getByCondition(userDO);
+                    UserVO userVO = new UserVO();
+                    BeanUtils.copyProperties(user, userVO);
+                    return ApiResponse.<UserVO>success(userVO);
+                }).orElseGet(()-> ApiResponse.error("令牌校验未通过"));
     }
 
     /**

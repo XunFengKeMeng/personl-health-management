@@ -2,9 +2,7 @@
   <div class="login-body">
     <!-- 顶部区域 -->
     <div class="header">
-      <AppLogo
-        sysName="员工健康管理系统"
-      />
+      <AppLogo sysName="员工健康管理系统" />
     </div>
     <div class="login-container">
       <!-- 右侧图片 -->
@@ -54,10 +52,12 @@
 <script>
 const ADMIN_ROLE = 1;
 const USER_ROLE = 0;
+const TIP_DELAY_TIME = 5000;
 const DELAY_TIME = 1300;
 import AppLogo from '@/components/Logo.vue';
 import request from "@/utils/request.js";
 import md5 from 'js-md5';
+import { setToken } from "@/utils/storage.js";
 export default {
   name: "AppLogin",
   components: { AppLogo },
@@ -77,11 +77,20 @@ export default {
       // 校验账号密码是否为空
       if (!this.act || !this.pwd) {
         this.$swal.fire({
-          title: '填写校验',
+          title: '提示',
           text: '账号或密码不能为空',
           icon: 'error',
-          showConfirmButton: false,
-          timer: DELAY_TIME,
+          showConfirmButton: true, // 显示确认按钮
+          confirmButtonText: '我知道了', // 按钮文本
+          confirmButtonColor: '#3085d6', // 按钮颜色
+          customClass: {
+            popup: 'custom-swal-popup', // 弹窗样式
+            title: 'custom-swal-title', // 标题样式
+            content: 'custom-swal-content', // 内容样式
+            confirmButton: 'custom-swal-confirm-button', // 按钮样式
+          },
+          backdrop: 'rgba(0,0,0,0.5)', // 背景遮罩颜色
+          timer: TIP_DELAY_TIME
         });
         return;
       }
@@ -100,9 +109,11 @@ export default {
           });
           return;
         }
+        // 接收后端返回的token，设置token
+        setToken(data.data.token);
         // 根据角色延迟跳转页面
         setTimeout(() => {
-          const role = data.data.userRole;
+          const role = data.data.role;
           this.navigateToRole(role);
         }, DELAY_TIME);
       } catch (error) {
@@ -148,6 +159,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // 添加阴影效果
   padding-left: 10%;
 }
+
 .login-container {
   width: 100%;
   min-height: calc(100vh - 70px); // 减去 header 的高度
@@ -269,6 +281,38 @@ export default {
         margin: 0 6px;
       }
     }
+  }
+
+  /* 弹窗样式 */
+  .custom-swal-popup {
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* 标题样式 */
+  .custom-swal-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  /* 内容样式 */
+  .custom-swal-content {
+    font-size: 16px;
+    color: #666;
+  }
+
+  /* 按钮样式 */
+  .custom-swal-confirm-button {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 20px;
+    border-radius: 5px;
+    background-color: #3085d6;
+    transition: background-color 0.3s ease;
+  }
+  .custom-swal-confirm-button:hover {
+    background-color: #1c6bb8;
   }
 }
 </style>

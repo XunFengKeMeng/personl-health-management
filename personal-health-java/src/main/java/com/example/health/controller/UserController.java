@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author huanghaiming
@@ -58,9 +59,21 @@ public class UserController {
      */
     @PostMapping(value = "/login")
     @ResponseBody
-    public ApiResponse<UserDO> login(@RequestBody UserLoginDTO userLoginDTO) {
+    public ApiResponse<Object> login(@RequestBody UserLoginDTO userLoginDTO) {
         return userService.login(userLoginDTO);
     }
+
+    /**
+     * token校验
+     *
+     * @return 校验结果，若通过令牌校验则返回用户数据
+     */
+    @GetMapping(value = "/auth")
+    @ResponseBody
+    public ApiResponse<UserVO> auth(@RequestParam String token) {
+        return userService.auth(token);
+    }
+
 
     /**
      * 管理员批量删除用户

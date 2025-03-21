@@ -8,6 +8,15 @@ import VueRouter from "vue-router";
  */
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+/**
+ * 引入登录认证
+ */
+import { getToken } from "@/utils/storage.js";
+/**
+ * 引入ECharts，并将ECharts挂载到Vue实例中
+ */
+import echarts from 'echarts';
+Vue.prototype.$echarts = echarts;
 
 /**
  * Vue.use()全局注册插件
@@ -40,11 +49,17 @@ const routes = [
   },
   {
     path: "/admin",
-    component: () => import(`@/views/admin/Home.vue`)
+    component: () => import(`@/views/admin/Home.vue`),
+    meta: {
+      requireAuth: true // 需要登录验证
+    }
   },
   {
     path: "/user",
-    component: () => import(`@/views/user/Main.vue`)
+    component: () => import(`@/views/user/Main.vue`),
+    meta: {
+      requireAuth: true // 需要登录验证
+    }
   }
 ]
 
@@ -55,6 +70,23 @@ const routes = [
 const router = new VueRouter({
   routes,
   mode: 'history'
+});
+
+/**
+ * 设置Vue Router 的全局前置守卫，用于在路由跳转前进行权限验证
+ */
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    const token = getToken();
+    if (token !== null) {
+      next();
+    } else {
+      next("/login");
+    }
+  }
+  else {
+    next();
+  }
 });
 
 /**
