@@ -5,6 +5,8 @@ import com.example.health.mapper.HealthArticleMapper;
 import com.example.health.pojo.dto.HealthArticleDTO;
 import com.example.health.pojo.dto.query.extend.HealthArticleQueryDTO;
 import com.example.health.pojo.entity.HealthArticleDO;
+import com.example.health.pojo.vo.ArticleTagStatisticsVO;
+import com.example.health.pojo.vo.ArticleTrendVO;
 import com.example.health.pojo.vo.HealthArticleVO;
 import com.example.health.service.HealthArticleService;
 import org.springframework.beans.BeanUtils;
@@ -92,5 +94,23 @@ public class HealthArticleServiceImpl implements HealthArticleService {
                 healthArticleQueryDTO.getSize());
         Integer count = healthArticleMapper.queryArticlesCount(healthArticleDO);
         return ApiResponse.success(healthArticleVOList, count);
+    }
+
+    /**
+     * 查询每个标签下的文章数
+     *
+     * @return 标签及标签下的文章数
+     */
+    public ApiResponse<List<ArticleTagStatisticsVO>> queryArticleTagStatistics() {
+        return ApiResponse.success(healthArticleMapper.queryArticleTagStatistics());
+    }
+
+    /**
+     * 查询每天的文章数量
+     *
+     * @return 每天的文章数
+     */
+    public ApiResponse<List<ArticleTrendVO>> queryArticleTrend() {
+        return ApiResponse.success(healthArticleMapper.queryArticleTrend());
     }
 }

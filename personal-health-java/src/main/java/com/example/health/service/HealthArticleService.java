@@ -3,6 +3,8 @@ package com.example.health.service;
 import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.HealthArticleDTO;
 import com.example.health.pojo.dto.query.extend.HealthArticleQueryDTO;
+import com.example.health.pojo.vo.ArticleTagStatisticsVO;
+import com.example.health.pojo.vo.ArticleTrendVO;
 import com.example.health.pojo.vo.HealthArticleVO;
 import org.springframework.stereotype.Service;
 
@@ -46,4 +48,18 @@ public interface HealthArticleService {
      * @return 查询操作响应结果
      */
     ApiResponse<List<HealthArticleVO>> queryArticles(HealthArticleQueryDTO healthArticleQueryDTO);
+
+    /**
+     * 查询每个标签下的文章数
+     *
+     * @return 标签及标签下的文章数
+     */
+    ApiResponse<List<ArticleTagStatisticsVO>>  queryArticleTagStatistics();
+
+    /**
+     * 查询每天的文章数
+     *
+     * @return 每天的文章数
+     */
+    ApiResponse<List<ArticleTrendVO>> queryArticleTrend();
 }

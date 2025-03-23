@@ -52,7 +52,16 @@ const routes = [
     component: () => import(`@/views/admin/Home.vue`),
     meta: {
       requireAuth: true // 需要登录验证
-    }
+    },
+    children: [
+      {
+        path: "/adminLayout",
+        name: '仪表盘',
+        icon: 'el-icon-pie-chart',
+        component: () => import(`@/views/admin/AdminMain.vue`),
+        meta: { requireAuth: true }
+      },
+    ]
   },
   {
     path: "/user",

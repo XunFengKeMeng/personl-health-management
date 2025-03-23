@@ -118,6 +118,29 @@
         </where>
     </select>
 
+    <!--  查询每个标签下的文章数量  -->
+    <select id="queryArticleTagStatistics" resultMap="ATSResultMap">
+        SELECT
+            tag.tag_id AS tag_id,
+            tag.tag_name AS tag_name,
+            COUNT(article.health_article_id) AS article_count
+        FROM
+            health_article_tag tag
+                LEFT JOIN
+            health_article article ON tag.tag_id = article.health_article_tag_id
+        GROUP BY
+            tag.tag_id, tag.tag_name;
+    </select>
+
+    <!--  查询每天的文章数量  -->
+    <select id="queryArticleTrend" resultMap="ATResultMap">
+        SELECT DATE(health_article_create_time) AS article_date,
+               COUNT(health_article_id)         AS article_count
+        FROM health_article
+        GROUP BY DATE(health_article_create_time)
+        ORDER BY article_date;
+    </select>
+
     <!-- 资讯实体映射结果 -->
     <resultMap id="ArticleResultMap" type="com.example.health.pojo.entity.HealthArticleDO">
         <id column="health_article_id" property="healthArticleId"/>
@@ -128,5 +151,16 @@
         <result column="health_article_reader_ids" property="healthArticleReaderIds"/>
         <result column="is_top" property="top"/>
         <result column="health_article_create_time" property="healthArticleCreateTime"/>
+    </resultMap>
+    <!--  标签文章数据映射结果  -->
+    <resultMap id="ATSResultMap" type="com.example.health.pojo.vo.ArticleTagStatisticsVO">
+        <id column="tag_id" property="tagId"/>
+        <result column="tag_name" property="tagName"/>
+        <result column="article_count" property="articleCount"/>
+    </resultMap>
+    <!--  文章日期数据映射结果  -->
+    <resultMap id="ATResultMap" type="com.example.health.pojo.vo.ArticleTrendVO">
+        <result column="article_date" property="articleDate"/>
+        <result column="article_count" property="articleCount"/>
     </resultMap>
 </mapper>

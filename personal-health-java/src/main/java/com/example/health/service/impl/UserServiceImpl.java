@@ -1,6 +1,5 @@
 package com.example.health.service.impl;
 
-import com.auth0.jwt.interfaces.Claim;
 import com.example.health.api.ApiResponse;
 import com.example.health.em.ActiveStatusEnum;
 import com.example.health.em.RoleEnum;

@@ -1,6 +1,8 @@
 package com.example.health.mapper;
 
 import com.example.health.pojo.entity.HealthArticleDO;
+import com.example.health.pojo.vo.ArticleTagStatisticsVO;
+import com.example.health.pojo.vo.ArticleTrendVO;
 import com.example.health.pojo.vo.HealthArticleVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -63,4 +65,18 @@ public interface HealthArticleMapper {
      * @return 完整的资讯信息
      */
     HealthArticleDO getByArticleId(Integer articleId);
+
+    /**
+     * 查询每个标签下的文章数
+     *
+     * @return 标签及标签下的文章数
+     */
+    List<ArticleTagStatisticsVO> queryArticleTagStatistics();
+
+    /**
+     * 查询每天的文章数量
+     *
+     * @return 每天的文章数
+     */
+    List<ArticleTrendVO> queryArticleTrend();
 }

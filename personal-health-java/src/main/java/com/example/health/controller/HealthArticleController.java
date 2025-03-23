@@ -3,6 +3,8 @@ package com.example.health.controller;
 import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.HealthArticleDTO;
 import com.example.health.pojo.dto.query.extend.HealthArticleQueryDTO;
+import com.example.health.pojo.vo.ArticleTagStatisticsVO;
+import com.example.health.pojo.vo.ArticleTrendVO;
 import com.example.health.pojo.vo.HealthArticleVO;
 import com.example.health.service.HealthArticleService;
 import org.springframework.web.bind.annotation.*;
@@ -72,4 +74,25 @@ public class HealthArticleController {
         return healthArticleService.queryArticles(healthArticleQueryDTO);
     }
 
+    /**
+     * 查询每个标签下的文章数
+     *
+     * @return 数据列表（标签信息（标签ID、标签名） + 标签下文章数） + 查询操作响应结果
+     */
+    @GetMapping(value = "/queryStatistics")
+    @ResponseBody
+    public ApiResponse<List<ArticleTagStatisticsVO>> queryHealthArticles() {
+        return healthArticleService.queryArticleTagStatistics();
+    }
+
+    /**
+     * 查询每天的文章数
+     *
+     * @return 每天的文章数 + 查询操作响应结果
+     */
+    @GetMapping(value = "/queryTrend")
+    @ResponseBody
+    public ApiResponse<List<ArticleTrendVO>> queryArticleTrend() {
+        return healthArticleService.queryArticleTrend();
+    }
 }

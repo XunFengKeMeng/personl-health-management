@@ -68,9 +68,10 @@ public class UserController {
      *
      * @return 校验结果，若通过令牌校验则返回用户数据
      */
-    @GetMapping(value = "/auth")
+    @PostMapping(value = "/auth")
     @ResponseBody
-    public ApiResponse<UserVO> auth(@RequestParam String token) {
+    public ApiResponse<UserVO> auth(@RequestBody  Map<String, String> request) {
+        String token = request.get("token");
         return userService.auth(token);
     }
 
