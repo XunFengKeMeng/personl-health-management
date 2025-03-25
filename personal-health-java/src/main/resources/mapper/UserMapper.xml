@@ -45,11 +45,11 @@
             <if test="userEmail != null and userEmail != ''">
                 user_email = #{userEmail},
             </if>
-            <if test="userRole != null and userRole != ''">
+            <if test="userRole != null">
                 user_role = #{userRole},
             </if>
-            <if test="active != null and active != ''">
-                is_active = #{active},
+            <if test="active != null">
+                is_active = #{active}
             </if>
         </set>
         WHERE user_id = #{userId}
@@ -114,10 +114,10 @@
                 AND u.create_time BETWEEN #{startTime} AND #{endTime}
             </if>
         </where>
+        ORDER BY u.user_id ASC
         <if test="current != null and size != null">
             LIMIT #{current},#{size}
         </if>
-        ORDER BY u.user_id DESC
     </select>
 
     <!--  获取符合分页查询条件的用户记录总数  -->

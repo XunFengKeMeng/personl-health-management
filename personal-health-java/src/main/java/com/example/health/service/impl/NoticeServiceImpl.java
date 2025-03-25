@@ -4,6 +4,7 @@ import com.example.health.api.ApiResponse;
 import com.example.health.em.ReadStatusEnum;
 import com.example.health.mapper.NoticeMapper;
 import com.example.health.pojo.dto.NoticeDTO;
+import com.example.health.pojo.dto.NoticeListDTO;
 import com.example.health.pojo.entity.NoticeDO;
 import com.example.health.pojo.vo.NoticeVO;
 import com.example.health.service.NoticeService;
@@ -35,17 +36,18 @@ public class NoticeServiceImpl implements NoticeService {
      * @return 新增操作响应结果
      */
     @Override
-    public ApiResponse<String> insertNotices(List<NoticeDTO> noticeDTOList) {
-        List<NoticeDO> noticeDOList = new ArrayList<NoticeDO>();
-        for (NoticeDTO noticeDTO : noticeDTOList) {
-            NoticeDO noticeDO = NoticeDO.builder().
-                    read(ReadStatusEnum.UNREAD.getReadStatus())
-                    .noticeCreateTime(LocalDateTime.now())
-                    .build();
-            BeanUtils.copyProperties(noticeDTO, noticeDO);
-            noticeDOList.add(noticeDO);
+    public ApiResponse<String> insertNotices(NoticeListDTO noticeDTOList) {
+        NoticeDO noticeDO = NoticeDO.builder()
+                .read(ReadStatusEnum.UNREAD.getReadStatus())
+                .noticeCreateTime(LocalDateTime.now())
+                .build();
+        BeanUtils.copyProperties(noticeDTOList, noticeDO);
+        if(noticeDTOList.getAll()){
+            noticeMapper.insertAll(noticeDO);
+        } else {
+            noticeMapper.insertNotices(noticeDO, noticeDTOList.getReceiverIds());
         }
-        noticeMapper.insertNotices(noticeDOList);
+
         return ApiResponse.success("新增成功");
     }
 

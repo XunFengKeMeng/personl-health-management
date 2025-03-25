@@ -84,7 +84,6 @@
 <script>
 import LineChart from "@/components/LineChart"
 import PieChart from "@/components/PieChart"
-// import { timeAgo } from "@/utils/data"
 const API = {
   ARTICLE_TAGS: '/article/queryStatistics',
   ARTICLE_TREND: '/article/queryTrend',

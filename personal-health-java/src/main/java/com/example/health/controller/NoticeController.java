@@ -2,6 +2,7 @@ package com.example.health.controller;
 
 import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.NoticeDTO;
+import com.example.health.pojo.dto.NoticeListDTO;
 import com.example.health.pojo.vo.NoticeVO;
 import com.example.health.service.NoticeService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,8 +35,8 @@ public class NoticeController {
      */
     @RequestMapping(value = "/insertNotices")
     @ResponseBody
-    public ApiResponse<String> insertNotices(@RequestBody List<NoticeDTO> noticeDTOList) {
-        return noticeService.insertNotices(noticeDTOList);
+    public ApiResponse<String> insertNotices(@RequestBody NoticeListDTO noticeListDTO) {
+        return noticeService.insertNotices(noticeListDTO);
     }
 
     /**

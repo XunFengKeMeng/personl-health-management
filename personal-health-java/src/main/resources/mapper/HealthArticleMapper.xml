@@ -37,7 +37,7 @@
             <if test="healthArticleContent != null and healthArticleContent != ''">
                 health_article_content = #{healthArticleContent},
             </if>
-            <if test="healthArticleTagId != null and healthArticleTagId != ''">
+            <if test="healthArticleTagId != null">
                 health_article_tag_id = #{healthArticleTagId},
             </if>
             <if test="healthArticleCover != null and healthArticleCover != ''">
@@ -46,7 +46,7 @@
             <if test="top != null">
                 is_top = #{top},
             </if>
-            <if test="healthArticleCreateTime != null and healthArticleCreateTime != ''">
+            <if test="healthArticleCreateTime != null">
                 health_article_create_time = #{healthArticleCreateTime}
             </if>
         </set>
@@ -54,17 +54,18 @@
     </update>
 
     <!--  分页查询健康资讯  -->
-    <select id="queryArticles" resultMap="ArticleResultMap">
+    <select id="queryArticles" resultMap="ArticleVOResultMap">
         SELECT
-            health_article_id,
-            health_article_title,
-            health_article_content,
-            health_article_tag_id,
-            health_article_cover,
-            health_article_reader_ids,
-            is_top,
-            health_article_create_time
+            a.health_article_id,
+            a.health_article_title,
+            a.health_article_content,
+            t.tag_name as health_article_tag_name,
+            a.health_article_cover,
+            a.health_article_reader_ids,
+            a.is_top,
+            a.health_article_create_time
         FROM health_article a
+        LEFT JOIN health_article_tag t ON t.tag_id = a.health_article_tag_id
         <where>
             <if test="article.healthArticleTitle != null and article.healthArticleTitle != ''">
                 AND a.health_article_title LIKE concat('%', #{article.healthArticleTitle} ,'%')
@@ -147,6 +148,17 @@
         <result column="health_article_title" property="healthArticleTitle"/>
         <result column="health_article_content" property="healthArticleContent"/>
         <result column="health_article_tag_id" property="healthArticleTagId"/>
+        <result column="health_article_cover" property="healthArticleCover"/>
+        <result column="health_article_reader_ids" property="healthArticleReaderIds"/>
+        <result column="is_top" property="top"/>
+        <result column="health_article_create_time" property="healthArticleCreateTime"/>
+    </resultMap>
+    <!-- 资讯VO映射结果 -->
+    <resultMap id="ArticleVOResultMap" type="com.example.health.pojo.vo.HealthArticleVO">
+        <id column="health_article_id" property="healthArticleId"/>
+        <result column="health_article_title" property="healthArticleTitle"/>
+        <result column="health_article_content" property="healthArticleContent"/>
+        <result column="health_article_tag_Name" property="healthArticleTagName"/>
         <result column="health_article_cover" property="healthArticleCover"/>
         <result column="health_article_reader_ids" property="healthArticleReaderIds"/>
         <result column="is_top" property="top"/>

@@ -11,15 +11,34 @@
                             content_id,
                             notice_create_time)
         VALUES
-            <foreach collection="list" item="notice" index="index" separator=",">
+            <foreach collection="ids" item="id" separator=",">
                 (#{notice.noticeContent},
                  #{notice.noticeType},
-                 #{notice.receiverId},
+                 #{id},
                  #{notice.senderId},
                  #{notice.read},
                  #{notice.contentId},
                  #{notice.noticeCreateTime})
             </foreach>
+    </insert>
+
+    <!--  通知全体发布  -->
+    <insert id="insertAll" parameterType="com.example.health.pojo.entity.NoticeDO">
+        INSERT INTO notice (notice_content,
+                            notice_type,
+                            receiver_id,
+                            sender_id,
+                            is_read,
+                            content_id,
+                            notice_create_time)
+        SELECT  #{noticeContent},
+                #{noticeType},
+                u.user_id AS receiver_id,
+                #{senderId},
+                #{read},
+                #{contentId},
+                #{noticeCreateTime}
+        FROM user u;
     </insert>
 
     <!--  批量删除通知  -->
@@ -34,6 +53,12 @@
     <update id="updateNotice" parameterType="com.example.health.pojo.entity.NoticeDO">
         UPDATE notice
         <set>
+            <if test="noticeContent != null and noticeContent != ''">
+                notice_content = #{noticeContent}
+            </if>
+            <if test="noticeType != null">
+                notice_type = #{noticeType}
+            </if>
             <if test="read != null">
                 is_read = #{read}
             </if>
@@ -68,10 +93,10 @@
                 AND is_read = #{notice.read}
             </if>
         </where>
+        ORDER BY n.notice_create_time DESC
         <if test="current != null and size != null">
             LIMIT #{current},#{size}
         </if>
-        ORDER BY n.notice_create_time DESC
     </select>
     <!--  分页查询得到的通知数  -->
     <select id="queryCount" resultType="Integer">

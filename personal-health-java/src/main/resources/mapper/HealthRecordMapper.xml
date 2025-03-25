@@ -60,10 +60,10 @@
                 AND r.health_metric_id = #{record.healthMetricId}
             </if>
         </where>
+        ORDER BY r.record_create_time DESC
         <if test="current != null and size != null">
             LIMIT #{current},#{size}
         </if>
-        ORDER BY r.record_create_time DESC
     </select>
     <!--  满足分页查询条件的数据数  -->
     <select id="queryRecordsCount" resultType="Integer">

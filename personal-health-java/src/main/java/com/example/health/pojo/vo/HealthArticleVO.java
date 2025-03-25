@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * @author huanghaiming
  * @date 2025/3/14 19:23
- * @description: 健康资讯视图对象（与DO一样）
+ * @description: 健康资讯视图对象（与DO相比，标签ID替换为标签名）
  */
 @Data
 @Builder
@@ -34,9 +34,9 @@ public class HealthArticleVO {
     private String healthArticleContent;
 
     /**
-     * 健康资讯标签ID
+     * 健康资讯标签名
      */
-    private Integer healthArticleTagId;
+    private String healthArticleTagName;
 
     /**
      * 健康资讯封面

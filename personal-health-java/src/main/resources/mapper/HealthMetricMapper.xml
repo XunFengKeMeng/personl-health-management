@@ -74,10 +74,10 @@
                 m.health_metric_name LIKE concat('%', #{metric.healthMetricName}, '%')
             </if>
         </where>
+        ORDER BY m.health_metric_id ASC
         <if test="current != null and size != null">
             LIMIT #{current},#{size}
         </if>
-        ORDER BY m.health_metric_id ASC
     </select>
     <!--  满足模糊查询条件的指标数  -->
     <select id="queryHealthMetricsCount" resultType="Integer">

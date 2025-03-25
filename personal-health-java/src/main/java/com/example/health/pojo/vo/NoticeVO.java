@@ -25,7 +25,7 @@ public class NoticeVO {
     /**
      * 消息类型
      */
-    private String noticeType;
+    private Integer noticeType;
 
     /**
      * 消息内容

@@ -2,6 +2,7 @@ package com.example.health.service;
 
 import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.NoticeDTO;
+import com.example.health.pojo.dto.NoticeListDTO;
 import com.example.health.pojo.vo.NoticeVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public interface NoticeService {
      * @param notices 新增的通知信息列表
      * @return 新增操作响应结果
      */
-    ApiResponse<String> insertNotices(List<NoticeDTO> noticeDTOList);
+    ApiResponse<String> insertNotices(NoticeListDTO noticeListDTO);
 
     /**
      * 批量删除通知

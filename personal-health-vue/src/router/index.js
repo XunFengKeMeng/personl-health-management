@@ -61,6 +61,48 @@ const routes = [
         component: () => import(`@/views/admin/AdminMain.vue`),
         meta: { requireAuth: true }
       },
+      {
+        path: "/userManage",
+        name: '用户管理',
+        icon: 'el-icon-user',
+        component: () => import(`@/views/admin/UserManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/TagManage",
+        name: '标签管理',
+        icon: 'el-icon-edit',
+        component: () => import(`@/views/admin/TagManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/ArticleManage",
+        name: '资讯管理',
+        icon: 'el-icon-edit-outline',
+        component: () => import(`@/views/admin/ArticleManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/NoticeManage",
+        name: '通知管理',
+        icon: 'el-icon-chat-dot-square',
+        component: () => import(`@/views/admin/NoticeManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/MetricManage",
+        name: '健康指标管理',
+        icon: 'el-icon-tickets',
+        component: () => import(`@/views/admin/MetricManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/RecordManage",
+        name: '健康记录管理',
+        icon: 'el-icon-document',
+        component: () => import(`@/views/admin/RecordManage.vue`),
+        meta: { requireAuth: true }
+      },
     ]
   },
   {
@@ -69,7 +111,8 @@ const routes = [
     meta: {
       requireAuth: true // 需要登录验证
     }
-  }
+  },
+
 ]
 
 /**

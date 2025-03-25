@@ -20,7 +20,16 @@ public interface NoticeMapper {
      *
      * @param notices 新增的若干通知信息
      */
-    void insertNotices(List<NoticeDO> notices);
+    void insertNotices(
+            @Param("notice")NoticeDO notice,
+            @Param("ids")List<Integer> receiverIds);
+
+    /**
+     * 发布全体通知
+     *
+     * @param notices 新增的若干通知信息
+     */
+    void insertAll(NoticeDO notice);
 
     /**
      * 批量删除通知

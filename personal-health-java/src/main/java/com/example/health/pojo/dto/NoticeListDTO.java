@@ -3,26 +3,23 @@ package com.example.health.pojo.dto;
 import com.example.health.pojo.dto.query.base.QueryDTO;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * @author huanghaiming
- * @date 2025/3/5 14:54
- * @description: 通知查询数据传输对象
+ * @date 2025/3/25 14:52
+ * @description: 新增通知使用到的数据传输对象
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NoticeDTO extends QueryDTO {
+public class NoticeListDTO extends QueryDTO {
     /**
-     * 消息ID
+     * 接收者ID集合
      */
-    private Integer noticeId;
-
-    /**
-     * 接收者ID
-     */
-    private Integer receiverId;
+    private List<Integer> receiverIds;
 
     /**
      * 发送者ID
@@ -40,12 +37,7 @@ public class NoticeDTO extends QueryDTO {
     private String noticeContent;
 
     /**
-     * 消息是否已读
+     * 是否为全体发布
      */
-    private Boolean read;
-
-    /**
-     * 关联信息ID（如哪个指标数据异常通知...）
-     */
-    private Integer contentId;
+    private Boolean all;
 }

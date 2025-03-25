@@ -29,8 +29,8 @@
 
 
 .el-switch.is-checked .el-switch__core {
-  border-color: rgb(43, 121, 203) !important;
-  background-color: rgb(43, 121, 203) !important;
+  border-color: rgb(43, 121, 203);
+  background-color: rgb(43, 121, 203);
 }
 
 .avatar-uploader .el-upload {
@@ -134,8 +134,8 @@
 /* 表格多选框颜色 */
 .el-checkbox__input.is-checked .el-checkbox__inner,
 .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-  background-color: #a7535a !important;
-  border-color: #a7535a !important;
+  background-color: #0088d2 !important;
+  border-color: #0088d2 !important;
 }
 
 .el-slider__bar {
@@ -228,4 +228,8 @@
   border-radius: 3px;
   margin: 0 6px;
   background-color: rgb(206, 204, 204);
+}
+
+.el-table__fixed-right {
+  box-shadow: none;
 }
