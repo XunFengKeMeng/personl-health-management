@@ -92,17 +92,31 @@ const routes = [
       {
         path: "/MetricManage",
         name: '健康指标管理',
-        icon: 'el-icon-tickets',
+        icon: 'el-icon-sort',
         component: () => import(`@/views/admin/MetricManage.vue`),
         meta: { requireAuth: true }
       },
       {
-        path: "/RecordManage",
-        name: '健康记录管理',
-        icon: 'el-icon-document',
-        component: () => import(`@/views/admin/RecordManage.vue`),
+        path: "/FormItemManage",
+        name: '表单项管理',
+        icon: 'el-icon-news',
+        component: () => import(`@/views/admin/FormItemManage.vue`),
         meta: { requireAuth: true }
       },
+      {
+        path: "/FormManage",
+        name: '表单模板管理',
+        icon: 'el-icon-tickets',
+        component: () => import(`@/views/admin/FormManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/FormDataManage",
+        name: '表单数据管理',
+        icon: 'el-icon-document-copy',
+        component: () => import(`@/views/admin/FormDataManage.vue`),
+        meta: { requireAuth: true }
+      }
     ]
   },
   {
