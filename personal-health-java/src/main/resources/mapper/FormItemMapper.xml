@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.health.mapper.FormItemMapper">
+    <!--  新增表单项  -->
+    <insert id="saveFormItem" parameterType="com.example.health.pojo.entity.FormItemDO">
+        INSERT INTO form_item_config(item_name,
+                                     health_metric_id,
+                                     placeholder,
+                                     is_required)
+        VALUES (#{itemName},
+                #{healthMetricId},
+                #{placeholder},
+                #{required})
+    </insert>
+
+    <!--  批量删除表单项  -->
+    <delete id="deleteFormItems" parameterType="list">
+        DELETE FROM form_item_config WHERE item_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 修改表单项信息 -->
+    <update id="updateFormItem" parameterType="com.example.health.pojo.entity.FormItemDO">
+        UPDATE form_item_config
+        <set>
+            <if test="itemName != null and itemName != ''">
+                item_name = #{itemName},
+            </if>
+            <if test="healthMetricId != null">
+                health_metric_id = #{healthMetricId},
+            </if>
+            <if test="placeholder != null and placeholder != ''">
+                placeholder = #{placeholder},
+            </if>
+            <if test="required != null">
+                is_required = #{required}
+            </if>
+        </set>
+        WHERE item_id = #{itemId}
+    </update>
+
+    <!--  模糊查询表单项  -->
+    <select id="queryFormItems" resultMap="FormItemVOResultMap">
+        SELECT i.item_id,
+               i.item_name,
+               h.health_metric_name,
+               i.placeholder,
+               i.is_required
+        FROM form_item_config i
+        LEFT JOIN health_metric h ON h.health_metric_id = i.health_metric_id
+        <where>
+            <if test="item.itemName != null and item.itemName != ''">
+                i.item_name LIKE concat('%', #{item.itemName}, '%')
+            </if>
+        </where>
+        ORDER BY i.item_id ASC
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+    </select>
+
+    <!--  满足模糊查询条件的表单项数量  -->
+    <select id="queryFormItemsCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM form_item_config
+        <where>
+            <if test="itemName != null and itemName != ''">
+                item_name LIKE concat('%', #{itemName}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!--  表单项视图对象映射实体  -->
+    <resultMap id="FormItemVOResultMap" type="com.example.health.pojo.vo.FormItemVO">
+        <id column="item_id" property="itemId"/>
+        <result column="item_name" property="itemName"/>
+        <result column="health_metric_name" property="healthMetricName"/>
+        <result column="placeholder" property="placeholder"/>
+        <result column="is_required" property="required"/>
+    </resultMap>
+</mapper>

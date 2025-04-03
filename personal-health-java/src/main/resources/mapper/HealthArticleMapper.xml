@@ -153,7 +153,7 @@
         <result column="is_top" property="top"/>
         <result column="health_article_create_time" property="healthArticleCreateTime"/>
     </resultMap>
-    <!-- 资讯VO映射结果 -->
+    <!-- 资讯视图对象映射结果 -->
     <resultMap id="ArticleVOResultMap" type="com.example.health.pojo.vo.HealthArticleVO">
         <id column="health_article_id" property="healthArticleId"/>
         <result column="health_article_title" property="healthArticleTitle"/>

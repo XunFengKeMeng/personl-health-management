@@ -1,4 +1,4 @@
-package com.example.health.pojo.entity;
+package com.example.health.pojo.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,16 +7,16 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author huanghaiming
- * @date 2025/4/1 22:25
- * @description: 表达项数据实体对象
+ * @date 2025/4/2 15:13
+ * @description: 表单模板下表单项信息的视图对象
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FormItemDO {
+public class TemplateItemRelationVO {
     /**
-     * 表达项ID
+     * 表单项ID
      */
     private Integer itemId;
 
@@ -24,11 +24,6 @@ public class FormItemDO {
      * 表单项名
      */
     private String itemName;
-
-    /**
-     * 关联的健康指标ID
-     */
-    private Integer healthMetricId;
 
     /**
      * 输入框提示文本
@@ -39,4 +34,9 @@ public class FormItemDO {
      * 是否必填
      */
     private Boolean required;
+
+    /**
+     * 表单项排序号
+     */
+    private Integer sortOrder;
 }

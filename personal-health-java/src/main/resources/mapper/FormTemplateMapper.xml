@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.health.mapper.FormTemplateMapper">
+    <!--  新增表单模板  -->
+    <insert id="save" parameterType="com.example.health.pojo.entity.FormTemplateDO"
+            useGeneratedKeys="true" keyProperty="templateId" keyColumn="template_id">
+        INSERT INTO form_template(template_name,
+                                  creator_id,
+                                  is_active,
+                                  create_time)
+        VALUES (#{templateName},
+                #{creatorId},
+                #{active},
+                #{createTime})
+    </insert>
+
+    <!--  删除指定表单模板  -->
+    <delete id="deleteByTemplateId" parameterType="Integer">
+        DELETE FROM form_template WHERE template_id = #{templateId}
+    </delete>
+
+    <!--  更新表单模板信息  -->
+    <update id="update" parameterType="com.example.health.pojo.entity.FormTemplateDO">
+        UPDATE form_template
+        <set>
+            <if test="templateName != null and templateName != ''">
+                template_name = #{templateName},
+            </if>
+            <if test="active != null">
+                is_active = #{active}
+            </if>
+        </set>
+        WHERE template_id = #{templateId}
+    </update>
+
+    <!--  模糊查询表单模板  -->
+    <select id="query" resultMap="FormTemplateVOResultMap">
+        SELECT
+            ft.template_id,
+            ft.template_name,
+            u.user_name AS creator_name,
+            ft.create_time,
+            ft.is_active
+        FROM form_template ft
+        LEFT JOIN user u ON u.user_id = ft.creator_id
+        <where>
+            <if test="formTemplate.templateName != null and formTemplate.templateName != ''">
+                ft.template_name LIKE concat('%',#{formTemplate.templateName},'%')
+            </if>
+        </where>
+        ORDER BY ft.template_id ASC
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+    </select>
+
+    <!--  满足模糊查询条件的表单模板数  -->
+    <select id="count" resultType="Integer">
+        SELECT COUNT(*)
+        FROM form_template
+        <where>
+            <if test="templateName != null and templateName != ''">
+                template_name LIKE concat('%',#{templateName},'%')
+            </if>
+        </where>
+    </select>
+
+    <!--  根据表单模板ID查询表单模板信息（不包含关联项）  -->
+    <select id="queryByTemplateId" resultMap="FormTemplateVOResultMap">
+        SELECT
+            ft.template_id,
+            ft.template_name,
+            u.user_name AS creator_name,
+            ft.create_time,
+            ft.is_active
+        FROM form_template ft
+        LEFT JOIN user u ON u.user_id = ft.creator_id
+        WHERE ft.template_id = #{templateId}
+    </select>
+
+    <!--  表单模板视图对象映射  -->
+    <resultMap id="FormTemplateVOResultMap" type="com.example.health.pojo.vo.FormTemplateVO">
+        <id column="template_id" property="templateId"/>
+        <result column="template_name" property="templateName"/>
+        <result column="creator_name" property="creatorName"/>
+        <result column="is_active" property="active"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+</mapper>
