@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.health.mapper.SubmissionMapper">
+    <!--  新增表单提交记录  -->
+    <insert id="save" parameterType="com.example.health.pojo.entity.SubmissionDO"
+            useGeneratedKeys="true" keyProperty="submissionId" keyColumn="submission_id">
+        INSERT INTO form_submission(template_id,
+                                    user_id,
+                                    status,
+                                    submit_time)
+        VALUES (#{templateId},
+                #{userId},
+                #{status},
+                #{submitTime})
+    </insert>
+
+    <!--  删除指定表单提交记录  -->
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM form_submission WHERE submission_id = #{submissionId}
+    </delete>
+
+    <!--  修改表单提交记录（一般为审核状态）  -->
+    <update id="update" parameterType="com.example.health.pojo.entity.SubmissionDO">
+        UPDATE form_submission
+        <set>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        WHERE submission_id = #{submissionId}
+    </update>
+
+    <!--  模糊查询表单提交记录  -->
+    <select id="query" resultMap="SubmissionVOResultMap">
+        SELECT
+            fs.submission_id,
+            ft.template_name,
+            u.user_name,
+            fs.status,
+            fs.submit_time
+        FROM form_submission fs
+        LEFT JOIN user u ON u.user_id = fs.user_id
+        LEFT JOIN form_template ft ON ft.template_id = fs.template_id
+        <where>
+            <if test="templateName != null and templateName != ''">
+                ft.template_name LIKE concat('%',#{templateName},'%')
+            </if>
+            <if test="userName != null and userName != ''">
+                u.user_name LIKE concat('%',#{userName},'%')
+            </if>
+        </where>
+        ORDER BY fs.submission_id DESC
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+    </select>
+
+    <!--  满足查询条件的提交记录数量  -->
+    <select id="count" resultType="Integer">
+        SELECT COUNT(*)
+        FROM form_submission fs
+        LEFT JOIN user u ON u.user_id = fs.user_id
+        LEFT JOIN form_template ft ON ft.template_id = fs.template_id
+        <where>
+            <if test="templateName != null and templateName != ''">
+                ft.template_name LIKE concat('%',#{templateName},'%')
+            </if>
+            <if test="userName != null and userName != ''">
+                u.user_name LIKE concat('%',#{userName},'%')
+            </if>
+        </where>
+    </select>
+
+    <!--  查询特定表单提交数据  -->
+    <select id="queryById" resultMap="SubmissionVOResultMap">
+        SELECT
+            fs.submission_id,
+            ft.template_id,
+            ft.template_name,
+            u.user_name,
+            fs.status,
+            fs.submit_time
+        FROM form_submission fs
+        LEFT JOIN user u ON u.user_id = fs.user_id
+        LEFT JOIN form_template ft ON ft.template_id = fs.template_id
+        WHERE submission_id = #{submissionId}
+    </select>
+
+    <!--  表单提交记录视图对象映射（不包含表单项数据）  -->
+    <resultMap id="SubmissionVOResultMap" type="com.example.health.pojo.vo.SubmissionVO">
+        <id column="submission_id" property="submissionId"/>
+        <result column="template_id" property="templateId"/>
+        <result column="template_name" property="templateName"/>
+        <result column="user_name" property="userName"/>
+        <result column="status" property="status"/>
+        <result column="submit_time" property="submitTime"/>
+    </resultMap>
+</mapper>

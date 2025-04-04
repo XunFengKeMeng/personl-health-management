@@ -36,7 +36,7 @@ public class SubmissionDO {
     /**
      * 审核状态
      */
-    private Boolean status;
+    private Integer status;
 
     /**
      * 提交时间

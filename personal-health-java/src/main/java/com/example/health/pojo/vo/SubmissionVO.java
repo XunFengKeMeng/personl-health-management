@@ -1,6 +1,5 @@
 package com.example.health.pojo.vo;
 
-import com.example.health.pojo.entity.FormDataDO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +25,14 @@ public class SubmissionVO {
     private Integer submissionId;
 
     /**
+     * 表单模板ID
+     */
+    private Integer templateId;
+
+    /**
      * 表单模板名
      */
-    private Integer templateName;
+    private String templateName;
 
     /**
      * 提交用户名
@@ -38,7 +42,7 @@ public class SubmissionVO {
     /**
      * 审核状态
      */
-    private Boolean status;
+    private Integer status;
 
     /**
      * 提交时间
@@ -49,5 +53,5 @@ public class SubmissionVO {
     /**
      * 表单项数据
      */
-    private List<FormDataDO> formDataList;
+    private List<FormDataVO> formDataList;
 }

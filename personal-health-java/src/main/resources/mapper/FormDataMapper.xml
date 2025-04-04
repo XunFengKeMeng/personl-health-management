@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.health.mapper.FormDataMapper">
+    <!--  新增提交表单的（所有）表单项数据  -->
+    <insert id="batchSave" parameterType="List">
+        INSERT INTO form_data(submission_id,
+                              item_id,
+                              value)
+        VALUES
+            <foreach collection="list" item="item" separator=",">
+                (
+                 #{item.submissionId},
+                 #{item.itemId},
+                 #{item.value}
+                )
+            </foreach>
+    </insert>
+
+    <!--  删除提交表单的（所有）表单项数据  -->
+    <delete id="deleteBySubmissionId" parameterType="Integer">
+        DELETE FROM form_data
+        WHERE submission_id = #{submissionId}
+    </delete>
+
+    <!--  更新提交表单（所有）表单项数据  -->
+    <update id="update" parameterType="com.example.health.pojo.entity.FormDataDO">
+        UPDATE form_data
+        SET
+            value = CASE 
+                <foreach collection="list" item="item">
+                    WHEN submission_id = #{item.submissionId} AND item_id = #{item.itemId} THEN #{item.value}
+                </foreach>
+            END
+        WHERE
+            (submission_id, item_id) IN
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+                (#{item.submissionId}, #{item.itemId})
+            </foreach>
+    </update>
+
+    <!--  查询提交表单下所有的表单项数据  -->
+    <select id="queryBySubmissionId" resultMap="FormDataVOResultMap">
+        SELECT fd.form_data_id,
+               fd.submission_id,
+               fd.item_id,
+               fic.item_name,
+               fic.is_required,
+               fd.value,
+               tir.sort_order
+        FROM form_data fd
+        LEFT JOIN template_item_relation tir on tir.template_id = #{tid} AND tir.item_id = fd.item_id
+        LEFT JOIN form_item_config fic on fic.item_id = fd.item_id
+        WHERE fd.submission_id = #{sid}
+    </select>
+
+    <!--  提交表单项数据视图对象映射  -->
+    <resultMap id="FormDataVOResultMap" type="com.example.health.pojo.vo.FormDataVO">
+        <id column="form_data_id" property="formDataId"/>
+        <result column="submission_id" property="submissionId"/>
+        <result column="item_id" property="itemId"/>
+        <result column="item_name" property="itemName"/>
+        <result column="is_required" property="required"/>
+        <result column="value" property="value"/>
+        <result column="sort_order" property="sortOrder"/>
+    </resultMap>
+</mapper>

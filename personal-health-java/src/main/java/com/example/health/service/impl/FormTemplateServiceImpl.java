@@ -56,10 +56,10 @@ public class FormTemplateServiceImpl implements FormTemplateService {
         // 新增表单模板关联的所有表单项
         List<TemplateItemRelationDO> templateItemRelationDOList = formTemplateDTO.getItemList()
                 .stream().map(itemDTO -> TemplateItemRelationDO.builder()
-                .templateId(formTemplateDO.getTemplateId())
-                .itemId(itemDTO.getItemId())
-                .sortOrder(itemDTO.getSortOrder())
-                .build()).collect(Collectors.toList());
+                        .templateId(formTemplateDO.getTemplateId())
+                        .itemId(itemDTO.getItemId())
+                        .sortOrder(itemDTO.getSortOrder())
+                        .build()).collect(Collectors.toList());
         templateItemRelationMapper.batchSave(templateItemRelationDOList);
 
         return ApiResponse.success("表单模板及其相关项新增成功");

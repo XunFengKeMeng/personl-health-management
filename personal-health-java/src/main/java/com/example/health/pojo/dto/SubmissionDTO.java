@@ -27,14 +27,24 @@ public class SubmissionDTO extends QueryDTO {
     private Integer templateId;
 
     /**
+     * 表单模板名
+     */
+    private String templateName;
+
+    /**
      * 提交用户ID
      */
     private Integer userId;
 
     /**
+     * 用户名
+     */
+    private String userName;
+
+    /**
      * 审核状态
      */
-    private Boolean status;
+    private Integer status;
 
     /**
      * 表单项数据
