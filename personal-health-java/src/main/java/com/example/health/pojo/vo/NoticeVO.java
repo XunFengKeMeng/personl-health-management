@@ -1,5 +1,6 @@
 package com.example.health.pojo.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -56,5 +57,6 @@ public class NoticeVO {
     /**
      * 信息发送时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime noticeCreateTime;
 }

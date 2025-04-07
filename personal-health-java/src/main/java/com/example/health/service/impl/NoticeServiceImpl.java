@@ -42,7 +42,7 @@ public class NoticeServiceImpl implements NoticeService {
                 .noticeCreateTime(LocalDateTime.now())
                 .build();
         BeanUtils.copyProperties(noticeDTOList, noticeDO);
-        if(noticeDTOList.getAll()){
+        if(noticeDTOList.getAll() != null) {
             noticeMapper.insertAll(noticeDO);
         } else {
             noticeMapper.insertNotices(noticeDO, noticeDTOList.getReceiverIds());
