@@ -62,4 +62,13 @@ public interface HealthArticleService {
      * @return 每天的文章数
      */
     ApiResponse<List<ArticleTrendVO>> queryArticleTrend();
+
+    /**
+     * 查询文章具体信息
+     *
+     * @param articleId 待查询资讯ID
+     * @param userId 查看资讯的用户ID
+     * @return 查询结果
+     */
+    ApiResponse<HealthArticleVO> queryArticleById(Integer articleId, Integer userId);
 }

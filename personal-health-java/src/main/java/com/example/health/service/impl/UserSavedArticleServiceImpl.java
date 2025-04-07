@@ -59,6 +59,22 @@ public class UserSavedArticleServiceImpl implements UserSavedArticleService {
     }
 
     /**
+     * 根据用户ID和资讯ID删除指定收藏记录
+     *
+     * @param userSavedArticleDTO 待删除的收藏记录信息
+     * @return 删除操作响应结果
+     */
+    @Override
+    public ApiResponse<String> deleteOneSaved(UserSavedArticleDTO userSavedArticleDTO) {
+        UserSavedArticleDO userSavedArticleDO = UserSavedArticleDO.builder()
+                .userId(userSavedArticleDTO.getUserId())
+                .articleId(userSavedArticleDTO.getArticleId())
+                .build();
+        userSavedArticleMapper.deleteOneSaved(userSavedArticleDO);
+        return ApiResponse.success("记录删除成功");
+    }
+
+    /**
      * 分页查询收藏记录
      *
      * @param userSavedArticleDTO 查询参数（用户ID/健康资讯ID）

@@ -215,6 +215,7 @@
         >
         </el-switch>
       </div>
+      
       <span
         slot="footer"
         class="dialog-footer"

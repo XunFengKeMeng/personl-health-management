@@ -48,6 +48,18 @@ public class UserSavedArticleController {
     }
 
     /**
+     * 删除指定收藏记录
+     *
+     * @param userSavedArticleDTO 删除记录使用参数（用户ID、资讯ID）
+     * @return 删除操作响应结果
+     */
+    @PostMapping(value = "/deleteOne")
+    @ResponseBody
+    public ApiResponse<String> deleteOne(@RequestBody UserSavedArticleDTO userSavedArticleDTO) {
+        return userSavedArticleService.deleteOneSaved(userSavedArticleDTO);
+    }
+
+    /**
      * 分页查询收藏记录（根据用户ID/健康资讯ID）
      *
      * @param userSavedArticleDTO 包含用户ID/健康资讯ID的查询参数

@@ -48,5 +48,5 @@ public class FormTemplateDetailVO {
     /**
      * 关联项列表
      */
-    private List<TemplateItemRelationVO> itemRelations;
+    private List<TemplateItemRelationVO> itemList;
 }

@@ -29,6 +29,13 @@ public interface UserSavedArticleMapper {
     void deleteSavedArticles(@Param("ids") List<Integer> ids);
 
     /**
+     * 删除单条记录
+     *
+     * @param userSavedArticleDO 收藏信息查询参数（用户ID和文章ID）
+     */
+    void deleteOneSaved(UserSavedArticleDO userSavedArticleDO);
+
+    /**
      * 查询收藏记录（主要用于检查数据库内有无记录）
      *
      * @param userSavedArticleDO 收藏记录信息

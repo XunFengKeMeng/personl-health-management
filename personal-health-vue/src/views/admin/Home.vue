@@ -146,7 +146,7 @@ export default {
   },
   methods: {
     // 退出登录
-    async loginOut () {
+    async logout () {
       const confirmed = await this.$swalConfirm({
         title: '退出登录？',
         text: `退出后需重新登录？`,
@@ -175,8 +175,8 @@ export default {
         this.dialogOperaion = true;
       }
       // 退出登录事件
-      if (event === 'loginOut') {
-        this.loginOut();
+      if (event === 'logout') {
+        this.logout();
       }
     },
     // 加载侧边栏上次的状态

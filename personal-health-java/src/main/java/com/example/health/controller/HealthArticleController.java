@@ -95,4 +95,10 @@ public class HealthArticleController {
     public ApiResponse<List<ArticleTrendVO>> queryArticleTrend() {
         return healthArticleService.queryArticleTrend();
     }
+
+    @PostMapping(value = "/queryDetail")
+    @ResponseBody
+    public ApiResponse<HealthArticleVO> queryArticleByArticleId(@RequestBody HealthArticleDTO healthArticleDTO) {
+        return healthArticleService.queryArticleById(healthArticleDTO.getHealthArticleId(), healthArticleDTO.getUserId());
+    }
 }

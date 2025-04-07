@@ -20,7 +20,7 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item icon="el-icon-user-solid" @click.native="userCenterPanel">个人资料</el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-s-fold" @click.native="loginOut">退出登录</el-dropdown-item>
+                    <el-dropdown-item icon="el-icon-s-fold" @click.native="logout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </span>
@@ -56,8 +56,8 @@ export default {
             this.$emit('eventListener', 'center');
         },
         // 退出登录，传回父组件处理
-        loginOut() {
-            this.$emit('eventListener', 'loginOut');
+        logout() {
+            this.$emit('eventListener', 'logout');
         },
         operation() {
             this.showFlag = !this.showFlag;

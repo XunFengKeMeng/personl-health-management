@@ -64,9 +64,6 @@
             </if>
         </where>
         ORDER BY template_id DESC
-        <if test="current != null and size != null">
-            LIMIT #{current},#{size}
-        </if>
     </select>
 
     <!--  根据表单模板ID查询表单模板信息（不包含关联项）  -->

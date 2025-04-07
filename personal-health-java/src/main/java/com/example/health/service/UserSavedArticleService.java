@@ -2,6 +2,7 @@ package com.example.health.service;
 
 import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.UserSavedArticleDTO;
+import com.example.health.pojo.entity.UserSavedArticleDO;
 import com.example.health.pojo.vo.UserSavedArticleVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,14 @@ public interface UserSavedArticleService {
      * @return 删除操作响应结果
      */
     ApiResponse<String> deleteSavedArticles(@Param("ids") List<Integer> ids);
+
+    /**
+     * 根据用户ID和资讯ID删除指定收藏记录
+     *
+     * @param userSavedArticleDTO 待删除的收藏记录信息
+     * @return 删除操作响应结果
+     */
+    ApiResponse<String> deleteOneSaved(UserSavedArticleDTO userSavedArticleDTO);
 
     /**
      * 分页查询收藏记录

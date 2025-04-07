@@ -146,7 +146,7 @@ public class FormTemplateServiceImpl implements FormTemplateService {
                 .creatorName(formTemplateVO.getCreatorName())
                 .active(formTemplateVO.getActive())
                 .createTime(formTemplateVO.getCreateTime())
-                .itemRelations(templateItemRelationVOList)
+                .itemList(templateItemRelationVOList)
                 .build();
         return ApiResponse.success(formTemplateDetailVO);
     }

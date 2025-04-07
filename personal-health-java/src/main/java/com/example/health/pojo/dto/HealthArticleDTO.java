@@ -59,4 +59,9 @@ public class HealthArticleDTO {
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime healthArticleCreateTime;
+
+    /**
+     * 用来传递用户与资讯的收藏关系
+     */
+    private Integer userId;
 }

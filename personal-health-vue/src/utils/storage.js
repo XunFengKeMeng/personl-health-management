@@ -30,13 +30,6 @@ export function setToken (token) {
  * @returns 用户的健康信息
  */
 export function getHealthInfo () {
-    // const info = sessionStorage.getItem(INFO_KEY);
-    // try {
-    //   return info ? JSON.parse(info) : null; // 解析 JSON 字符串
-    // } catch (error) {
-    //   console.error("Failed to parse health info:", error);
-    //   return null;
-    // }
     return sessionStorage.getItem(INFO_KEY);
 }
 

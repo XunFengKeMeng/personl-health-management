@@ -112,7 +112,7 @@ const routes = [
       },
       {
         path: "/FormDataManage",
-        name: '表单数据管理',
+        name: '提交表单审核',
         icon: 'el-icon-document-copy',
         component: () => import(`@/views/admin/FormDataManage.vue`),
         meta: { requireAuth: true }
@@ -124,7 +124,50 @@ const routes = [
     component: () => import(`@/views/user/Main.vue`),
     meta: {
       requireAuth: true // 需要登录验证
-    }
+    },
+    children: [
+      {
+        name: '首页',
+        path: "/article",
+        component: () => import(`@/views/user/Home.vue`),
+        meta: {
+          requireAuth: true,
+        },
+      },
+      {
+        name: '健康资讯详情',
+        path: "/article-detail",
+        component: () => import(`@/views/user/ArticleDetail.vue`),
+        meta: {
+          requireAuth: true,
+          isHidden: true, // 不显示
+        },
+      },
+      {
+        name: '我的收藏',
+        path: "/savedArticle",
+        component: () => import(`@/views/user/SavedArticle.vue`),
+        meta: {
+          requireAuth: true,
+        },
+      },
+      {
+        name: '表单',
+        path: "/form",
+        component: () => import(`@/views/user/UserForm.vue`),
+        meta: {
+          requireAuth: true,
+        },
+      },
+      {
+        name: '通知',
+        path: "/notice",
+        component: () => import(`@/views/user/UserNotice.vue`),
+        meta: {
+          requireAuth: true,
+        },
+      },
+    ]
   },
 
 ]

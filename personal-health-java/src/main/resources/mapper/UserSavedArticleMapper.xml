@@ -19,6 +19,12 @@
         </foreach>
     </delete>
 
+    <!--  删除单条收藏记录  -->
+    <delete id="deleteOneSaved" parameterType="com.example.health.pojo.entity.UserSavedArticleDO">
+        DELETE FROM user_saved_article
+        WHERE user_id = #{userId} AND article_id = #{articleId}
+    </delete>
+
     <!--  根据用户ID和资讯ID查询记录信息  -->
     <select id="querySavedArticle" resultMap="SavedResultMap">
         SELECT user_id, article_id FROM user_saved_article

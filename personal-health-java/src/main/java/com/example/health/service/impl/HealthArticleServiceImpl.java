@@ -2,12 +2,15 @@ package com.example.health.service.impl;
 
 import com.example.health.api.ApiResponse;
 import com.example.health.mapper.HealthArticleMapper;
+import com.example.health.mapper.UserSavedArticleMapper;
 import com.example.health.pojo.dto.HealthArticleDTO;
 import com.example.health.pojo.dto.query.extend.HealthArticleQueryDTO;
 import com.example.health.pojo.entity.HealthArticleDO;
+import com.example.health.pojo.entity.UserSavedArticleDO;
 import com.example.health.pojo.vo.ArticleTagStatisticsVO;
 import com.example.health.pojo.vo.ArticleTrendVO;
 import com.example.health.pojo.vo.HealthArticleVO;
+import com.example.health.pojo.vo.UserSavedArticleVO;
 import com.example.health.service.HealthArticleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author huanghaiming
@@ -29,6 +33,12 @@ public class HealthArticleServiceImpl implements HealthArticleService {
      */
     @Resource
     private HealthArticleMapper healthArticleMapper;
+
+    /**
+     * 收藏关系持久层接口注入
+     */
+    @Resource
+    private UserSavedArticleMapper userSavedArticleMapper;
 
     /**
      * 新增健康资讯
@@ -112,5 +122,36 @@ public class HealthArticleServiceImpl implements HealthArticleService {
      */
     public ApiResponse<List<ArticleTrendVO>> queryArticleTrend() {
         return ApiResponse.success(healthArticleMapper.queryArticleTrend());
+    }
+
+    /**
+     * 查询文章具体信息
+     *
+     * @param articleId 待查询资讯ID
+     * @param userId 查看文章的用户ID
+     * @return 查询结果
+     */
+    @Override
+    public ApiResponse<HealthArticleVO> queryArticleById(Integer articleId, Integer userId) {
+        // 获知用户是否已经收藏了该资讯文章
+        UserSavedArticleDO userSavedArticleDO = UserSavedArticleDO.builder()
+                .articleId(articleId)
+                .userId(userId)
+                .build();
+        List<UserSavedArticleVO> result = userSavedArticleMapper.querySavedArticles(userSavedArticleDO, null, null);
+        boolean flag = Optional.ofNullable(result)
+                .map(list -> !list.isEmpty())
+                .orElse(false);
+        // 视图对象设置
+        HealthArticleDO healthArticleDO = healthArticleMapper.getByArticleId(articleId);
+        HealthArticleVO healthArticleVO = HealthArticleVO.builder()
+                .healthArticleId(healthArticleDO.getHealthArticleId())
+                .healthArticleTitle(healthArticleDO.getHealthArticleTitle())
+                .healthArticleContent(healthArticleDO.getHealthArticleContent())
+                .top(healthArticleDO.getTop())
+                .healthArticleCreateTime(healthArticleDO.getHealthArticleCreateTime())
+                .saved(flag)
+                .build();
+        return ApiResponse.success(healthArticleVO);
     }
 }
