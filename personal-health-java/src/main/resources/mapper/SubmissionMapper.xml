@@ -42,11 +42,14 @@
         LEFT JOIN user u ON u.user_id = fs.user_id
         LEFT JOIN form_template ft ON ft.template_id = fs.template_id
         <where>
-            <if test="templateName != null and templateName != ''">
-                ft.template_name LIKE concat('%',#{templateName},'%')
+            <if test="sub.templateName != null and sub.templateName != ''">
+                AND ft.template_name LIKE concat('%',#{sub.templateName},'%')
             </if>
-            <if test="userName != null and userName != ''">
-                u.user_name LIKE concat('%',#{userName},'%')
+            <if test="sub.userName != null and sub.userName != ''">
+                AND u.user_name LIKE concat('%',#{sub.userName},'%')
+            </if>
+            <if test="sub.userId != null">
+                AND fs.user_id = #{sub.userId}
             </if>
         </where>
         ORDER BY fs.submission_id DESC
@@ -66,7 +69,10 @@
                 ft.template_name LIKE concat('%',#{templateName},'%')
             </if>
             <if test="userName != null and userName != ''">
-                u.user_name LIKE concat('%',#{userName},'%')
+                AND u.user_name LIKE concat('%',#{userName},'%')
+            </if>
+            <if test="userId != null">
+                AND fs.user_id = #{userId}
             </if>
         </where>
     </select>

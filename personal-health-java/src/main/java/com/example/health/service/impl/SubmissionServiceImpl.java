@@ -115,13 +115,17 @@ public class SubmissionServiceImpl implements SubmissionService {
      */
     @Override
     public ApiResponse<List<SubmissionVO>> query(SubmissionDTO submissionDTO) {
+        SubmissionDO submissionDO = SubmissionDO.builder()
+                .templateName(submissionDTO.getTemplateName())
+                .userId(submissionDTO.getUserId())
+                .userName(submissionDTO.getUserName())
+                .build();
         List<SubmissionVO> submissionVOList = submissionMapper.query(
-                submissionDTO.getTemplateName(),
-                submissionDTO.getUserName(),
+                submissionDO,
                 submissionDTO.getCurrent(),
                 submissionDTO.getSize()
         );
-        Integer count = submissionMapper.count(submissionDTO.getTemplateName(), submissionDTO.getUserName());
+        Integer count = submissionMapper.count(submissionDO);
         return ApiResponse.success(submissionVOList, count);
     }
 

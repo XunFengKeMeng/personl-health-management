@@ -39,28 +39,23 @@ public interface SubmissionMapper {
     /**
      * 模糊查询表单提交信息
      *
-     * @param templateName 表单模板名（部分）
-     * @param userName 用户名（部分）
+     * @param submissionDO 查询参数
      * @param current 当前页
      * @param size 页大小
      * @return 满足查询条件的提交表单列表
      */
     List<SubmissionVO> query(
-            @Param("templateName") String templateName,
-            @Param("userName") String userName,
+            @Param("sub") SubmissionDO submissionDO,
             @Param("current") Integer current,
             @Param("size") Integer size);
 
     /**
      * 满足模糊查询条件的表单提交信息数量
      *
-     * @param templateName 表单模板名（部分）
-     * @param userName 用户名（部分）
+     * @param submissionDO 查询参数
      * @return 满足查询条件的的数据数量
      */
-    Integer count(
-            @Param("templateName") String templateName,
-            @Param("userName") String userName);
+    Integer count(SubmissionDO submissionDO);
 
     /**
      * 根据提交ID查询表单记录结果

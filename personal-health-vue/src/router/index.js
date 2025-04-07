@@ -152,9 +152,17 @@ const routes = [
         },
       },
       {
-        name: '表单',
+        name: '表单填写',
         path: "/form",
         component: () => import(`@/views/user/UserForm.vue`),
+        meta: {
+          requireAuth: true,
+        },
+      },
+      {
+        name: '表单档案',
+        path: "/submittedForm",
+        component: () => import(`@/views/user/SubmittedForm.vue`),
         meta: {
           requireAuth: true,
         },

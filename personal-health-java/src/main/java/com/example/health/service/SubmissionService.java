@@ -50,5 +50,5 @@ public interface SubmissionService {
      * @param submissionDTO 查询参数（提交记录ID）
      * @return 查询结果 + 查询操作相应结果
      */
-    ApiResponse<SubmissionVO> queryBySubmissionId(SubmissionDTO submissionDTO );
+    ApiResponse<SubmissionVO> queryBySubmissionId(SubmissionDTO submissionDTO);
 }

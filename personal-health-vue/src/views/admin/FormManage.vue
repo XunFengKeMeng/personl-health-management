@@ -137,12 +137,15 @@
             </span>
           </div>
         </el-row>
-        
+
         <!-- 表单项管理区域 -->
         <el-row style="margin-top: 20px;">
           <div class="form-items-header">
-            <span class="dialog-hover" style="font-weight: bold;">表单项管理</span>
-            <el-button 
+            <span
+              class="dialog-hover"
+              style="font-weight: bold;"
+            >表单项管理</span>
+            <el-button
               size="mini"
               type="primary"
               icon="el-icon-plus"
@@ -150,23 +153,29 @@
               style="margin-left: 10px;"
             >添加表单项</el-button>
           </div>
-          
+
           <!-- 已选择的表单项列表 -->
-          <div v-if="data.itemList && data.itemList.length > 0" class="form-items-container">
-            <el-card 
-              v-for="(item, index) in data.itemList" 
+          <div
+            v-if="data.itemList && data.itemList.length > 0"
+            class="form-items-container"
+          >
+            <el-card
+              v-for="(item, index) in data.itemList"
               :key="index"
               class="form-item-card"
               shadow="hover"
             >
               <div class="form-item-header">
                 <span>
-                  <span v-if="item.required" class="required-mark">*</span>
+                  <span
+                    v-if="item.required"
+                    class="required-mark"
+                  >*</span>
                   <span>{{ item.itemName }}</span>
                 </span>
-                <el-button 
-                  type="text" 
-                  icon="el-icon-delete" 
+                <el-button
+                  type="text"
+                  icon="el-icon-delete"
                   @click="removeFormItem(index)"
                   class="delete-btn"
                 ></el-button>
@@ -178,23 +187,26 @@
                 ></el-input>
               </div>
               <div class="form-item-order">
-                <el-button 
-                  type="text" 
-                  icon="el-icon-arrow-up" 
+                <el-button
+                  type="text"
+                  icon="el-icon-arrow-up"
                   @click="moveItemUp(index)"
                   :disabled="index === 0"
                 ></el-button>
                 <span>序号: {{ item.sortOrder }}</span>
-                <el-button 
-                  type="text" 
-                  icon="el-icon-arrow-down" 
+                <el-button
+                  type="text"
+                  icon="el-icon-arrow-down"
                   @click="moveItemDown(index)"
                   :disabled="index === data.itemList.length - 1"
                 ></el-button>
               </div>
             </el-card>
           </div>
-          <div v-else class="empty-form-items">
+          <div
+            v-else
+            class="empty-form-items"
+          >
             <i class="el-icon-document"></i>
             <p>暂无表单项，请点击"添加表单项"按钮添加</p>
           </div>
@@ -222,7 +234,6 @@
 
     <!-- 表单项选择器弹窗 -->
     <el-dialog
-      title="选择表单项"
       :visible.sync="formItemSelectorVisible"
       width="40%"
       append-to-body
@@ -257,7 +268,10 @@
           label="表单项名称"
         >
           <template slot-scope="scope">
-            <span v-if="scope.row.required" class="required-mark">*</span>
+            <span
+              v-if="scope.row.required"
+              class="required-mark"
+            >*</span>
             {{ scope.row.itemName }}
           </template>
         </el-table-column>
@@ -266,9 +280,15 @@
           label="提示文本"
         ></el-table-column>
       </el-table>
-      <div slot="footer" class="dialog-footer">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button @click="formItemSelectorVisible = false">取消</el-button>
-        <el-button type="primary" @click="addSelectedFormItems">确认添加</el-button>
+        <el-button
+          type="primary"
+          @click="addSelectedFormItems"
+        >确认添加</el-button>
       </div>
     </el-dialog>
   </el-row>
@@ -304,7 +324,7 @@ export default {
       filteredFormItems: [], // 过滤后的表单项
       formItemSearchKey: '', // 表单项搜索关键字
       selectedFormItems: [], // 选中的表单项
-      currentUserId:null
+      currentUserId: null
     };
   },
   created () {
@@ -314,7 +334,7 @@ export default {
   },
   methods: {
     // 获取当前用户ID
-    async getCurrentUserId() {
+    async getCurrentUserId () {
       try {
         const token = { token: getToken() };
         const res = await this.$axios.post('user/auth', token);
@@ -387,7 +407,7 @@ export default {
       if (!this.validateFormData()) {
         return;
       }
-      
+
       try {
         // 设置创建者ID
         this.data.creatorId = this.currentUserId;
@@ -410,11 +430,11 @@ export default {
       if (!this.validateFormData()) {
         return;
       }
-      
+
       try {
         // 确保每个表单项都有正确的sortOrder
         this.updateSortOrders();
-        
+
         const response = await this.$axios.post(API.UPDATE_TEMPLATE, this.data);
         if (response.data.code === 200) {
           this.fetchTemplateData();
@@ -464,10 +484,10 @@ export default {
 
       // 获取已有的itemId列表，避免重复添加
       const existingItemIds = this.data.itemList.map(item => item.itemId);
-      
+
       // 过滤出未添加的表单项
       const newItems = this.selectedFormItems.filter(item => !existingItemIds.includes(item.itemId));
-      
+
       if (newItems.length === 0) {
         this.$message.warning('选中的表单项已全部添加');
         this.formItemSelectorVisible = false;
@@ -475,10 +495,10 @@ export default {
       }
 
       // 为新表单项设置初始的sortOrder
-      const nextSortOrder = this.data.itemList.length > 0 
-        ? Math.max(...this.data.itemList.map(item => item.sortOrder)) + 1 
+      const nextSortOrder = this.data.itemList.length > 0
+        ? Math.max(...this.data.itemList.map(item => item.sortOrder)) + 1
         : 1;
-      
+
       newItems.forEach((item, index) => {
         this.data.itemList.push({
           ...item,
@@ -488,7 +508,7 @@ export default {
 
       // 更新排序号
       this.updateSortOrders();
-      
+
       this.formItemSelectorVisible = false;
       this.$message.success(`已添加${newItems.length}个表单项`);
     },
@@ -503,11 +523,11 @@ export default {
     // 上移表单项
     moveItemUp (index) {
       if (index === 0) return;
-      
+
       const temp = this.data.itemList[index];
       this.data.itemList[index] = this.data.itemList[index - 1];
       this.data.itemList[index - 1] = temp;
-      
+
       // 更新排序号
       this.updateSortOrders();
     },
@@ -515,11 +535,11 @@ export default {
     // 下移表单项
     moveItemDown (index) {
       if (index === this.data.itemList.length - 1) return;
-      
+
       const temp = this.data.itemList[index];
       this.data.itemList[index] = this.data.itemList[index + 1];
       this.data.itemList[index + 1] = temp;
-      
+
       // 更新排序号
       this.updateSortOrders();
     },
@@ -539,8 +559,8 @@ export default {
         this.filteredFormItems = [...this.formItems];
       } else {
         const keyword = this.formItemSearchKey.toLowerCase();
-        this.filteredFormItems = this.formItems.filter(item => 
-          item.itemName.toLowerCase().includes(keyword) || 
+        this.filteredFormItems = this.formItems.filter(item =>
+          item.itemName.toLowerCase().includes(keyword) ||
           item.placeholder.toLowerCase().includes(keyword)
         );
       }
@@ -564,53 +584,53 @@ export default {
     handleFilterClear () { this.templateQueryDto.templateName = ''; this.handleFilter(); },
     handleSizeChange (val) { this.pageSize = val; this.currentPage = 1; this.fetchTemplateData(); },
     handleCurrentChange (val) { this.currentPage = val; this.fetchTemplateData(); },
-    
-    add () { 
-      this.data = { 
+
+    add () {
+      this.data = {
         templateName: '',
         active: false,
-        itemList: [] 
-      }; 
-      this.isOperation = false; 
-      this.dialogTemplateOperation = true; 
+        itemList: []
+      };
+      this.isOperation = false;
+      this.dialogTemplateOperation = true;
     },
-    
-    async handleEdit (row) { 
+
+    async handleEdit (row) {
       this.isOperation = true;
       // 先获取模板详情，包含关联表单项信息
       await this.fetchTemplateDetail(row.templateId);
-      this.dialogTemplateOperation = true; 
+      this.dialogTemplateOperation = true;
     },
-    
-    cancel () { 
-      this.dialogTemplateOperation = false; 
-      this.data = { 
+
+    cancel () {
+      this.dialogTemplateOperation = false;
+      this.data = {
         active: false,
-        itemList: [] 
-      }; 
+        itemList: []
+      };
     },
-    
+
     // 将 templateId 格式化为 4 位，不足部分补零
     formatTemplateId (row, column, cellValue) {
       return String(cellValue).padStart(4, '0');
     },
-    
+
     // 将 itemId 格式化为 4 位，不足部分补零
     formatItemId (row, column, cellValue) {
       return String(cellValue).padStart(4, '0');
     },
-    
+
     // 格式化日期
     formatDate (timestamp) {
       if (!timestamp) return '';
-      
+
       const date = new Date(timestamp);
       const year = date.getFullYear();
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
       const day = date.getDate().toString().padStart(2, '0');
       const hour = date.getHours().toString().padStart(2, '0');
       const minute = date.getMinutes().toString().padStart(2, '0');
-      
+
       return `${year}-${month}-${day} ${hour}:${minute}`;
     }
   }
@@ -704,4 +724,5 @@ export default {
   font-size: 48px;
   margin-bottom: 10px;
 }
+
 </style>

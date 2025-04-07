@@ -118,6 +118,7 @@ public class FormTemplateServiceImpl implements FormTemplateService {
         // 获取查询参数
         FormTemplateDO formTemplateDO = FormTemplateDO.builder()
                 .templateName(formTemplateDTO.getTemplateName())
+                .active(formTemplateDTO.getActive())
                 .build();
         // 调用查询方法
         List<FormTemplateVO> formTemplateVOList = formTemplateMapper.query(formTemplateDO,

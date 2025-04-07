@@ -47,6 +47,9 @@
             <if test="formTemplate.templateName != null and formTemplate.templateName != ''">
                 ft.template_name LIKE concat('%',#{formTemplate.templateName},'%')
             </if>
+            <if test="formTemplate.active != null">
+                AND ft.is_active = #{formTemplate.active}
+            </if>
         </where>
         ORDER BY ft.template_id ASC
         <if test="current != null and size != null">
@@ -61,6 +64,9 @@
         <where>
             <if test="templateName != null and templateName != ''">
                 template_name LIKE concat('%',#{templateName},'%')
+            </if>
+            <if test="active != null">
+                AND is_active = #{active}
             </if>
         </where>
         ORDER BY template_id DESC
