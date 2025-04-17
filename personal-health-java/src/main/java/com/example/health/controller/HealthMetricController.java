@@ -4,6 +4,7 @@ import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.HealthMetricDTO;
 import com.example.health.pojo.vo.HealthMetricVO;
 import com.example.health.service.HealthMetricService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -31,6 +32,7 @@ public class HealthMetricController {
      */
     @PostMapping(value = "/save")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> saveMetric(@RequestBody HealthMetricDTO healthMetricDTO) {
         return healthMetricService.save(healthMetricDTO);
     }
@@ -43,6 +45,7 @@ public class HealthMetricController {
      */
     @PostMapping(value = "/deleteMetrics")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> deleteMetrics(@RequestBody List<Integer> ids) {
         return healthMetricService.deleteMetrics(ids);
     }
@@ -55,6 +58,7 @@ public class HealthMetricController {
      */
     @PostMapping(value = "/update")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> updateMetric(@RequestBody HealthMetricDTO healthMetricDTO) {
         return healthMetricService.update(healthMetricDTO);
     }
@@ -66,6 +70,7 @@ public class HealthMetricController {
      */
     @PostMapping(value = "/queryMetrics")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<List<HealthMetricVO>> queryMetrics(@RequestBody HealthMetricDTO healthMetricDTO) {
         return healthMetricService.queryMetricsByName(healthMetricDTO);
     }

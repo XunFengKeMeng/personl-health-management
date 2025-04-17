@@ -126,7 +126,7 @@
       // 加载轮播图文章（最先创建的3篇）
       async loadCarouselArticles() {
         this.carouselLoading = true;
-        this.$axios.post(API.QUERY_ARTICLES, {}).then(response => {
+        this.$axios.post(API.QUERY_ARTICLES, {}, {withCredentials: true}).then(response => {
           const { data } = response;
           if (data.code === 200) {
             this.carouselArticles = data.data.slice(0, 3).map(article => this.processArticleImage(article));
@@ -139,7 +139,7 @@
       
       // 加载感兴趣的资讯（8篇，两行四列）
       async loadArticle() {
-        this.$axios.post(API.QUERY_ARTICLES, {}).then(response => {
+        this.$axios.post(API.QUERY_ARTICLES, {}, {withCredentials: true}).then(response => {
           const { data } = response;
           if (data.code === 200) {
             this.articleList = data.data
@@ -158,7 +158,7 @@
       // 加载推荐资讯
       async loadTopArticle() {
         this.topArticlesLoading = true;
-        this.$axios.post(API.QUERY_ARTICLES, {top: true}).then(response => {
+        this.$axios.post(API.QUERY_ARTICLES, {top: true}, {withCredentials: true}).then(response => {
           const { data } = response;
           if (data.code === 200) {
             this.articleTopList = data.data
@@ -191,7 +191,7 @@
     async getUserID() {
       try {
         const token = { token: getToken() };
-        const res = await this.$axios.post('user/auth', token);
+        const res = await this.$axios.post('user/auth', token, {withCredentials: true});
         // 错误处理
         if (res.code === 400) {
           this.$message.error(res.data.msg);
@@ -213,7 +213,7 @@
           userId: this.userId
         }
         try {
-          const response = await this.$axios.post(API.QUERY_ARTICLE_DETAIL, detailDto);
+          const response = await this.$axios.post(API.QUERY_ARTICLE_DETAIL, detailDto, {withCredentials: true});
           const { data } = response;
           if (data.code === 200) {
             article.saved = data.data.saved;

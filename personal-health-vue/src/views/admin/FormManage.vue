@@ -337,7 +337,7 @@ export default {
     async getCurrentUserId () {
       try {
         const token = { token: getToken() };
-        const res = await this.$axios.post('user/auth', token);
+        const res = await this.$axios.post('user/auth', token, {withCredentials: true});
         // 错误处理
         if (res.code === 400) {
           this.$message.error(res.data.msg);
@@ -360,7 +360,7 @@ export default {
           size: this.pageSize,
           ...this.templateQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_TEMPLATE_LIST, params);
+        const response = await this.$axios.post(API.QUERY_TEMPLATE_LIST, params, {withCredentials: true});
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -372,7 +372,7 @@ export default {
     // 获取表单模板详情（包含关联表单项）
     async fetchTemplateDetail (templateId) {
       try {
-        const response = await this.$axios.post(API.QUERY_TEMPLATE_DETAIL, { templateId });
+        const response = await this.$axios.post(API.QUERY_TEMPLATE_DETAIL, { templateId }, {withCredentials: true});
         const { data } = response;
         if (data.code === 200 && data.data) {
           this.data = data.data;
@@ -393,7 +393,7 @@ export default {
           current: 0,
           size: 999 // 获取所有表单项
         };
-        const response = await this.$axios.post(API.QUERY_FORM_ITEMS, params);
+        const response = await this.$axios.post(API.QUERY_FORM_ITEMS, params, {withCredentials: true});
         const { data } = response;
         this.formItems = data.data || [];
         this.filteredFormItems = [...this.formItems];
@@ -413,7 +413,7 @@ export default {
         this.data.creatorId = this.currentUserId;
         // 确保每个表单项都有正确的sortOrder
         this.updateSortOrders();
-        const response = await this.$axios.post(API.INSERT_TEMPLATE, this.data);
+        const response = await this.$axios.post(API.INSERT_TEMPLATE, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchTemplateData();
           this.cancel();
@@ -435,7 +435,7 @@ export default {
         // 确保每个表单项都有正确的sortOrder
         this.updateSortOrders();
 
-        const response = await this.$axios.post(API.UPDATE_TEMPLATE, this.data);
+        const response = await this.$axios.post(API.UPDATE_TEMPLATE, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchTemplateData();
           this.cancel();
@@ -456,7 +456,7 @@ export default {
       });
       if (confirmed) {
         try {
-          const response = await this.$axios.post(API.DELETE_TEMPLATE, { templateId: row.templateId });
+          const response = await this.$axios.post(API.DELETE_TEMPLATE, { templateId: row.templateId }, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '表单模板已删除', type: 'success' });
             this.fetchTemplateData();

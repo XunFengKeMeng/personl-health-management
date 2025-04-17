@@ -4,6 +4,7 @@ import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.UserSavedArticleDTO;
 import com.example.health.pojo.vo.UserSavedArticleVO;
 import com.example.health.service.UserSavedArticleService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -31,6 +32,7 @@ public class UserSavedArticleController {
      */
     @PostMapping(value = "/save")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<String> save(@RequestBody UserSavedArticleDTO userSavedArticleDTO) {
         return userSavedArticleService.save(userSavedArticleDTO);
     }
@@ -43,6 +45,7 @@ public class UserSavedArticleController {
      */
     @PostMapping(value = "/delete")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<String> delete(@RequestBody List<Integer> ids) {
         return userSavedArticleService.deleteSavedArticles(ids);
     }
@@ -55,6 +58,7 @@ public class UserSavedArticleController {
      */
     @PostMapping(value = "/deleteOne")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<String> deleteOne(@RequestBody UserSavedArticleDTO userSavedArticleDTO) {
         return userSavedArticleService.deleteOneSaved(userSavedArticleDTO);
     }
@@ -67,6 +71,7 @@ public class UserSavedArticleController {
      */
     @PostMapping(value = "/query")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<List<UserSavedArticleVO>> queryUserSavedArticles(@RequestBody UserSavedArticleDTO userSavedArticleDTO) {
         return userSavedArticleService.querySavedArticles(userSavedArticleDTO);
     }

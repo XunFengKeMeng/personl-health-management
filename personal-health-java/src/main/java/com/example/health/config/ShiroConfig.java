@@ -13,6 +13,9 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.servlet.Filter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -33,19 +36,21 @@ public class ShiroConfig {
         // 将安全管理器注册到过滤器中
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
+        // 添加自定义filter
+        Map<String, Filter> filters = new HashMap<>();
+        filters.put("jwt", new JwtFilter());
+        shiroFilterFactoryBean.setFilters(filters);
+
         // 过滤链的定义与存储
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
-        // 开放接口
+        // 开放接口：登录、注册、令牌验证
         filterChainDefinitionMap.put("/api/health-management/user/login", "anon");
         filterChainDefinitionMap.put("/api/health-management/user/register", "anon");
-        filterChainDefinitionMap.put("/api/health-management/user/auth", "anon"); // token认证接口
+        filterChainDefinitionMap.put("/api/health-management/user/auth", "anon");
 
-        // 用户端接口
-        filterChainDefinitionMap.put("/api/health-management/user/**", "roles[admin]");
-
-        // 管理员接口
-//        filterChainDefinitionMap.put("/api/health-management/api/admin/**", "jwt, roles[admin]");
+        // 发现问题：以下代码本应根据最后的roles要求去拦截，但实际情况中却没有。似乎加入和不加入结果一样。
+//        filterChainDefinitionMap.put("/api/health-management/user/**", "jwt, roles[admin]");
 
         // 过滤链设置
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

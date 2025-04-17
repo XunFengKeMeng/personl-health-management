@@ -221,7 +221,7 @@ export default {
           size: this.pageSize,
           ...this.formSubmissionQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_FORM_SUBMISSION_LIST, params);
+        const response = await this.$axios.post(API.QUERY_FORM_SUBMISSION_LIST, params, {withCredentials: true});
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -233,7 +233,7 @@ export default {
     // 获取表单提交记录详情
     async fetchFormSubmissionDetail (submissionId) {
       try {
-        const response = await this.$axios.post(API.QUERY_FORM_SUBMISSION_DETAIL, { submissionId });
+        const response = await this.$axios.post(API.QUERY_FORM_SUBMISSION_DETAIL, { submissionId }, {withCredentials: true});
         if (response.data.code === 200) {
           this.data = response.data.data;
           // 根据状态设置开关值
@@ -253,7 +253,7 @@ export default {
           formDataList: this.data.formDataList
         };
         
-        const response = await this.$axios.post(API.UPDATE_FORM_SUBMISSION, submitData);
+        const response = await this.$axios.post(API.UPDATE_FORM_SUBMISSION, submitData, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFormSubmissionData();
           this.cancel();
@@ -284,7 +284,7 @@ export default {
       });
       if (confirmed) {
         try {
-          const response = await this.$axios.post(API.DELETE_FORM_SUBMISSION, { submissionId: row.submissionId });
+          const response = await this.$axios.post(API.DELETE_FORM_SUBMISSION, { submissionId: row.submissionId }, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '表单提交记录已删除', type: 'success' });
             this.fetchFormSubmissionData();

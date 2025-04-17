@@ -98,7 +98,7 @@ export default {
       const paramDTO = { userAccount: this.act, userPassword: hashedPwd };
       // 向后端发送请求
       try {
-        const { data } = await request.post(`user/login`, paramDTO);
+        const { data } = await request.post(`user/login`, paramDTO, {withCredentials: true});
         if (data.code !== 200) {
           this.$swal.fire({
             title: '登录失败',

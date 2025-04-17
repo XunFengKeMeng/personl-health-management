@@ -223,7 +223,7 @@ export default {
           userName: this.userInfo.name,
           userEmail: this.userInfo.email
         }
-        const resposne = await this.$axios.post(`/user/updateSelf`, userUpdateDTO);
+        const resposne = await this.$axios.post(`/user/updateSelf`, userUpdateDTO, {withCredentials: true});
         const { data } = resposne;
         if (data.code === 200) {
           this.dialogOperaion = false;

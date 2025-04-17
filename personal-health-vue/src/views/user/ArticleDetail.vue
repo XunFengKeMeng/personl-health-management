@@ -146,7 +146,7 @@ export default {
     async getUserID () {
       try {
         const token = { token: getToken() };
-        const res = await this.$axios.post('user/auth', token);
+        const res = await this.$axios.post('user/auth', token, {withCredentials: true});
         // 错误处理
         if (res.code === 400) {
           this.$message.error(res.data.msg);
@@ -167,7 +167,7 @@ export default {
       this.$axios.post(API.QUERY_ARTICLE_DETAIL, {
         healthArticleId: this.article.healthArticleId,
         userId: this.userId
-      }).then(response => {
+      }, {withCredentials: true}).then(response => {
         const { data } = response;
         if (data.code === 200) {
           this.article = data.data;
@@ -186,7 +186,7 @@ export default {
     // 加载推荐文章
     async loadRecommendArticles () {
       this.recommendLoading = true;
-      this.$axios.post(API.QUERY_ARTICLES, {}).then(response => {
+      this.$axios.post(API.QUERY_ARTICLES, {}, {withCredentials: true}).then(response => {
         const { data } = response;
         if (data.code === 200) {
           const randomArticles = data.data
@@ -207,7 +207,7 @@ export default {
       this.$axios.post(apiEndpoint, {
         articleId: this.article.healthArticleId,
         userId: this.userId
-      }).then(response => {
+      }, {withCredentials: true}).then(response => {
         const { data } = response;
         if (data.code === 200) {
           this.article.saved = !this.article.saved;
@@ -227,7 +227,7 @@ export default {
         userId: this.userId
       }
       try {
-        const response = await this.$axios.post(API.QUERY_ARTICLE_DETAIL, detailDto);
+        const response = await this.$axios.post(API.QUERY_ARTICLE_DETAIL, detailDto, {withCredentials: true});
         const { data } = response;
         if (data.code === 200) {
           article.saved = data.data.saved;

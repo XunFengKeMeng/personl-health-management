@@ -283,7 +283,7 @@ export default {
           // ...是扩展运算符，其作用是将this.userQueryDto对象中的所有属性展开并合并到params对象中
           ...this.userQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_USERLIST, params);
+        const response = await this.$axios.post(API.QUERY_USERLIST, params, {withCredentials: true});
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -302,7 +302,7 @@ export default {
         userRole: this.roleStatus ? 1 : 0,
         active: this.activeStatus
       }
-      this.$axios.post(API.UPDATE_USER, userUpdateDto).then(res => {
+      this.$axios.post(API.UPDATE_USER, userUpdateDto, {withCredentials: true}).then(res => {
         if (res.data.code === 200) {
           this.$notify({
             duration: 2000,
@@ -344,7 +344,7 @@ export default {
         try {
           console.log(this.selectedRows);
           let ids = this.selectedRows.map(entity => entity.userId);
-          const response = await this.$axios.post(API.DELETE_USERLIST, ids);
+          const response = await this.$axios.post(API.DELETE_USERLIST, ids, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({
               duration: 2000,
@@ -373,7 +373,7 @@ export default {
       }
       console.log(this.data);
       try {
-        const response = await this.$axios.post(API.UPDATE_USER, this.data);
+        const response = await this.$axios.post(API.UPDATE_USER, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFreshData();
           this.cannel();
@@ -397,7 +397,7 @@ export default {
         this.data.userPassword = null;
       }
       try {
-        const response = await this.$axios.post(API.INSERT_USER, this.data);
+        const response = await this.$axios.post(API.INSERT_USER, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFreshData();
           this.cannel();
@@ -476,7 +476,7 @@ export default {
       if (confirmed) {
         try {
           let ids = [row.userId];
-          const response = await this.$axios.post(API.DELETE_USERLIST, ids);
+          const response = await this.$axios.post(API.DELETE_USERLIST, ids, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({
               duration: 2000,

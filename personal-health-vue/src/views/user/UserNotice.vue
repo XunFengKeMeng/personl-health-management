@@ -152,7 +152,7 @@ export default {
     async getUserID () {
       try {
         const token = { token: getToken() };
-        const res = await this.$axios.post('user/auth', token);
+        const res = await this.$axios.post('user/auth', token, {withCredentials: true});
         if (res.code === 400) {
           this.$message.error(res.data.msg);
           this.$router.push('/login');
@@ -174,7 +174,7 @@ export default {
           receiverId: this.userId,
           current: (this.currentPage - 1) * this.pageSize,
           size: this.pageSize
-        });
+        }, {withCredentials: true});
 
         const { data } = response;
         if (data.code === 200) {
@@ -209,7 +209,7 @@ export default {
           await this.$axios.post(API.UPDATE_NOTICE, {
             noticeId: notice.noticeId,
             read: true
-          });
+          }, {withCredentials: true});
 
           // 更新本地状态
           notice.read = true;
@@ -256,7 +256,7 @@ export default {
           type: 'warning'
         });
 
-        const response = await this.$axios.post(API.DELETE_NOTICES, this.selectedNotices);
+        const response = await this.$axios.post(API.DELETE_NOTICES, this.selectedNotices, {withCredentials: true});
 
         const { data } = response;
         if (data.code === 200) {

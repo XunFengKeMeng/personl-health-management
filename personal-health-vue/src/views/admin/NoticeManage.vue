@@ -137,14 +137,14 @@
         <!-- 操作列 -->
         <el-table-column
           label="操作"
-          width="130"
+          width="80"
           fixed="right"
         >
           <template slot-scope="scope">
-            <span
+            <!-- <span
               class="text-button"
               @click="handleEdit(scope.row)"
-            >编辑</span>
+            >编辑</span> -->
             <span
               class="text-button"
               @click="handleDelete(scope.row)"
@@ -311,7 +311,7 @@ export default {
     async getSenderID() {
       try {
         const token = { token: getToken() };
-        const res = await this.$axios.post('user/auth', token);
+        const res = await this.$axios.post('user/auth', token, {withCredentials: true});
         // 错误处理
         if (res.code === 400) {
           this.$message.error(res.data.msg);
@@ -335,7 +335,7 @@ export default {
           size: this.pageSize,
           ...this.noticeQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_NOTICE_LIST, params);
+        const response = await this.$axios.post(API.QUERY_NOTICE_LIST, params, {withCredentials: true});
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -370,7 +370,7 @@ export default {
             userName: query,
             size: 20
           };
-          const response = await this.$axios.post(API.QUERY_USERS, params);
+          const response = await this.$axios.post(API.QUERY_USERS, params, {withCredentials: true});
           this.loading = false;
           if (response.data.code === 200) {
             this.userOptions = response.data.data;
@@ -410,7 +410,7 @@ export default {
       if (confirmed) {
         try {
           let ids = this.selectedRows.map(entity => entity.noticeId);
-          const response = await this.$axios.post(API.DELETE_NOTICES, ids);
+          const response = await this.$axios.post(API.DELETE_NOTICES, ids, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({
               duration: 2000,
@@ -437,7 +437,7 @@ export default {
           this.noticeData.receiverIds = this.selectedReceivers;
         }
         
-        const response = await this.$axios.post(API.UPDATE_NOTICE, this.noticeData);
+        const response = await this.$axios.post(API.UPDATE_NOTICE, this.noticeData, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFreshData();
           this.cannel();
@@ -465,7 +465,7 @@ export default {
         }
         // 发送者
         this.noticeData.senderId = this.senderId;
-        const response = await this.$axios.post(API.INSERT_NOTICES, this.noticeData);
+        const response = await this.$axios.post(API.INSERT_NOTICES, this.noticeData, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFreshData();
           this.cannel();
@@ -566,7 +566,7 @@ export default {
       if (confirmed) {
         try {
           let ids = [row.noticeId];
-          const response = await this.$axios.post(API.DELETE_NOTICES, ids);
+          const response = await this.$axios.post(API.DELETE_NOTICES, ids, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({
               duration: 2000,

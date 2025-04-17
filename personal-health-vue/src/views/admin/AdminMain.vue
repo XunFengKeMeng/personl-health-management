@@ -112,7 +112,7 @@ export default {
   methods: {
     // 加载加载饼图
     loadPieCharts () {
-      this.$axios.get(API.ARTICLE_TAGS)
+      this.$axios.get(API.ARTICLE_TAGS, {withCredentials: true})
         .then(response => {
           const { data } = response;
           if (data.code === 200) {
@@ -127,7 +127,7 @@ export default {
     },
     // 加载折线图数据（文章数量趋势）
     articleDatesSelected () {
-      this.$axios.get(API.ARTICLE_TREND)
+      this.$axios.get(API.ARTICLE_TREND, {withCredentials: true})
         .then(response => {
           const { data } = response;
           if (data.code === 200) {
@@ -143,7 +143,7 @@ export default {
     // 加载统计数据（用户数、文章数、健康指标数）
     loadStatistics () {
       // 用户数
-      this.$axios.post(API.NUMBER_USER, { userName: '' })
+      this.$axios.post(API.NUMBER_USER, { userName: '' }, {withCredentials: true})
         .then(response => {
           const { data } = response;
           if (data.code === 200) {
@@ -155,7 +155,7 @@ export default {
           this.$message.error('加载用户数量数据失败，请重试！');
         });
       // 文章数 
-      this.$axios.post(API.NUMBER_ARTICLE, { healthArticleTitle: '' })
+      this.$axios.post(API.NUMBER_ARTICLE, { healthArticleTitle: '' }, {withCredentials: true})
         .then(response => {
           const { data } = response;
           if (data.code === 200) {
@@ -167,7 +167,7 @@ export default {
           this.$message.error('加载用户数量数据失败，请重试！');
         });
       // 健康指标数
-      this.$axios.post(API.NUMBER_METRIC, { healthMetricName: '' })
+      this.$axios.post(API.NUMBER_METRIC, { healthMetricName: '' }, {withCredentials: true})
         .then(response => {
           const { data } = response;
           if (data.code === 200) {

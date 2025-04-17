@@ -4,6 +4,7 @@ import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.SubmissionDTO;
 import com.example.health.pojo.vo.SubmissionVO;
 import com.example.health.service.SubmissionService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -31,6 +32,7 @@ public class SubmissionController {
      */
     @PostMapping(value = "/save")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<String> save(@RequestBody SubmissionDTO submissionDTO) {
         return submissionService.save(submissionDTO);
     }
@@ -43,6 +45,7 @@ public class SubmissionController {
      */
     @PostMapping(value = "/delete")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> delete(@RequestBody SubmissionDTO submissionDTO) {
         return submissionService.delete(submissionDTO);
     }
@@ -55,6 +58,7 @@ public class SubmissionController {
      */
     @PostMapping(value = "/update")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<String> update(@RequestBody SubmissionDTO submissionDTO) {
         return submissionService.update(submissionDTO);
     }
@@ -67,6 +71,7 @@ public class SubmissionController {
      */
     @PostMapping(value = "/query")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<List<SubmissionVO>> query(@RequestBody SubmissionDTO submissionDTO) {
         return submissionService.query(submissionDTO);
     }
@@ -79,6 +84,7 @@ public class SubmissionController {
      */
     @PostMapping(value = "/queryDetail")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<SubmissionVO> queryDetail(@RequestBody SubmissionDTO submissionDTO) {
         return submissionService.queryBySubmissionId(submissionDTO);
     }

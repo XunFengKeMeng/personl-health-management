@@ -48,6 +48,7 @@ public class UserController {
      */
     @PostMapping(value = "/insert")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> insertUser(@RequestBody UserRegisterDTO userRegisterDTO) {
         return userService.insertUser(userRegisterDTO);
     }
@@ -85,6 +86,7 @@ public class UserController {
      */
     @PostMapping(value = "/deleteUsers")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> deleteUsers(@RequestBody List<Integer> ids) {
         return userService.deleteUsers(ids);
     }
@@ -97,6 +99,7 @@ public class UserController {
      */
     @PostMapping(value = "/updateSelf")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<String> updateSelf(@RequestBody UserUpdateDTO userUpdateDTO) {
         return userService.updateSelf(userUpdateDTO);
     }
@@ -109,6 +112,7 @@ public class UserController {
      */
     @PostMapping(value = "/updatePassword")
     @ResponseBody
+//    @RequiresRoles("user")
     public ApiResponse<String> updatePassword(@RequestBody Map<String, String> map) {
         return userService.updatePassword(map);
     }
@@ -134,6 +138,7 @@ public class UserController {
      */
     @PostMapping(value = "/queryUsers")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<List<UserVO>> queryUsers(@RequestBody UserQueryDTO userQueryDTO) {
         return userService.queryUsers(userQueryDTO);
     }

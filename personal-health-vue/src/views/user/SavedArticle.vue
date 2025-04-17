@@ -125,7 +125,7 @@ export default {
     async getUserID() {
       try {
         const token = { token: getToken() };
-        const res = await this.$axios.post('user/auth', token);
+        const res = await this.$axios.post('user/auth', token, {withCredentials: true});
         if (res.code === 400) {
           this.$message.error(res.data.msg);
           this.$router.push('/login');
@@ -147,7 +147,7 @@ export default {
           userId: this.userId,
           current: (this.currentPage - 1) * this.pageSize,
           size: this.pageSize
-        });
+        }, {withCredentials: true});
         
         const { data } = response;
         if (data.code === 200) {
@@ -181,7 +181,7 @@ export default {
         const response = await this.$axios.post(API.ARTICLE_DETAIL, {
           healthArticleId: article.articleId,
           userId: this.userId
-        });
+        }, {withCredentials: true});
         
         const { data } = response;
         if (data.code === 200) {
@@ -204,7 +204,7 @@ export default {
         const response = await this.$axios.post(API.DELETE_COLLECTION, {
           userId: this.userId,
           articleId: articleId
-        });
+        }, {withCredentials: true});
         
         const { data } = response;
         if (data.code === 200) {
@@ -250,7 +250,7 @@ export default {
           type: 'warning'
         });
 
-        const response = await this.$axios.post(API.BATCH_DELETE, this.selectedArticles);
+        const response = await this.$axios.post(API.BATCH_DELETE, this.selectedArticles, {withCredentials: true});
         
         const { data } = response;
         if (data.code === 200) {

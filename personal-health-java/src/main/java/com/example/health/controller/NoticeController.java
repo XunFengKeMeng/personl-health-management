@@ -5,6 +5,7 @@ import com.example.health.pojo.dto.NoticeDTO;
 import com.example.health.pojo.dto.NoticeListDTO;
 import com.example.health.pojo.vo.NoticeVO;
 import com.example.health.service.NoticeService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,6 +36,7 @@ public class NoticeController {
      */
     @RequestMapping(value = "/insertNotices")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> insertNotices(@RequestBody NoticeListDTO noticeListDTO) {
         return noticeService.insertNotices(noticeListDTO);
     }
@@ -47,6 +49,7 @@ public class NoticeController {
      */
     @RequestMapping(value = "/deleteNotices")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<String> deleteNotices(@RequestBody List<Integer> ids) {
         return noticeService.deleteNotices(ids);
     }
@@ -59,6 +62,7 @@ public class NoticeController {
      */
     @RequestMapping(value = "/update")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<String> update(@RequestBody NoticeDTO noticeDTO) {
         return noticeService.updateNotice(noticeDTO);
     }
@@ -71,6 +75,7 @@ public class NoticeController {
      */
     @RequestMapping(value = "/query")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<List<NoticeVO>> queryNotices(@RequestBody NoticeDTO noticeDTO) {
         return noticeService.queryNotices(noticeDTO);
     }

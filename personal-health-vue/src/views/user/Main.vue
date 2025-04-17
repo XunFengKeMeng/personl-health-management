@@ -125,7 +125,7 @@ export default {
               userName: this.data.name,
               userEmail: this.data.email
             }
-            const resposne = await this.$axios.post(API.UPDATE_USER, userUpdateDTO);
+            const resposne = await this.$axios.post(API.UPDATE_USER, userUpdateDTO, {withCredentials: true});
             const { data } = resposne;
             if (data.code === 200) {
                 this.dialogOperaion = false;
@@ -166,7 +166,7 @@ export default {
                 userAccount: this.userInfo.account,
                 newPassword: this.$md5(this.$md5(newPwd))
             }
-            const resposne = await this.$axios.post(API.UPDATE_USER_PASSWORD, pwdDTO);
+            const resposne = await this.$axios.post(API.UPDATE_USER_PASSWORD, pwdDTO, {withCredentials: true});
             const { data } = resposne;
             if (data.code === 200) {
                 this.dialogRetPwdOperaion = false;
@@ -211,11 +211,6 @@ export default {
             this.logOutOperation();
             return;
         }
-        // 健康指标记录
-        // if (event === 'healthDataRecord') {
-        //     this.$router.push('/record');
-        //     return;
-        // }
     },
     // 退出登录
     async logOutOperation() {
@@ -233,7 +228,7 @@ export default {
     async tokenCheckLoad() {
         try {
             const token = { token: getToken() };
-            const res = await this.$axios.post(API.AUTH, token);
+            const res = await this.$axios.post(API.AUTH, token, {withCredentials: true});
             // 校验失败
             if (res.data.code === 400) {
                 clearToken();

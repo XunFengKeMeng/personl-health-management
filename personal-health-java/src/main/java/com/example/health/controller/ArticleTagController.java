@@ -4,6 +4,7 @@ import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.ArticleTagDTO;
 import com.example.health.pojo.vo.ArticleTagVO;
 import com.example.health.service.ArticleTagService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -31,6 +32,7 @@ public class ArticleTagController {
      */
     @PostMapping(value = "/save")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> save(@RequestBody ArticleTagDTO articleTagDTO) {
         return articleTagService.saveArticleTag(articleTagDTO);
     }
@@ -43,6 +45,7 @@ public class ArticleTagController {
      */
     @PostMapping(value = "/deleteTags")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> deleteArticleTags(@RequestBody List<Integer> ids) {
         return articleTagService.deleteArticleTags(ids);
     }
@@ -55,6 +58,7 @@ public class ArticleTagController {
      */
     @PostMapping(value = "/update")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> update(@RequestBody ArticleTagDTO articleTagDTO) {
         return articleTagService.updateArticleTag(articleTagDTO);
     }
@@ -67,6 +71,7 @@ public class ArticleTagController {
      */
     @PostMapping(value = "/queryTags")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<List<ArticleTagVO>> queryArticleTags(@RequestBody ArticleTagDTO articleTagDTO) {
         return articleTagService.queryArticleTags(articleTagDTO);
     }

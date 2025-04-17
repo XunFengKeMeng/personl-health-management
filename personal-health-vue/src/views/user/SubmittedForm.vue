@@ -210,7 +210,7 @@ export default {
     async getUserID() {
       try {
         const token = { token: getToken() };
-        const res = await this.$axios.post('user/auth', token);
+        const res = await this.$axios.post('user/auth', token, {withCredentials: true});
         if (res.code === 400) {
           this.$message.error(res.data.msg);
           this.$router.push('/login');
@@ -233,7 +233,7 @@ export default {
           templateName: this.searchQuery,
           current: (this.currentPage - 1) * this.pageSize,
           size: this.pageSize
-        });
+        }, {withCredentials: true});
         
         const { data } = response;
         if (data.code === 200) {
@@ -267,7 +267,7 @@ export default {
       try {
         const response = await this.$axios.post(API.QUERY_DETAIL, {
           submissionId: submissionId
-        });
+        }, {withCredentials: true});
         
         const { data } = response;
         if (data.code === 200) {
@@ -288,7 +288,7 @@ export default {
       try {
         const response = await this.$axios.post(API.QUERY_DETAIL, {
           submissionId: submissionId,
-        });
+        }, {withCredentials: true});
         
         const { data } = response;
         if (data.code === 200) {
@@ -326,7 +326,7 @@ export default {
           submissionId: this.currentSubmission.submissionId,
           status: 0,
           formDataList: formDataList
-        });
+        }, {withCredentials: true});
         
         const { data } = response;
         if (data.code === 200) {

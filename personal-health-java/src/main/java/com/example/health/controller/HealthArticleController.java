@@ -7,6 +7,7 @@ import com.example.health.pojo.vo.ArticleTagStatisticsVO;
 import com.example.health.pojo.vo.ArticleTrendVO;
 import com.example.health.pojo.vo.HealthArticleVO;
 import com.example.health.service.HealthArticleService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,6 +35,7 @@ public class HealthArticleController {
      */
     @PostMapping(value = "/save")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> save(@RequestBody HealthArticleDTO healthArticleDTO) {
         return healthArticleService.saveArticle(healthArticleDTO);
     }
@@ -46,6 +48,7 @@ public class HealthArticleController {
      */
     @PostMapping(value = "/deleteArticles")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> deleteArticles(@RequestBody List<Integer> ids) {
         return healthArticleService.deleteArticles(ids);
     }
@@ -58,6 +61,7 @@ public class HealthArticleController {
      */
     @PostMapping(value = "/update")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> update(@RequestBody HealthArticleDTO healthArticleDTO) {
         return healthArticleService.updateArticle(healthArticleDTO);
     }
@@ -70,6 +74,7 @@ public class HealthArticleController {
      */
     @PostMapping(value = "/queryArticles")
     @ResponseBody
+//    @RequiresRoles("user")
     public ApiResponse<List<HealthArticleVO>> queryHealthArticles(@RequestBody HealthArticleQueryDTO healthArticleQueryDTO) {
         return healthArticleService.queryArticles(healthArticleQueryDTO);
     }
@@ -81,6 +86,7 @@ public class HealthArticleController {
      */
     @GetMapping(value = "/queryStatistics")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<List<ArticleTagStatisticsVO>> queryHealthArticles() {
         return healthArticleService.queryArticleTagStatistics();
     }
@@ -92,12 +98,14 @@ public class HealthArticleController {
      */
     @GetMapping(value = "/queryTrend")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<List<ArticleTrendVO>> queryArticleTrend() {
         return healthArticleService.queryArticleTrend();
     }
 
     @PostMapping(value = "/queryDetail")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<HealthArticleVO> queryArticleByArticleId(@RequestBody HealthArticleDTO healthArticleDTO) {
         return healthArticleService.queryArticleById(healthArticleDTO.getHealthArticleId(), healthArticleDTO.getUserId());
     }

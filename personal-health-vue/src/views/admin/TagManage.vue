@@ -166,7 +166,7 @@ export default {
           size: this.pageSize,
           ...this.tagQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_TAGLIST, params);
+        const response = await this.$axios.post(API.QUERY_TAGLIST, params, {withCredentials: true});
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -189,7 +189,7 @@ export default {
       if (confirmed) {
         try {
           let ids = this.selectedRows.map(tag => tag.tagId);
-          const response = await this.$axios.post(API.DELETE_TAGS, ids);
+          const response = await this.$axios.post(API.DELETE_TAGS, ids, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '标签已删除', type: 'success' });
             this.fetchTagData();
@@ -203,7 +203,7 @@ export default {
     // 新增标签
     async addOperation () {
       try {
-        const response = await this.$axios.post(API.INSERT_TAG, this.data);
+        const response = await this.$axios.post(API.INSERT_TAG, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchTagData();
           this.cancel();
@@ -218,7 +218,7 @@ export default {
     // 修改标签
     async updateOperation () {
       try {
-        const response = await this.$axios.post(API.UPDATE_TAG, this.data);
+        const response = await this.$axios.post(API.UPDATE_TAG, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchTagData();
           this.cancel();
@@ -239,7 +239,7 @@ export default {
       });
       if (confirmed) {
         try {
-          const response = await this.$axios.post(API.DELETE_TAGS, [row.tagId]);
+          const response = await this.$axios.post(API.DELETE_TAGS, [row.tagId], {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '标签已删除', type: 'success' });
             this.fetchTagData();

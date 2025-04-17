@@ -5,6 +5,7 @@ import com.example.health.pojo.dto.FormTemplateDTO;
 import com.example.health.pojo.vo.FormTemplateDetailVO;
 import com.example.health.pojo.vo.FormTemplateVO;
 import com.example.health.service.FormTemplateService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,6 +33,7 @@ public class FormTemplateController {
      */
     @PostMapping(value = "/save")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> save(@RequestBody FormTemplateDTO formTemplateDTO) {
         return formTemplateService.save(formTemplateDTO);
     }
@@ -44,6 +46,7 @@ public class FormTemplateController {
      */
     @PostMapping(value = "/delete")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> delete(@RequestBody FormTemplateDTO formTemplateDTO) {
         return formTemplateService.deleteByTemplateId(formTemplateDTO.getTemplateId());
     }
@@ -56,6 +59,7 @@ public class FormTemplateController {
      */
     @PostMapping(value = "/update")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> update(@RequestBody FormTemplateDTO formTemplateDTO) {
         return formTemplateService.update(formTemplateDTO);
     }
@@ -68,6 +72,7 @@ public class FormTemplateController {
      */
     @PostMapping(value = "/query")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<List<FormTemplateVO>> query(@RequestBody FormTemplateDTO formTemplateDTO) {
         return formTemplateService.query(formTemplateDTO);
     }
@@ -80,6 +85,7 @@ public class FormTemplateController {
      */
     @PostMapping(value = "/queryDetail")
     @ResponseBody
+    @RequiresRoles("user")
     public ApiResponse<FormTemplateDetailVO> queryDetail(@RequestBody FormTemplateDTO formTemplateDTO) {
         return formTemplateService.queryByTemplateId(formTemplateDTO.getTemplateId());
     }

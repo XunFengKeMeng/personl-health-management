@@ -13,6 +13,12 @@ import './assets/css/input.scss'
 import request from '@/utils/request'
 import md5 from 'js-md5';
 
+import axios from "axios";
+// 全局配置
+axios.defaults.withCredentials = true; // 允许跨域携带 Cookie
+axios.defaults.baseURL = "http://localhost:21090"; // 后端 API 地址
+Vue.prototype.$axios = axios; // 挂载到 Vue 实例（可选）
+
 /**
  * 关闭关闭Vue 的生产环境提示。
  */

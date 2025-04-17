@@ -263,7 +263,7 @@ export default {
         tagId: null
       };
       try {
-        const response = await this.$axios.post(API.QUERY_TAGS, params);
+        const response = await this.$axios.post(API.QUERY_TAGS, params, {withCredentials: true});
         const { data } = response;
         if (data.code === 200) {
           this.tagOptions = data.data.map(tag => ({
@@ -285,7 +285,7 @@ export default {
           size: this.pageSize,
           ...this.articleQueryDto,
         };
-        const response = await this.$axios.post(API.QUERY_ARTICLE_LIST, params);
+        const response = await this.$axios.post(API.QUERY_ARTICLE_LIST, params, {withCredentials: true});
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -311,7 +311,7 @@ export default {
           top: row.top
         };
         console.log(params)
-        const response = await this.$axios.post(API.UPDATE_ARTICLE, params);
+        const response = await this.$axios.post(API.UPDATE_ARTICLE, params, {withCredentials: true});
         if (response.data.code === 200) {
           this.$notify({
             duration: 2000,
@@ -344,7 +344,7 @@ export default {
       if (confirmed) {
         try {
           let ids = this.selectedRows.map(entity => entity.healthArticleId);
-          const response = await this.$axios.post(API.DELETE_ARTICLES, ids);
+          const response = await this.$axios.post(API.DELETE_ARTICLES, ids, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({
               duration: 2000,
@@ -363,7 +363,7 @@ export default {
     // 修改健康资讯
     async updateOperation () {
       try {
-        const response = await this.$axios.post(API.UPDATE_ARTICLE, this.articleData);
+        const response = await this.$axios.post(API.UPDATE_ARTICLE, this.articleData, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFreshData();
           this.cannel();
@@ -382,7 +382,7 @@ export default {
     // 新增健康资讯
     async addOperation () {
       try {
-        const response = await this.$axios.post(API.INSERT_ARTICLE, this.articleData);
+        const response = await this.$axios.post(API.INSERT_ARTICLE, this.articleData, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFreshData();
           this.cannel();
@@ -464,7 +464,7 @@ export default {
       if (confirmed) {
         try {
           let ids = [row.healthArticleId];
-          const response = await this.$axios.post(API.DELETE_ARTICLES, ids);
+          const response = await this.$axios.post(API.DELETE_ARTICLES, ids, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({
               duration: 2000,

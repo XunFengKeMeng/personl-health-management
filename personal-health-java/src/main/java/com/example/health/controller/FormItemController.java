@@ -4,6 +4,7 @@ import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.FormItemDTO;
 import com.example.health.pojo.vo.FormItemVO;
 import com.example.health.service.FormItemService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -31,6 +32,7 @@ public class FormItemController {
      */
     @PostMapping(value = "/save")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> saveFormItem(@RequestBody FormItemDTO formItemDTO) {
         return formItemService.save(formItemDTO);
     }
@@ -43,6 +45,7 @@ public class FormItemController {
      */
     @PostMapping(value = "/deleteItems")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> deleteItems(@RequestBody List<Integer> ids) {
         return formItemService.deleteItems(ids);
     }
@@ -55,6 +58,7 @@ public class FormItemController {
      */
     @PostMapping(value = "/update")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> updateFormItem(@RequestBody FormItemDTO formItemDTO) {
         return formItemService.update(formItemDTO);
     }
@@ -67,6 +71,7 @@ public class FormItemController {
      */
     @PostMapping(value = "/queryItems")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<List<FormItemVO>> queryItems(@RequestBody FormItemDTO formItemDTO) {
         return formItemService.queryItems(formItemDTO);
     }

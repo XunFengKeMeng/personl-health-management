@@ -240,7 +240,7 @@ export default {
           size: this.pageSize,
           ...this.formItemQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_FORM_ITEM_LIST, params);
+        const response = await this.$axios.post(API.QUERY_FORM_ITEM_LIST, params, {withCredentials: true});
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -256,7 +256,7 @@ export default {
           current: 0,
           size: 999 // 获取所有健康指标
         };
-        const response = await this.$axios.post(API.QUERY_HEALTH_METRICS, params);
+        const response = await this.$axios.post(API.QUERY_HEALTH_METRICS, params, {withCredentials: true});
         const { data } = response;
         this.healthMetricOptions = data.data || [];
       } catch (error) {
@@ -278,7 +278,7 @@ export default {
       if (confirmed) {
         try {
           let ids = this.selectedRows.map(item => item.itemId);
-          const response = await this.$axios.post(API.DELETE_FORM_ITEMS, ids);
+          const response = await this.$axios.post(API.DELETE_FORM_ITEMS, ids, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '表单项已删除', type: 'success' });
             this.fetchFormItemData();
@@ -296,7 +296,7 @@ export default {
       }
       
       try {
-        const response = await this.$axios.post(API.INSERT_FORM_ITEM, this.data);
+        const response = await this.$axios.post(API.INSERT_FORM_ITEM, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFormItemData();
           this.cancel();
@@ -315,7 +315,7 @@ export default {
       }
       
       try {
-        const response = await this.$axios.post(API.UPDATE_FORM_ITEM, this.data);
+        const response = await this.$axios.post(API.UPDATE_FORM_ITEM, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFormItemData();
           this.cancel();
@@ -345,7 +345,7 @@ export default {
       });
       if (confirmed) {
         try {
-          const response = await this.$axios.post(API.DELETE_FORM_ITEMS, [row.itemId]);
+          const response = await this.$axios.post(API.DELETE_FORM_ITEMS, [row.itemId], {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '表单项已删除', type: 'success' });
             this.fetchFormItemData();

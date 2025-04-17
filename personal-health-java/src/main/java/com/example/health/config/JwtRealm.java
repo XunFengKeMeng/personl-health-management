@@ -52,7 +52,7 @@ public class JwtRealm extends AuthorizingRealm {
         String roleName = roleId == 1 ? "admin" : "user";
         authorizationInfo.addRole(roleName);
         // 管理员同时拥有用户身份
-        if(roleName.equals("admin")){
+        if ("admin".equals(roleName)) {
             authorizationInfo.addRole("user");
         }
         // 返回认证信息

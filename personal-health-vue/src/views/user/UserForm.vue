@@ -135,7 +135,7 @@ export default {
     async getUserID() {
       try {
         const token = { token: getToken() };
-        const res = await this.$axios.post('user/auth', token);
+        const res = await this.$axios.post('user/auth', token, {withCredentials: true});
         if (res.code === 400) {
           this.$message.error(res.data.msg);
           this.$router.push('/login');
@@ -164,7 +164,7 @@ export default {
           params.templateName = this.searchKeyword;
         }
 
-        const response = await this.$axios.post(API.QUERY_TEMPLATES, params);
+        const response = await this.$axios.post(API.QUERY_TEMPLATES, params, {withCredentials: true});
         
         if (response.data && response.data.code === 200) {
           this.templates = response.data.data || [];
@@ -200,7 +200,7 @@ export default {
       try {
         const response = await this.$axios.post(API.QUERY_TEMPLATE_DETAIL, {
           templateId: template.templateId
-        });
+        }, {withCredentials: true});
         
         if (response.data && response.data.code === 200) {
           this.selectedTemplate = response.data.data;
@@ -283,7 +283,7 @@ export default {
               templateId: this.selectedTemplate.templateId,
               userId: this.userId,
               formDataList: formDataList
-            });
+            }, {withCredentials: true});
             
             if (response.data && response.data.code === 200) {
               this.$message.success('表单提交成功');

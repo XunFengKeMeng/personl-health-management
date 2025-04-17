@@ -187,7 +187,7 @@ export default {
           size: this.pageSize,
           ...this.healthMetricQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_HEALTH_METRIC_LIST, params);
+        const response = await this.$axios.post(API.QUERY_HEALTH_METRIC_LIST, params, {withCredentials: true});
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -210,7 +210,7 @@ export default {
       if (confirmed) {
         try {
           let ids = this.selectedRows.map(metric => metric.healthMetricId);
-          const response = await this.$axios.post(API.DELETE_HEALTH_METRICS, ids);
+          const response = await this.$axios.post(API.DELETE_HEALTH_METRICS, ids, {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '健康指标已删除', type: 'success' });
             this.fetchHealthMetricData();
@@ -224,7 +224,7 @@ export default {
     // 新增健康指标
     async addOperation () {
       try {
-        const response = await this.$axios.post(API.INSERT_HEALTH_METRIC, this.data);
+        const response = await this.$axios.post(API.INSERT_HEALTH_METRIC, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchHealthMetricData();
           this.cancel();
@@ -239,7 +239,7 @@ export default {
     // 修改健康指标
     async updateOperation () {
       try {
-        const response = await this.$axios.post(API.UPDATE_HEALTH_METRIC, this.data);
+        const response = await this.$axios.post(API.UPDATE_HEALTH_METRIC, this.data, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchHealthMetricData();
           this.cancel();
@@ -260,7 +260,7 @@ export default {
       });
       if (confirmed) {
         try {
-          const response = await this.$axios.post(API.DELETE_HEALTH_METRICS, [row.healthMetricId]);
+          const response = await this.$axios.post(API.DELETE_HEALTH_METRICS, [row.healthMetricId], {withCredentials: true});
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '健康指标已删除', type: 'success' });
             this.fetchHealthMetricData();
