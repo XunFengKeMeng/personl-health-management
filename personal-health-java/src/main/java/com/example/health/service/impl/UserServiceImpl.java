@@ -4,6 +4,7 @@ import com.example.health.api.ApiResponse;
 import com.example.health.em.ActiveStatusEnum;
 import com.example.health.em.RoleEnum;
 import com.example.health.mapper.UserMapper;
+import com.example.health.pojo.JwtToken;
 import com.example.health.pojo.dto.query.extend.UserQueryDTO;
 import com.example.health.pojo.dto.update.UserLoginDTO;
 import com.example.health.pojo.dto.update.UserRegisterDTO;
@@ -13,6 +14,11 @@ import com.example.health.pojo.vo.UserVO;
 import com.example.health.service.UserService;
 import com.example.health.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -112,6 +118,17 @@ public class UserServiceImpl implements UserService {
                     Map<String, Object> map = new HashMap<>();
                     map.put("token", token);
                     map.put("role", user.getUserRole());
+                    // Shiro
+                    Subject subject = SecurityUtils.getSubject();
+                    JwtToken jwtToken = new JwtToken(token);
+                    try {
+                        // 进行验证。如果不加，在首次访问Shiro管理的接口时，无法直接认证授权信息。
+                        subject.login(jwtToken);
+                    } catch (UnknownAccountException e) {
+                        return ApiResponse.<Object>error("用户不存在");
+                    } catch (AuthenticationException | AuthorizationException e) {
+                        return ApiResponse.error("账号密码错误或没有权限");
+                    }
                     return ApiResponse.<Object>success("登录成功",map);
                 }).orElseGet(() -> ApiResponse.<Object>error("用户不存在"));
     }

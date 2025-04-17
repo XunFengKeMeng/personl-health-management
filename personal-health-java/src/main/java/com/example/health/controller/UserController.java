@@ -8,6 +8,7 @@ import com.example.health.pojo.dto.update.UserUpdateDTO;
 import com.example.health.pojo.entity.UserDO;
 import com.example.health.pojo.vo.UserVO;
 import com.example.health.service.UserService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -120,6 +121,7 @@ public class UserController {
      */
     @PostMapping(value = "/updateByAdmin")
     @ResponseBody
+    @RequiresRoles("admin")
     public ApiResponse<String> updateByAdmin(@RequestBody UserUpdateDTO userUpdateDTO) {
         return userService.updateByAdmin(userUpdateDTO);
     }
@@ -130,7 +132,6 @@ public class UserController {
      * @param userQueryDTO 查询参数
      * @return 查询操作响应结果 + 满足查询参数的用户信息列表
      */
-//    @Pager
     @PostMapping(value = "/queryUsers")
     @ResponseBody
     public ApiResponse<List<UserVO>> queryUsers(@RequestBody UserQueryDTO userQueryDTO) {

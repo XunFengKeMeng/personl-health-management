@@ -12,10 +12,15 @@ spring:
     url: jdbc:mysql://localhost:3306/personal_health?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
     password:
+  main:
+    # 允许Spring Boot在启动时覆盖已有的Bean定义，涉及到Shiro JwtRealm的使用
+    allow-bean-definition-overriding: true
 # 指定MyBatis扫描的Mapper XML文件路径，以实现SQL映射
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 jwt:
   secret-key: "d8c986df-8512-42b5-906f-eeea9b3acf86"  # JWT 密钥
   expiration-time: 604800000  # JWT 有效期（7 天，单位：毫秒）
+
+
 

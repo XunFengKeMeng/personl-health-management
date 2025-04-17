@@ -50,7 +50,7 @@ public class JwtUtil {
     }
 
     /**
-     * 解密JWT,提取有效信息（Payload）
+     * 解析JWT,提取有效信息（Payload）
      *
      * @param token 需要解析的JWT
      */
