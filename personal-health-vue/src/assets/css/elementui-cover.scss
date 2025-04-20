@@ -114,6 +114,15 @@
   padding: 0 !important;
 }
 
+.el-dialog__title {
+  font-size: 18px;
+  // font-weight: 600;
+  color: #6b6a6a;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-left: 12px; 
+}
+
 /* 多选框偏移 */
 .el-table th>.cell {
   padding-left: 15px !important;

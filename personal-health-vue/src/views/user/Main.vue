@@ -7,7 +7,7 @@
       </div>
       <div class="content-container">
           <!-- 路由出口 -->
-          <router-view class="route-container"></router-view>
+          <router-view class="route-container" ref="currentView"></router-view>
       </div>
       <!-- 个人中心弹窗 -->
       <el-dialog :show-close="false" :visible.sync="dialogOperaion" width="30%">
@@ -202,10 +202,10 @@ export default {
             return;
         }
         // 搜索
-        // if (event === 'search-detail') {
-        //     this.$router.push('/search-detail');
-        //     return;
-        // }
+        if (event === 'search-detail') {
+            this.$router.push('/search-detail');
+            return;
+        }
         // 退出登录
         if (event === 'logout') {
             this.logOutOperation();

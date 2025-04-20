@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author huanghaiming
  * @date 2025/3/16 14:44
@@ -14,7 +16,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HealthMetricVO {
+public class HealthMetricVO implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 健康指标编号
      */

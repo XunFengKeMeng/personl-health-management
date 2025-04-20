@@ -144,6 +144,15 @@ const routes = [
         },
       },
       {
+        name: '搜索页',
+        path: "/search-detail",
+        component: () => import(`@/views/user/Search.vue`),
+        meta: {
+          requireAuth: true,
+          isHidden: true, // 不显示
+        },
+      },
+      {
         name: '我的收藏',
         path: "/savedArticle",
         component: () => import(`@/views/user/SavedArticle.vue`),

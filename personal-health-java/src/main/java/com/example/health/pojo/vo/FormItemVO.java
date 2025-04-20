@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author huanghaiming
  * @date 2025/4/1 22:26
@@ -14,7 +16,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FormItemVO {
+public class FormItemVO implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 表达项ID
      */

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace：命名空间，将XML映射文件于Mapper接口绑定。 -->
 <mapper namespace="com.example.health.mapper.UserMapper">
+    <cache type="com.example.health.cache.RedisCache"/>
     <!--  新增用户信息  -->
     <!--  parameterType：指定需要传入数据库的数据类型（因为MyBatis的反射机制，其实不强制需求写）  -->
     <insert id="insertUser" parameterType="com.example.health.pojo.entity.UserDO">

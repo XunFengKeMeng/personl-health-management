@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.health.mapper.HealthMetricMapper">
+    <cache type="com.example.health.cache.RedisCache"/>
     <!--  新增健康指标  -->
     <insert id="save" parameterType="com.example.health.pojo.entity.HealthMetricDO">
         INSERT INTO health_metric(health_metric_name,

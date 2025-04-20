@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.health.mapper.FormDataMapper">
+    <cache type="com.example.health.cache.RedisCache"/>
     <!--  新增提交表单的（所有）表单项数据  -->
     <insert id="batchSave" parameterType="List">
         INSERT INTO form_data(submission_id,

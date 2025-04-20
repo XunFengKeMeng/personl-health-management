@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author huanghaiming
  * @date 2025/4/1 23:04
@@ -14,7 +16,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FormDataDO {
+public class FormDataDO implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 表单数据ID
      */

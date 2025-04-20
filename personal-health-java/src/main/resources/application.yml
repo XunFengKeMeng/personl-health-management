@@ -1,6 +1,7 @@
 server:
   port: 21090
   servlet:
+    # 接口前缀配置
     context-path: /api/health-management
 # MySQL配置
 spring:
@@ -15,12 +16,31 @@ spring:
   main:
     # 允许Spring Boot在启动时覆盖已有的Bean定义，涉及到Shiro JwtRealm的使用
     allow-bean-definition-overriding: true
+  redis:
+    host: localhost
+    port: 6379
+    # Redis启动后，默认提供16个数据库，这里的0表示：使用0号数据库
+    database: 0
+#    password:XXX
+    jedis:
+      # Redis连接池配置
+      pool:
+        # 最大连接数
+        max-active: 8
+        # 连接池最大阻塞等待时间
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
 # 指定MyBatis扫描的Mapper XML文件路径，以实现SQL映射
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+  configuration:
+    cache-enabled: true  # 启用二级缓存
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 开启SQL日志
 jwt:
   secret-key: "d8c986df-8512-42b5-906f-eeea9b3acf86"  # JWT 密钥
   expiration-time: 604800000  # JWT 有效期（7 天，单位：毫秒）
-
 
 

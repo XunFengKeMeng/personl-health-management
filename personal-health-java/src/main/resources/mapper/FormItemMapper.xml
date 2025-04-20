@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.health.mapper.FormItemMapper">
+    <cache type="com.example.health.cache.RedisCache"/>
     <!--  新增表单项  -->
     <insert id="saveFormItem" parameterType="com.example.health.pojo.entity.FormItemDO">
         INSERT INTO form_item_config(item_name,

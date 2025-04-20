@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.health.mapper.TemplateItemRelationMapper">
+    <cache type="com.example.health.cache.RedisCache"/>
     <!--  新增模板下的关联表单项信息（单条）  -->
     <insert id="save" parameterType="com.example.health.pojo.entity.TemplateItemRelationDO">
         INSERT INTO template_item_relation(template_id,

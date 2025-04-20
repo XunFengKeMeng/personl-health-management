@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author huanghaiming
  * @date 2025/4/1 22:53
@@ -14,7 +16,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TemplateItemRelationDO {
+public class TemplateItemRelationDO implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 关联ID
      */

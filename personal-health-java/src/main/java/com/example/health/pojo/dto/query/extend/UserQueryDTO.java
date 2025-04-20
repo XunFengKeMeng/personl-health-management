@@ -3,6 +3,8 @@ package com.example.health.pojo.dto.query.extend;
 import com.example.health.pojo.dto.query.base.QueryDTO;
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * @author huanghaiming
  * @date 2025/3/5 10:57
@@ -13,7 +15,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserQueryDTO extends QueryDTO {
+public class UserQueryDTO extends QueryDTO implements Serializable {
     /**
      * 用户ID
      */
