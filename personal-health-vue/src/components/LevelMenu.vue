@@ -113,10 +113,14 @@ export default {
           // 直接调用搜索页面的刷新方法
           this.$parent.$refs.currentView.refreshSearch(this.filterText);
         }
+        // 清空搜索栏
+        this.filterText = '';
         return;
       }
       // 不在搜索页面时，通知父组件进行路由跳转
       this.$emit('eventListener', 'search-detail');
+      // 清空搜索栏
+      this.filterText = '';
     },
 
     // 个人中心，传回父组件处理
@@ -131,24 +135,9 @@ export default {
     logout () {
       this.$emit('eventListener', 'logout');
     },
-    // 退出登录，传回父组件处理
-    logout () {
-      this.$emit('eventListener', 'logout');
-    },
     // 加载用户数据
     async loadUserData () {
       const userInfo = sessionStorage.getItem('userInfo');
-    },
-    // 加载用户通知数据
-    async loadMsgCount () {
-      // const userInfo = sessionStorage.getItem('userInfo');
-      // const userInfoEntity = JSON.parse(userInfo);
-      // const messageQueryDto = { userId: userInfoEntity.id, isRead: false }
-      // const response = await this.$axios.post(`/message/query`, messageQueryDto);
-      // const { data } = response;
-      // if (data.code === 200) {
-      //     this.noReadMsg = data.data.length;
-      // }
     },
     // 不是存量路由，则跳转
     pathToDo (path) {
