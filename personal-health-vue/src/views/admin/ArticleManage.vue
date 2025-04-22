@@ -176,6 +176,13 @@
             </el-select>
           </el-form-item>
 
+          <el-form-item label="资讯封面">
+            <el-input
+              v-model="articleData.healthArticleCover"
+              placeholder="请输入资讯封面URL"
+            ></el-input>
+          </el-form-item>
+
           <el-form-item label="是否推荐">
             <el-switch
               v-model="articleData.top"
@@ -414,6 +421,7 @@ export default {
         healthArticleTitle: '',
         healthArticleContent: '',
         healthArticleTagId: '',
+        healthArticleCover: '',
         top: false
       };
     },

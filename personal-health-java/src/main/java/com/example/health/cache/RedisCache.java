@@ -69,7 +69,7 @@ public class RedisCache implements Cache {
             return getRedisTemplate().opsForHash().get(id,key.toString());
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("缓存出错 ");
+            log.error("缓存出错");
         }
         return null;
     }
@@ -91,7 +91,7 @@ public class RedisCache implements Cache {
     @Override
     public void clear() {
         log.debug("清空缓存");
-        Set<String> keys = getRedisTemplate().keys("*:" + this.id + "*");
+        Set<String> keys = getRedisTemplate().keys(this.id);
         if (!CollectionUtils.isEmpty(keys)) {
             getRedisTemplate().delete(keys);
         }
