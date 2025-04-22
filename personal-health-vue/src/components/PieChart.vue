@@ -30,7 +30,7 @@ export default {
     },
     height: {
       type: String,
-      default: '243px'
+      default: '300px'
     },
     // 背景颜色
     bag: {
@@ -156,7 +156,7 @@ export default {
 
 <style scoped lang="scss">
 .line-main {
-  padding-top: 40px;
+  padding-top: 10px;
   margin-bottom: 5px;
   border-radius: 3px;
   background-color: #000000;

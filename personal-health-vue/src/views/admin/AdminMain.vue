@@ -52,7 +52,7 @@
     <el-row>
       <!-- 饼图 -->
       <el-col :span="8">
-        <div style="padding: 15px 5px;box-sizing: border-box;">
+        <div style="padding: 0px 5px;box-sizing: border-box;">
           <div class="card-header">
             <h3>文章标签分布</h3>
           </div>
