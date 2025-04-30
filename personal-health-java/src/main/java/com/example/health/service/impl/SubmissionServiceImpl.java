@@ -1,12 +1,15 @@
 package com.example.health.service.impl;
 
 import com.example.health.api.ApiResponse;
+import com.example.health.em.NoticeTypeEnum;
+import com.example.health.em.ReadStatusEnum;
 import com.example.health.em.SubmissionStatusEnum;
 import com.example.health.mapper.FormDataMapper;
+import com.example.health.mapper.NoticeMapper;
 import com.example.health.mapper.SubmissionMapper;
-import com.example.health.pojo.dto.FormDataDTO;
 import com.example.health.pojo.dto.SubmissionDTO;
 import com.example.health.pojo.entity.FormDataDO;
+import com.example.health.pojo.entity.NoticeDO;
 import com.example.health.pojo.entity.SubmissionDO;
 import com.example.health.pojo.vo.FormDataVO;
 import com.example.health.pojo.vo.SubmissionVO;
@@ -16,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +42,12 @@ public class SubmissionServiceImpl implements SubmissionService {
      */
     @Resource
     private FormDataMapper formDataMapper;
+
+    /**
+     * 校验健康表单项并发送通知
+     */
+    @Resource
+    private NoticeMapper noticeMapper;
 
 
     /**
@@ -87,6 +98,51 @@ public class SubmissionServiceImpl implements SubmissionService {
      * @param submissionDTO 修改后的表单提交信息
      * @return 更新操作响应结果
      */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ApiResponse<String> updateAndNotice(SubmissionDTO submissionDTO) {
+        // 修改表单提交记录（审核状态）
+        SubmissionDO submissionDO = SubmissionDO.builder()
+                .submissionId(submissionDTO.getSubmissionId())
+                .status(submissionDTO.getStatus())
+                .build();
+        submissionMapper.update(submissionDO);
+        // 通知消息体
+        String noticeMsg;
+        SubmissionVO submission = submissionMapper.queryById(submissionDTO.getSubmissionId());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        if(Objects.equals(submissionDTO.getStatus(), SubmissionStatusEnum.APPROVED.getCode())){
+            // 获取
+            List<String> itemNameList = submissionMapper.queryHealthMetricViolations(submissionDTO.getSubmissionId());
+            String healthMetricViolations = String.join(",", itemNameList);
+            noticeMsg = String.format(
+                    "亲爱的%s:%n  您于%s提交的%s已经审核通过。%n%n经系统检测，您的%s数值超出正常范围。为确保您的健康安全，建议：%n" +
+                            "1. 核对填报数据是否准确%n" +
+                            "2. 如数据无误，请及时咨询专业医师%n" +
+                            "3. 关注相关健康指标变化%n%n" +
+                            "祝您健康平安！",
+                    submission.getUserName(),
+                    submission.getSubmitTime().format(formatter),
+                    submission.getTemplateName(),
+                    healthMetricViolations
+            );
+        } else {
+            noticeMsg = "亲爱的" + submission.getUserName() + ":\n  您于" + submission.getSubmitTime() + "提交的" +
+                    submission.getTemplateName() + "审核未通过，请正确填写表单。";
+        }
+        // 发送通知
+        NoticeDO noticeDO = NoticeDO.builder()
+                .receiverId(submission.getUserId())
+                .read(ReadStatusEnum.UNREAD.getReadStatus())
+                .noticeCreateTime(LocalDateTime.now())
+                .noticeType(NoticeTypeEnum.HEALTH_ALERT.getNoticeTypeCode())
+                .noticeContent(noticeMsg).build();
+
+        noticeMapper.insertNotice(noticeDO);
+
+        return ApiResponse.success("表单审核成功");
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ApiResponse<String> update(SubmissionDTO submissionDTO) {

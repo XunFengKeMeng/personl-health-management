@@ -64,4 +64,12 @@ public interface SubmissionMapper {
      * @return 指定提交表单记录的数据（不包含表单项数据）
      */
     SubmissionVO queryById(Integer submissionId);
+
+    /**
+     * 查询提交表单中数据超出健康指标正常值的表单项名列表
+     *
+     * @param submissionId 待查询的提交表单ID
+     * @return 关联健康指标的异常数据表单项名列表
+     */
+    List<String> queryHealthMetricViolations(Integer submissionId);
 }

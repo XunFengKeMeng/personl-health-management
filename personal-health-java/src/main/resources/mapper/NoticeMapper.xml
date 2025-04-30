@@ -23,6 +23,20 @@
             </foreach>
     </insert>
 
+    <!--  系统发送单条通知  -->
+    <insert id="insertNotice" parameterType="com.example.health.pojo.entity.NoticeDO">
+        INSERT INTO notice (notice_content,
+                            notice_type,
+                            receiver_id,
+                            is_read,
+                            notice_create_time)
+        SELECT  #{noticeContent},
+                #{noticeType},
+                #{receiverId},
+                #{read},
+                #{noticeCreateTime}
+    </insert>
+
     <!--  通知全体发布  -->
     <insert id="insertAll" parameterType="com.example.health.pojo.entity.NoticeDO">
         INSERT INTO notice (notice_content,

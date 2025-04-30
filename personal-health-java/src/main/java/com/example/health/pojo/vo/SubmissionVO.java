@@ -37,6 +37,11 @@ public class SubmissionVO implements Serializable {
     private String templateName;
 
     /**
+     * 提交ID
+     */
+    private Integer userId;
+
+    /**
      * 提交用户名
      */
     private String userName;

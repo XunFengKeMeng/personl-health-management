@@ -25,6 +25,13 @@ public interface NoticeMapper {
             @Param("ids")List<Integer> receiverIds);
 
     /**
+     * 新增单条通知（系统发送
+     * ）
+     * @param notice 通知信息
+     */
+    void insertNotice(NoticeDO notice);
+
+    /**
      * 发布全体通知
      *
      * @param notices 新增的若干通知信息

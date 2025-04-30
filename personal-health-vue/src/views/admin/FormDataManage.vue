@@ -182,12 +182,11 @@
 
 <script>
 const API = {
-  UPDATE_FORM_SUBMISSION: '/formSubmission/update',
+  CHECK_FORM_SUBMISSION: '/formSubmission/check',
   DELETE_FORM_SUBMISSION: '/formSubmission/delete',
   QUERY_FORM_SUBMISSION_LIST: '/formSubmission/query',
   QUERY_FORM_SUBMISSION_DETAIL: '/formSubmission/queryDetail'
 }
-
 export default {
   data () {
     return {
@@ -244,7 +243,7 @@ export default {
       }
     },
 
-    // 更新表单提交记录
+    // 审核表单提交记录
     async updateOperation () {
       try {
         const submitData = {
@@ -253,7 +252,7 @@ export default {
           formDataList: this.data.formDataList
         };
         
-        const response = await this.$axios.post(API.UPDATE_FORM_SUBMISSION, submitData, {withCredentials: true});
+        const response = await this.$axios.post(API.CHECK_FORM_SUBMISSION, submitData, {withCredentials: true});
         if (response.data.code === 200) {
           this.fetchFormSubmissionData();
           this.cancel();

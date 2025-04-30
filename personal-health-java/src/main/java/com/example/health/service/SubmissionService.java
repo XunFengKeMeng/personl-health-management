@@ -4,6 +4,7 @@ import com.example.health.api.ApiResponse;
 import com.example.health.pojo.dto.SubmissionDTO;
 import com.example.health.pojo.vo.SubmissionVO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,15 @@ public interface SubmissionService {
      * @return 删除操作响应结果
      */
     ApiResponse<String> delete(SubmissionDTO submissionDTO);
+
+    /**
+     * 审核表单并发送数据
+     *
+     * @param submissionDTO
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    ApiResponse<String> updateAndNotice(SubmissionDTO submissionDTO);
 
     /**
      * 更新表单提交记录（审核情况）及其表单项数据

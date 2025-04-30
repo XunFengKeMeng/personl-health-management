@@ -51,7 +51,7 @@ public class SubmissionController {
     }
 
     /**
-     * 更新表单提交数据
+     * 更新表单提交数据（用户）
      *
      * @param submissionDTO 修改后的表单提交数据
      * @return 更新操作响应结果
@@ -61,6 +61,19 @@ public class SubmissionController {
     @RequiresRoles("user")
     public ApiResponse<String> update(@RequestBody SubmissionDTO submissionDTO) {
         return submissionService.update(submissionDTO);
+    }
+
+    /**
+     * 审核表单并通知
+     *
+     * @param submissionDTO
+     * @return
+     */
+    @PostMapping(value = "/check")
+    @ResponseBody
+    @RequiresRoles("admin")
+    public ApiResponse<String> check(@RequestBody SubmissionDTO submissionDTO) {
+        return submissionService.updateAndNotice(submissionDTO);
     }
 
     /**

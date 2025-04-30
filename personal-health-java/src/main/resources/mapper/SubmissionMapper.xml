@@ -84,6 +84,7 @@
             fs.submission_id,
             ft.template_id,
             ft.template_name,
+            u.user_id,
             u.user_name,
             fs.status,
             fs.submit_time
@@ -93,11 +94,36 @@
         WHERE submission_id = #{submissionId}
     </select>
 
+    <!--  查询提交表单中数据超出健康指标正常值的表单项名列表  -->
+    <select id="queryHealthMetricViolations" resultType="string">
+        SELECT
+        fic.item_name
+        FROM
+        form_data fd
+        JOIN
+        form_item_config fic ON fd.item_id = fic.item_id
+        LEFT JOIN
+        health_metric hm ON fic.health_metric_id = hm.health_metric_id
+        WHERE
+        fd.submission_id = #{submissionId}
+        AND hm.health_metric_range IS NOT NULL
+        AND (
+        -- 检查数值是否低于最小值
+        CAST(fd.value AS DECIMAL(10,2)) <![CDATA[ < ]]>
+        CAST(SUBSTRING_INDEX(hm.health_metric_range, ',', 1) AS DECIMAL(10,2))
+        OR
+        -- 检查数值是否高于最大值
+        CAST(fd.value AS DECIMAL(10,2)) <![CDATA[ > ]]>
+        CAST(SUBSTRING_INDEX(hm.health_metric_range, ',', -1) AS DECIMAL(10,2))
+        );
+    </select>
+
     <!--  表单提交记录视图对象映射（不包含表单项数据）  -->
     <resultMap id="SubmissionVOResultMap" type="com.example.health.pojo.vo.SubmissionVO">
         <id column="submission_id" property="submissionId"/>
         <result column="template_id" property="templateId"/>
         <result column="template_name" property="templateName"/>
+        <result column="user_id" property="userId"/>
         <result column="user_name" property="userName"/>
         <result column="status" property="status"/>
         <result column="submit_time" property="submitTime"/>
