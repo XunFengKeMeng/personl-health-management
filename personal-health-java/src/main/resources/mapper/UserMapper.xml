@@ -12,14 +12,18 @@
                          user_email,
                          user_role,
                          is_active,
-                         user_create_time)
+                         user_create_time,
+                         sex,
+                         department_name)
         VALUES (#{userAccount},
                 #{userName},
                 #{userPassword},
                 #{userEmail},
                 #{userRole},
                 #{active},
-                #{userCreateTime})
+                #{userCreateTime},
+                #{sex},
+                #{departmentName})
     </insert>
 
     <!--  根据用户ID,批量删除用户信息  -->
@@ -50,7 +54,16 @@
                 user_role = #{userRole},
             </if>
             <if test="active != null">
-                is_active = #{active}
+                is_active = #{active},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                department_name = #{departmentName},
+            </if>
+            <if test="healthStatus != null">
+                health_status = #{healthStatus}
             </if>
         </set>
         WHERE user_id = #{userId}
@@ -68,7 +81,10 @@
         user_email,
         user_role,
         is_active,
-        user_create_time
+        user_create_time,
+        sex,
+        department_name,
+        health_status
         FROM user u
         <where>
             <if test="userId != null">
@@ -93,7 +109,10 @@
             user_email,
             user_role,
             is_active,
-            user_create_time
+            user_create_time,
+            sex,
+            department_name,
+            health_status
         FROM user u
         <where>
             <if test="userAccount != null and userAccount != ''">
@@ -113,6 +132,15 @@
             </if>
             <if test="startTime != null and endTime != null">
                 AND u.create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test="sex != null">
+                AND u.sex = #{sex}
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                AND u.department_name = #{departmentName}
+            </if>
+            <if test="healthStatus != null">
+                AND u.health_status = #{healthStatus}
             </if>
         </where>
         ORDER BY u.user_id ASC
@@ -144,7 +172,20 @@
             <if test="startTime != null and endTime != null">
                 AND u.create_time BETWEEN #{startTime} AND #{endTime}
             </if>
+            <if test="sex != null">
+                AND u.sex = #{sex}
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                AND u.department_name = #{departmentName}
+            </if>
+            <if test="healthStatus != null">
+                AND u.health_status = #{healthStatus}
+            </if>
         </where>
+    </select>
+
+    <select id="queryHealthStatusStatistics" resultMap="HealthStatusStatisticsVOResultMap">
+        SELECT health_status, COUNT(*) AS count FROM user GROUP BY health_status
     </select>
 
     <!-- 用户查询映射结果 -->
@@ -158,6 +199,9 @@
         <result column="user_role" property="userRole"/>
         <result column="is_active" property="active"/>
         <result column="user_create_time" property="userCreateTime"/>
+        <result column="sex" property="sex"/>
+        <result column="health_status" property="healthStatus"/>
+        <result column="department_name" property="departmentName"/>
     </resultMap>
 
     <resultMap id="UserResultVOMap" type="com.example.health.pojo.vo.UserVO">
@@ -169,5 +213,13 @@
         <result column="user_role" property="userRole"/>
         <result column="is_active" property="active"/>
         <result column="user_create_time" property="userCreateTime"/>
+        <result column="sex" property="sex"/>
+        <result column="health_status" property="healthStatus"/>
+        <result column="department_name" property="departmentName"/>
+    </resultMap>
+
+    <resultMap id="HealthStatusStatisticsVOResultMap" type="com.example.health.pojo.vo.HealthStatusStatisticsVO">
+        <result column="health_status" property="healthStatus"/>
+        <result column="count" property="count"/>
     </resultMap>
 </mapper>

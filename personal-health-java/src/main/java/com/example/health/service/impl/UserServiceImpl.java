@@ -10,6 +10,7 @@ import com.example.health.pojo.dto.update.UserLoginDTO;
 import com.example.health.pojo.dto.update.UserRegisterDTO;
 import com.example.health.pojo.dto.update.UserUpdateDTO;
 import com.example.health.pojo.entity.UserDO;
+import com.example.health.pojo.vo.HealthStatusStatisticsVO;
 import com.example.health.pojo.vo.UserVO;
 import com.example.health.service.UserService;
 import com.example.health.utils.JwtUtil;
@@ -73,6 +74,8 @@ public class UserServiceImpl implements UserService {
                             .userEmail(userRegisterDTO.getUserEmail())
                             .userRole(RoleEnum.USER.getRoleCode())
                             .active(ActiveStatusEnum.INACTIVE.getStatusCode())
+                            .sex(userRegisterDTO.getSex())
+                            .departmentName(userRegisterDTO.getDepartmentName())
                             .userCreateTime(LocalDateTime.now()).build();
                     userMapper.insertUser(user);
                     return ApiResponse.success("注册成功");
@@ -243,4 +246,16 @@ public class UserServiceImpl implements UserService {
                     return ApiResponse.success(userVO);
                 }).orElseGet(()-> ApiResponse.error("用户不存在"));
     }
+
+    /**
+     * 获取健康状态码及每个健康状态下的用户数
+     *
+     * @return 健康状态码及每个健康状态下的用户数
+     */
+    @Override
+    public ApiResponse<List<HealthStatusStatisticsVO>> getHealthStatusStatistics() {
+        List<HealthStatusStatisticsVO> healthStatusStatisticsVOList = userMapper.queryHealthStatusStatistics();
+        return ApiResponse.success(healthStatusStatisticsVOList);
+    }
+
 }

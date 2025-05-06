@@ -73,6 +73,7 @@
         <el-table-column
           label="操作"
           width="170"
+          fixed="right"
         >
           <template slot-scope="scope">
             <span
@@ -114,7 +115,8 @@
         <div class="form-info-section">
           <el-row class="info-item">
             <span class="info-label">提交记录ID:</span>
-            <span class="info-value">{{ formatSubmissionId(null, null, data.submissionId) }}</span>
+            <span
+              class="info-value">{{ formatSubmissionId(null, null, data.submissionId) }}</span>
           </el-row>
           <el-row class="info-item">
             <span class="info-label">表单模板名:</span>
@@ -141,20 +143,55 @@
               ></el-switch>
             </div>
           </el-row>
+          <el-row
+            v-if="data.templateId === 1"
+            class="info-item"
+          >
+            <span class="info-label">健康状态:</span>
+            <div style="display: inline-block; margin-left: 10px;">
+              <el-select
+                v-model="healthStatus"
+                placeholder="请选择健康状态"
+                size="small"
+                style="width: 200px"
+              >
+                <el-option
+                  v-for="item in healthStatusOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </div>
+          </el-row>
         </div>
-        
+
         <div class="form-data-section">
           <h3>表单数据</h3>
-          <div 
-            v-for="(item, index) in sortedFormDataList" 
+          <div
+            v-for="(item, index) in sortedFormDataList"
             :key="item.formDataId"
             class="form-item"
           >
             <div class="form-item-label">
-              <span v-if="item.required" class="required-star">*</span>
+              <span
+                v-if="item.required"
+                class="required-star"
+              >*</span>
               {{ item.itemName }}:
             </div>
-            <div class="form-item-value">{{ item.value || '无' }}</div>
+            <div class="form-item-value">
+              <!-- 文件类型特殊处理 -->
+              <a
+                v-if="isFileType(item)"
+                :href="getFileUrl(item.value)"
+                target="_blank"
+                class="download-link"
+              >
+                查看文件
+              </a>
+              <span v-else>{{ item.value || '无' }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -199,11 +236,20 @@ export default {
       dialogFormSubmissionOperation: false, // 弹窗开关
       tableData: [],
       formSubmissionQueryDto: {}, // 查询参数
-      approvalStatus: true // 默认审核通过
+      approvalStatus: true, // 默认审核通过
+      healthStatus: 0, // 默认值设为0（未知）
+      healthStatusOptions: [
+        { value: 0, label: '未知' },
+        { value: 1, label: '未见异常' },
+        { value: 2, label: '疑似职业病' },
+        { value: 3, label: '职业禁忌病' },
+        { value: 4, label: '其他疾患' },
+        { value: 5, label: '职业病' }
+      ]
     };
   },
   computed: {
-    sortedFormDataList() {
+    sortedFormDataList () {
       if (!this.data.formDataList) return [];
       return [...this.data.formDataList].sort((a, b) => a.sortOrder - b.sortOrder);
     }
@@ -220,7 +266,7 @@ export default {
           size: this.pageSize,
           ...this.formSubmissionQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_FORM_SUBMISSION_LIST, params, {withCredentials: true});
+        const response = await this.$axios.post(API.QUERY_FORM_SUBMISSION_LIST, params, { withCredentials: true });
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -232,7 +278,7 @@ export default {
     // 获取表单提交记录详情
     async fetchFormSubmissionDetail (submissionId) {
       try {
-        const response = await this.$axios.post(API.QUERY_FORM_SUBMISSION_DETAIL, { submissionId }, {withCredentials: true});
+        const response = await this.$axios.post(API.QUERY_FORM_SUBMISSION_DETAIL, { submissionId }, { withCredentials: true });
         if (response.data.code === 200) {
           this.data = response.data.data;
           // 根据状态设置开关值
@@ -249,28 +295,31 @@ export default {
         const submitData = {
           submissionId: this.data.submissionId,
           status: this.approvalStatus ? 1 : 2, // 1通过 2驳回
-          formDataList: this.data.formDataList
+          formDataList: this.data.formDataList,
+          healthStatus: this.healthStatus,
+          templateId: this.data.templateId,
+          userId: this.data.userId
         };
-        
-        const response = await this.$axios.post(API.CHECK_FORM_SUBMISSION, submitData, {withCredentials: true});
+        const response = await this.$axios.post(API.CHECK_FORM_SUBMISSION, submitData, { withCredentials: true });
         if (response.data.code === 200) {
           this.fetchFormSubmissionData();
           this.cancel();
-          this.$notify({ 
-            duration: 2000, 
-            title: '审核成功', 
-            message: `表单已${this.approvalStatus ? '通过' : '驳回'}`, 
-            type: 'success' 
+          this.$notify({
+            duration: 2000,
+            title: '审核成功',
+            message: `表单已${this.approvalStatus ? '通过' : '驳回'}`,
+            type: 'success'
           });
         }
       } catch (error) {
         console.error('更新表单提交记录异常:', error);
         this.$message.error('提交失败，请稍后再试！');
       }
+      this.healthStatus = null
     },
 
     // 处理状态变更
-    handleStatusChange(value) {
+    handleStatusChange (value) {
       // 已在计算属性中更新
     },
 
@@ -283,7 +332,7 @@ export default {
       });
       if (confirmed) {
         try {
-          const response = await this.$axios.post(API.DELETE_FORM_SUBMISSION, { submissionId: row.submissionId }, {withCredentials: true});
+          const response = await this.$axios.post(API.DELETE_FORM_SUBMISSION, { submissionId: row.submissionId }, { withCredentials: true });
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '表单提交记录已删除', type: 'success' });
             this.fetchFormSubmissionData();
@@ -295,7 +344,7 @@ export default {
     },
 
     // 获取状态文本
-    getStatusText(status) {
+    getStatusText (status) {
       switch (status) {
         case 0: return '待审核';
         case 1: return '已通过';
@@ -305,7 +354,7 @@ export default {
     },
 
     // 获取状态标签类型
-    getStatusTagType(status) {
+    getStatusTagType (status) {
       switch (status) {
         case 0: return 'info';
         case 1: return 'success';
@@ -314,14 +363,37 @@ export default {
       }
     },
 
+    // 判断是否为文件类型
+    isFileType (item) {
+      return item.style === 1;
+    },
+
+
+    // 获取完整的文件URL
+    getFileUrl (value) {
+      // 替换URL前缀
+      if (value.startsWith('http://localhost:21090/')) {
+        const newUrl = value.replace(
+          'http://localhost:21090/',
+          'http://localhost:21090/api/health-management/'
+        );
+        console.log('Modified URL:', newUrl);
+        return newUrl;
+      }
+
+      // 拼接基础路径（根据实际API调整）
+      return `${window.location.origin}/api/download?file=${encodeURIComponent(value)}`;
+    },
+
+
     handleFilter () { this.currentPage = 1; this.fetchFormSubmissionData(); },
     handleUserNameClear () { this.formSubmissionQueryDto.userName = ''; this.handleFilter(); },
     handleTemplateNameClear () { this.formSubmissionQueryDto.templateName = ''; this.handleFilter(); },
     handleSizeChange (val) { this.pageSize = val; this.currentPage = 1; this.fetchFormSubmissionData(); },
     handleCurrentChange (val) { this.currentPage = val; this.fetchFormSubmissionData(); },
-    async handleEdit (row) { 
+    async handleEdit (row) {
       await this.fetchFormSubmissionDetail(row.submissionId);
-      this.dialogFormSubmissionOperation = true; 
+      this.dialogFormSubmissionOperation = true;
     },
     cancel () { this.dialogFormSubmissionOperation = false; this.data = { formDataList: [] }; },
     // 将 submissionId 格式化为 4 位，不足部分补零

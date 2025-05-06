@@ -31,4 +31,14 @@ public class UserRegisterDTO {
      * 用户邮箱
      */
     private String userEmail;
+
+    /**
+     * 性别（0女1男）
+     */
+    private Integer sex;
+
+    /**
+     * 部门
+     */
+    private String departmentName;
 }

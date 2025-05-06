@@ -6,6 +6,7 @@ import com.example.health.pojo.dto.update.UserLoginDTO;
 import com.example.health.pojo.dto.update.UserRegisterDTO;
 import com.example.health.pojo.dto.update.UserUpdateDTO;
 import com.example.health.pojo.entity.UserDO;
+import com.example.health.pojo.vo.HealthStatusStatisticsVO;
 import com.example.health.pojo.vo.UserVO;
 import org.springframework.stereotype.Service;
 
@@ -97,4 +98,10 @@ public interface UserService {
      * @return 根据用户ID查询到的用户整体信息
      */
     ApiResponse<UserVO> getByUserId(Integer userId);
+
+    /**
+     * 获取健康状态码及每个健康状态下的用户数
+     * @return 健康状态码及每个健康状态下的用户数
+     */
+    ApiResponse<List<HealthStatusStatisticsVO>> getHealthStatusStatistics();
 }

@@ -50,4 +50,9 @@ public class SubmissionDTO extends QueryDTO {
      * 表单项数据
      */
     private List<FormDataDTO> formDataList;
+
+    /**
+     * 用户健康状态赋值
+     */
+    private Integer healthStatus;
 }

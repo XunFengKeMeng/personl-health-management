@@ -26,7 +26,7 @@ public class UserDO implements Serializable {
     private Integer userId;
 
     /**
-     * 用户账号
+     * 用户账号（工号）
      */
     private String userAccount;
 
@@ -63,4 +63,18 @@ public class UserDO implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime userCreateTime;
 
+    /**
+     * 性别（0女1男）
+     */
+    private Integer sex;
+
+    /**
+     * 健康状态（0未知，1未见异常，2疑似职业病，3职业禁忌病，4其他疾患，5职业病）
+     */
+    private Integer healthStatus;
+
+    /**
+     * 部门
+     */
+    private String departmentName;
 }

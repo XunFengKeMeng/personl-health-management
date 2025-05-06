@@ -73,7 +73,7 @@
         <el-table-column
           prop="placeholder"
           label="提示文本"
-          width="180"
+          width="160"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
@@ -90,6 +90,13 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column
+          prop="style"
+          label="样式"
+          width="100"
+          :formatter="formatStyle"
+          show-overflow-tooltip
+        ></el-table-column>
         <!-- 操作列 -->
         <el-table-column
           label="操作"
@@ -178,6 +185,23 @@
             </span>
           </div>
         </el-row>
+        <el-row style="margin-top: 15px;">
+          <span class="dialog-hover">样式</span>
+          <el-select
+            class="dialog-select"
+            v-model="data.style"
+            placeholder="请选择表单项样式"
+          >
+            <el-option
+              label="文本框"
+              :value="0"
+            ></el-option>
+            <el-option
+              label="文件上传"
+              :value="1"
+            ></el-option>
+          </el-select>
+        </el-row>
       </div>
       <span
         slot="footer"
@@ -224,7 +248,7 @@ export default {
       tableData: [],
       selectedRows: [],
       formItemQueryDto: {}, // 查询参数
-      healthMetricOptions: [] // 健康指标选项
+      healthMetricOptions: [], // 健康指标选项
     };
   },
   created () {
@@ -240,7 +264,7 @@ export default {
           size: this.pageSize,
           ...this.formItemQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_FORM_ITEM_LIST, params, {withCredentials: true});
+        const response = await this.$axios.post(API.QUERY_FORM_ITEM_LIST, params, { withCredentials: true });
         const { data } = response;
         this.tableData = data.data;
         this.totalItems = data.total;
@@ -256,7 +280,7 @@ export default {
           current: 0,
           size: 999 // 获取所有健康指标
         };
-        const response = await this.$axios.post(API.QUERY_HEALTH_METRICS, params, {withCredentials: true});
+        const response = await this.$axios.post(API.QUERY_HEALTH_METRICS, params, { withCredentials: true });
         const { data } = response;
         this.healthMetricOptions = data.data || [];
       } catch (error) {
@@ -278,7 +302,7 @@ export default {
       if (confirmed) {
         try {
           let ids = this.selectedRows.map(item => item.itemId);
-          const response = await this.$axios.post(API.DELETE_FORM_ITEMS, ids, {withCredentials: true});
+          const response = await this.$axios.post(API.DELETE_FORM_ITEMS, ids, { withCredentials: true });
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '表单项已删除', type: 'success' });
             this.fetchFormItemData();
@@ -294,9 +318,9 @@ export default {
       if (!this.validateFormData()) {
         return;
       }
-      
+
       try {
-        const response = await this.$axios.post(API.INSERT_FORM_ITEM, this.data, {withCredentials: true});
+        const response = await this.$axios.post(API.INSERT_FORM_ITEM, this.data, { withCredentials: true });
         if (response.data.code === 200) {
           this.fetchFormItemData();
           this.cancel();
@@ -313,9 +337,9 @@ export default {
       if (!this.validateFormData()) {
         return;
       }
-      
+
       try {
-        const response = await this.$axios.post(API.UPDATE_FORM_ITEM, this.data, {withCredentials: true});
+        const response = await this.$axios.post(API.UPDATE_FORM_ITEM, this.data, { withCredentials: true });
         if (response.data.code === 200) {
           this.fetchFormItemData();
           this.cancel();
@@ -345,7 +369,7 @@ export default {
       });
       if (confirmed) {
         try {
-          const response = await this.$axios.post(API.DELETE_FORM_ITEMS, [row.itemId], {withCredentials: true});
+          const response = await this.$axios.post(API.DELETE_FORM_ITEMS, [row.itemId], { withCredentials: true });
           if (response.data.code === 200) {
             this.$notify({ duration: 2000, title: '删除成功', message: '表单项已删除', type: 'success' });
             this.fetchFormItemData();
@@ -354,6 +378,10 @@ export default {
           console.error('删除表单项异常：', e);
         }
       }
+    },
+    // 样式数字转文字
+    formatStyle (row, column, styleValue) {
+      return styleValue === 0 ? '文本框' : '文件上传';
     },
 
     handleFilter () { this.currentPage = 1; this.fetchFormItemData(); },

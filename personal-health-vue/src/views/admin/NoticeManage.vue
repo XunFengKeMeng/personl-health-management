@@ -86,7 +86,7 @@
         ></el-table-column>
         <el-table-column
           prop="noticeType"
-          width="120"
+          width="150"
           label="消息类型"
         >
           <template slot-scope="scope">

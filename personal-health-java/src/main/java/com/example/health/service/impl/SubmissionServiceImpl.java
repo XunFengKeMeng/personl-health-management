@@ -7,10 +7,12 @@ import com.example.health.em.SubmissionStatusEnum;
 import com.example.health.mapper.FormDataMapper;
 import com.example.health.mapper.NoticeMapper;
 import com.example.health.mapper.SubmissionMapper;
+import com.example.health.mapper.UserMapper;
 import com.example.health.pojo.dto.SubmissionDTO;
 import com.example.health.pojo.entity.FormDataDO;
 import com.example.health.pojo.entity.NoticeDO;
 import com.example.health.pojo.entity.SubmissionDO;
+import com.example.health.pojo.entity.UserDO;
 import com.example.health.pojo.vo.FormDataVO;
 import com.example.health.pojo.vo.SubmissionVO;
 import com.example.health.service.SubmissionService;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +52,11 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Resource
     private NoticeMapper noticeMapper;
 
+    /**
+     * 审核时，对用户健康状态进行赋值
+     */
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 新增表单提交记录（包含表单项数据）
@@ -93,7 +101,8 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     /**
-     * 更新表单提交记录（审核情况）及其表单项数据
+     * 更新表单提交记录（审核情况）及其表单项数据并发布通知（管理员）
+     * 如果是体检结果表，还会修改用户的健康状态
      *
      * @param submissionDTO 修改后的表单提交信息
      * @return 更新操作响应结果
@@ -107,6 +116,13 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .status(submissionDTO.getStatus())
                 .build();
         submissionMapper.update(submissionDO);
+        // 修改用户的健康状态（如果表单ID为1，即体检结果表时）
+        if(submissionDTO.getTemplateId() == 1) {
+            UserDO userDO = UserDO.builder()
+                    .userId(submissionDTO.getUserId())
+                    .healthStatus(submissionDTO.getHealthStatus()).build();
+            userMapper.updateUser(userDO);
+        }
         // 通知消息体
         String noticeMsg;
         SubmissionVO submission = submissionMapper.queryById(submissionDTO.getSubmissionId());
@@ -114,28 +130,44 @@ public class SubmissionServiceImpl implements SubmissionService {
         if(Objects.equals(submissionDTO.getStatus(), SubmissionStatusEnum.APPROVED.getCode())){
             // 获取
             List<String> itemNameList = submissionMapper.queryHealthMetricViolations(submissionDTO.getSubmissionId());
-            String healthMetricViolations = String.join(",", itemNameList);
+
+            noticeMsg = Optional.ofNullable(itemNameList)
+                    .filter(list -> !list.isEmpty())
+                    .map(list -> String.join(",", list))
+                    .map(healthMetricViolations ->
+                            String.format(
+                                    "亲爱的%s:%n  您于%s提交的%s已经审核通过。%n%n经系统检测，您的%s数值超出正常范围。为确保您的健康安全，建议：%n" +
+                                            "1. 核对填报数据是否准确%n" +
+                                            "2. 如数据无误，请及时咨询专业医师%n" +
+                                            "3. 关注相关健康指标变化%n%n" +
+                                            "祝您健康平安！",
+                                    submission.getUserName(),
+                                    submission.getSubmitTime().format(formatter),
+                                    submission.getTemplateName(),
+                                    healthMetricViolations
+                            )
+                    )
+                    .orElseGet(() ->
+                            String.format(
+                                    "亲爱的%s:%n  您于%s提交的%s已经审核通过。",
+                                    submission.getUserName(),
+                                    submission.getSubmitTime().format(formatter),
+                                    submission.getTemplateName()
+                            )
+                    );
+        } else {
             noticeMsg = String.format(
-                    "亲爱的%s:%n  您于%s提交的%s已经审核通过。%n%n经系统检测，您的%s数值超出正常范围。为确保您的健康安全，建议：%n" +
-                            "1. 核对填报数据是否准确%n" +
-                            "2. 如数据无误，请及时咨询专业医师%n" +
-                            "3. 关注相关健康指标变化%n%n" +
-                            "祝您健康平安！",
+                    "亲爱的%s:%n  您于%s提交的%s审核未通过，请正确填写表单。",
                     submission.getUserName(),
                     submission.getSubmitTime().format(formatter),
-                    submission.getTemplateName(),
-                    healthMetricViolations
-            );
-        } else {
-            noticeMsg = "亲爱的" + submission.getUserName() + ":\n  您于" + submission.getSubmitTime() + "提交的" +
-                    submission.getTemplateName() + "审核未通过，请正确填写表单。";
+                    submission.getTemplateName());
         }
         // 发送通知
         NoticeDO noticeDO = NoticeDO.builder()
                 .receiverId(submission.getUserId())
                 .read(ReadStatusEnum.UNREAD.getReadStatus())
                 .noticeCreateTime(LocalDateTime.now())
-                .noticeType(NoticeTypeEnum.HEALTH_ALERT.getNoticeTypeCode())
+                .noticeType(NoticeTypeEnum.FORM_ALERT.getNoticeTypeCode())
                 .noticeContent(noticeMsg).build();
 
         noticeMapper.insertNotice(noticeDO);
@@ -143,6 +175,12 @@ public class SubmissionServiceImpl implements SubmissionService {
         return ApiResponse.success("表单审核成功");
     }
 
+    /**
+     * 更新被退回的提交表单数据（用户）
+     *
+     * @param submissionDTO 修改后的表单提交信息
+     * @return 更新操作响应结果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ApiResponse<String> update(SubmissionDTO submissionDTO) {
@@ -152,7 +190,7 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .status(submissionDTO.getStatus())
                 .build();
         submissionMapper.update(submissionDO);
-        // 修改表单项数据
+        // 修改提交表单项数据
         List<FormDataDO> formDataDOList = submissionDTO.getFormDataList()
                 .stream().map(formDataDTO -> FormDataDO.builder()
                         .submissionId(submissionDO.getSubmissionId())

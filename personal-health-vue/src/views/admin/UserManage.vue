@@ -8,7 +8,7 @@
           size="small"
           style="width: 238px;margin-left: 5px;margin-right: 6px;"
           v-model="userQueryDto.userName"
-          placeholder="用户名"
+          placeholder="姓名"
           clearable
           @clear="handleFilterClear"
         >
@@ -51,26 +51,36 @@
         >
         </el-table-column>
         <el-table-column
-          prop="userId"
-          width="100"
-          label="用户ID"
-          :formatter="formatUserId"
+          prop="userAccount"
+          width="128"
+          label="工号"
         ></el-table-column>
         <el-table-column
           prop="userName"
           width="90"
-          label="名称"
+          label="姓名"
         ></el-table-column>
         <el-table-column
-          prop="userAccount"
+          prop="sex"
+          width="68"
+          label="性别"
+        ></el-table-column>
+        <el-table-column
+          prop="departmentName"
           width="128"
-          label="账号"
+          label="部门"
         ></el-table-column>
         <el-table-column
-          prop="userEmail"
-          width="218"
-          label="邮箱"
-        ></el-table-column>
+          prop="healthStatus"
+          width="128"
+          label="健康状况"
+        >
+          <template slot-scope="scope">
+            <el-tag :type="getHealthStatusTag(scope.row.healthStatus)">
+              {{ getHealthStatusName(scope.row.healthStatus) }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="userRole"
           width="98"
@@ -95,6 +105,7 @@
         <el-table-column
           label="操作"
           width="170"
+          fixed="right"
         >
           <template slot-scope="scope">
             <span
@@ -134,17 +145,29 @@
       </div>
       <div style="padding:0 20px;">
         <el-row>
-          <span class="dialog-hover">用户名</span>
+          <span class="dialog-hover">姓名</span>
           <input
             class="dialog-input"
             v-model="data.userName"
-            placeholder="用户名"
+            placeholder="姓名"
           />
-          <span class="dialog-hover">账号</span>
+          <span class="dialog-hover">工号</span>
           <input
             class="dialog-input"
             v-model="data.userAccount"
-            placeholder="账号"
+            placeholder="工号"
+          />
+          <span class="dialog-hover">性别</span>
+          <input
+            class="dialog-input"
+            v-model="data.sex"
+            placeholder="性别"
+          />
+          <span class="dialog-hover">部门</span>
+          <input
+            class="dialog-input"
+            v-model="data.departmentName"
+            placeholder="部门"
           />
           <span class="dialog-hover">邮箱</span>
           <input
@@ -215,7 +238,7 @@
         >
         </el-switch>
       </div>
-      
+
       <span
         slot="footer"
         class="dialog-footer"
@@ -283,18 +306,23 @@ export default {
           // ...是扩展运算符，其作用是将this.userQueryDto对象中的所有属性展开并合并到params对象中
           ...this.userQueryDto
         };
-        const response = await this.$axios.post(API.QUERY_USERLIST, params, {withCredentials: true});
+        const response = await this.$axios.post(API.QUERY_USERLIST, params, { withCredentials: true });
         const { data } = response;
-        this.tableData = data.data;
+        this.tableData = data.data.map(item => ({
+          ...item,
+          sex: item.sex === 1 ? '男' : '女', // 转换逻辑
+        }));
         this.totalItems = data.total;
       } catch (error) {
         console.error('查询用户信息异常:', error);
       }
     },
+    
     // 将 userId 格式化为 8 位，不足部分补零
     formatUserId (row, column, cellValue) {
       return String(cellValue).padStart(8, '0');
     },
+
     // 账号管理修改用户信息（角色、账号激活状态）
     comfirmStatus () {
       const userUpdateDto = {
@@ -302,7 +330,7 @@ export default {
         userRole: this.roleStatus ? 1 : 0,
         active: this.activeStatus
       }
-      this.$axios.post(API.UPDATE_USER, userUpdateDto, {withCredentials: true}).then(res => {
+      this.$axios.post(API.UPDATE_USER, userUpdateDto, { withCredentials: true }).then(res => {
         if (res.data.code === 200) {
           this.$notify({
             duration: 2000,
@@ -317,6 +345,7 @@ export default {
         console.log("修改状态异常：" + error);
       })
     },
+
     // 打开账号管理窗口
     handleStatus (data) {
       this.dialogStatusOperation = true;
@@ -324,11 +353,13 @@ export default {
       this.activeStatus = data.active;
       this.data = data;
     },
+
     // 多选框选中
     handleSelectionChange (selection) {
       this.selectedRows = selection;
       console.log(this.selectedRows);
     },
+
     // 批量删除用户数据
     async batchDelete () {
       if (!this.selectedRows.length) {
@@ -344,7 +375,7 @@ export default {
         try {
           console.log(this.selectedRows);
           let ids = this.selectedRows.map(entity => entity.userId);
-          const response = await this.$axios.post(API.DELETE_USERLIST, ids, {withCredentials: true});
+          const response = await this.$axios.post(API.DELETE_USERLIST, ids, { withCredentials: true });
           if (response.data.code === 200) {
             this.$notify({
               duration: 2000,
@@ -362,18 +393,21 @@ export default {
       }
     },
 
-    // 修改信息
+    // 修改用户信息
     async updateOperation () {
+      // 1. 密码处理（保持原逻辑）
       if (this.userPwd !== '' && this.userPwd !== null) {
-        console.log(this.userPwd)
         const pwd = this.$md5(this.$md5(this.userPwd));
         this.data.userPassword = pwd;
       } else {
         this.data.userPassword = null;
       }
-      console.log(this.data);
+      // 深拷贝原始数据，避免污染双向绑定的 this.data，并处理sex
+      const params = JSON.parse(JSON.stringify(this.data));
+      params.sex = this.sexToNumber(params.sex);
+      delete params.healthStatus;
       try {
-        const response = await this.$axios.post(API.UPDATE_USER, this.data, {withCredentials: true});
+        const response = await this.$axios.post(API.UPDATE_USER, params, { withCredentials: true });
         if (response.data.code === 200) {
           this.fetchFreshData();
           this.cannel();
@@ -389,6 +423,7 @@ export default {
         this.$message.error('提交失败，请稍后再试！');
       }
     },
+
     // 新增用户
     async addOperation () {
       if (this.userPwd !== '' && this.userPwd !== null) {
@@ -396,8 +431,11 @@ export default {
       } else {
         this.data.userPassword = null;
       }
+      // 深拷贝原始数据，避免污染双向绑定的 this.data，并处理sex
+      const params = JSON.parse(JSON.stringify(this.data));
+      params.sex = this.sexToNumber(params.sex);
       try {
-        const response = await this.$axios.post(API.INSERT_USER, this.data, {withCredentials: true});
+        const response = await this.$axios.post(API.INSERT_USER, params, { withCredentials: true });
         if (response.data.code === 200) {
           this.fetchFreshData();
           this.cannel();
@@ -413,6 +451,7 @@ export default {
         this.$message.error('提交失败，请稍后再试！');
       }
     },
+
     // 窗口消失，并清除文本框数据
     cannel () {
       this.dialogStatusOperation = false;
@@ -423,38 +462,45 @@ export default {
         this.clearText();
       }, 200);
     },
+
     // 清除弹窗文本数据
     clearText () {
       this.userPwd = '';
       this.data = {};
     },
+
     // 弹出添加用户窗口
     add () {
       this.clearText();
       this.isOperation = false;
       this.dialogUserOperaion = true;
     },
+
     // 查询用户名重置页数和数据
     handleFilter () {
       this.currentPage = 1;
       this.fetchFreshData();
     },
+
     // 清除查询框，并重新查询所有数据
     handleFilterClear () {
       this.filterText = '';
       this.handleFilter();
     },
+    
     // 修改每页的size，并将页数与数据重置
     handleSizeChange (val) {
       this.pageSize = val;
       this.currentPage = 1;
       this.fetchFreshData();
     },
+
     // 切换到指定页码
     handleCurrentChange (val) {
       this.currentPage = val;
       this.fetchFreshData();
     },
+
     // 编辑点击事件
     handleEdit (row) {
       // 弹窗标题设置为‘修改用户信息’
@@ -466,6 +512,7 @@ export default {
       // 显示其他密码
       this.data = { ...row }
     },
+
     // 删除单个用户
     async handleDelete (row) {
       const confirmed = await this.$swalConfirm({
@@ -476,7 +523,7 @@ export default {
       if (confirmed) {
         try {
           let ids = [row.userId];
-          const response = await this.$axios.post(API.DELETE_USERLIST, ids, {withCredentials: true});
+          const response = await this.$axios.post(API.DELETE_USERLIST, ids, { withCredentials: true });
           if (response.data.code === 200) {
             this.$notify({
               duration: 2000,
@@ -493,6 +540,37 @@ export default {
         }
       }
     },
+
+    // 性别中文 → 数字的转换方法
+    sexToNumber (sexText) {
+      return sexText === '男' ? 1 : 0;
+    },
+
+    // 获取健康状况对应的标签类型
+    getHealthStatusTag (status) {
+      switch (status) {
+        case 0: return 'info';      // 未知 - 灰色
+        case 1: return 'success';   // 未见异常 - 绿色
+        case 2: return 'warning';   // 疑似职业病 - 黄色
+        case 3: return 'danger';    // 职业禁忌病 - 红色
+        case 4: return '';          // 其他疾患 - 默认色
+        case 5: return 'danger';    // 职业病 - 红色
+        default: return '';
+      }
+    },
+
+    // 获取健康状况对应的文本名称
+    getHealthStatusName (status) {
+      const statusMap = {
+        0: '未知',
+        1: '未见异常',
+        2: '疑似职业病',
+        3: '职业禁忌病',
+        4: '其他疾患',
+        5: '职业病'
+      };
+      return statusMap[status] || '未知';
+    }
   },
 };
 </script>

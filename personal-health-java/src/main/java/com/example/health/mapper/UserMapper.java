@@ -2,6 +2,7 @@ package com.example.health.mapper;
 
 import com.example.health.pojo.dto.query.extend.UserQueryDTO;
 import com.example.health.pojo.entity.UserDO;
+import com.example.health.pojo.vo.HealthStatusStatisticsVO;
 import com.example.health.pojo.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -58,4 +59,9 @@ public interface UserMapper {
      * @return 符合图条件的用户记录数
      */
     int queryCount(UserQueryDTO userQueryDTO);
+
+    /**
+     * 获取健康状态码及每个健康状态下的用户数
+     */
+    List<HealthStatusStatisticsVO> queryHealthStatusStatistics();
 }

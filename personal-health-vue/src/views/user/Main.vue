@@ -33,13 +33,13 @@
       <el-row style="padding: 10px 20px 20px 20px;">
         <el-row>
           <p style="font-size: 12px;padding: 3px 0;">
-            <span class="modelName">*账号</span>
+            <span class="modelName">*工号</span>
           </p>
           <input
             class="modelInput"
             type="text"
             v-model="data.account"
-            placeholder="用户名"
+            placeholder="工号"
           >
         </el-row>
         <el-row>
@@ -51,6 +51,28 @@
             type="text"
             v-model="data.name"
             placeholder="用户名"
+          >
+        </el-row>
+        <el-row>
+          <p style="font-size: 12px;padding: 3px 0;">
+            <span class="modelName">*性别</span>
+          </p>
+          <input
+            class="modelInput"
+            type="text"
+            v-model="data.sex"
+            placeholder="性别"
+          >
+        </el-row>
+        <el-row>
+          <p style="font-size: 12px;padding: 3px 0;">
+            <span class="modelName">*部门</span>
+          </p>
+          <input
+            class="modelInput"
+            type="text"
+            v-model="data.departmentName"
+            placeholder="部门"
           >
         </el-row>
         <el-row>
@@ -200,7 +222,9 @@ export default {
           userId: this.userInfo.userId,
           userAccount: this.data.account,
           userName: this.data.name,
-          userEmail: this.data.email
+          userEmail: this.data.email,
+          sex: this.data.sex,
+          departmentName: this.data.departmentName
         }
         const resposne = await this.$axios.post(API.UPDATE_USER, userUpdateDTO, { withCredentials: true });
         const { data } = resposne;
@@ -313,7 +337,8 @@ export default {
           this.$router.push('/login');
           return;
         }
-        const { userId, userAccount, userName, userRole, userEmail } = res.data.data;
+        const { userId, userAccount, userName, userRole, userEmail, sex: sexCode, departmentName } = res.data.data;
+        const sex = sexCode === 1 ? '男' : '女';
         // 将用户信息存储起来
         sessionStorage.setItem('userInfo', JSON.stringify(res.data.data));
         this.userInfo = {
@@ -321,7 +346,9 @@ export default {
           account: userAccount,
           name: userName,
           role: userRole,
-          email: userEmail
+          email: userEmail,
+          sex: sex,
+          departmentName: departmentName
         };
         this.data = { ...this.userInfo };
         // 根据角色解析路由

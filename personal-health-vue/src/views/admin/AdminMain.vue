@@ -54,7 +54,7 @@
       <el-col :span="8">
         <div style="padding: 0px 5px;box-sizing: border-box;">
           <div class="card-header">
-            <h3>文章标签分布</h3>
+            <h3>健康看板</h3>
           </div>
           <PieChart
             fontColor="rgb(51,51,51)"
@@ -89,19 +89,29 @@ const API = {
   ARTICLE_TREND: '/article/queryTrend',
   NUMBER_USER: 'user/queryUsers',
   NUMBER_ARTICLE: 'article/queryArticles',
-  NUMBER_METRIC: 'metric/queryMetrics'
+  NUMBER_METRIC: 'metric/queryMetrics',
+  HEALTHSTATUS_COUNT: 'user/getHealthStatusStatistics'
 };
 export default {
   components: { LineChart, PieChart },
   data () {
     return {
-      tagValues: [], // 饼图数据：文章数量
-      tagTypes: [], // 饼图数据：文章标签
+      tagValues: [], // 饼图数据
+      tagTypes: [], // 饼图数据
       articleValues: [], // 折线图数据：文章数量
       articleDates: [], // 折线图数据：日期
       userCount: 0, // 用户数
       articleCount: 0, // 文章数
-      healthMetricCount: 0 // 健康指标数
+      healthMetricCount: 0, // 健康指标数
+      // 健康状态映射表
+      healthStatusMap: {
+        0: '未知',
+        1: '未见异常',
+        2: '疑似职业病',
+        3: '职业禁忌病',
+        4: '其他疾患',
+        5: '职业病'
+      },
     }
   },
   created () {
@@ -112,12 +122,12 @@ export default {
   methods: {
     // 加载加载饼图
     loadPieCharts () {
-      this.$axios.get(API.ARTICLE_TAGS, {withCredentials: true})
+      this.$axios.get(API.HEALTHSTATUS_COUNT, { withCredentials: true })
         .then(response => {
           const { data } = response;
           if (data.code === 200) {
-            this.tagValues = data.data.map(entity => entity.articleCount);
-            this.tagTypes = data.data.map(entity => entity.tagName);
+            this.tagValues = data.data.map(item => item.count);
+            this.tagTypes = data.data.map(item => this.healthStatusMap[item.healthStatus] || '其他');
           }
         })
         .catch(error => {
@@ -127,7 +137,7 @@ export default {
     },
     // 加载折线图数据（文章数量趋势）
     articleDatesSelected () {
-      this.$axios.get(API.ARTICLE_TREND, {withCredentials: true})
+      this.$axios.get(API.ARTICLE_TREND, { withCredentials: true })
         .then(response => {
           const { data } = response;
           if (data.code === 200) {
@@ -143,7 +153,7 @@ export default {
     // 加载统计数据（用户数、文章数、健康指标数）
     loadStatistics () {
       // 用户数
-      this.$axios.post(API.NUMBER_USER, { userName: '' }, {withCredentials: true})
+      this.$axios.post(API.NUMBER_USER, { userName: '' }, { withCredentials: true })
         .then(response => {
           const { data } = response;
           if (data.code === 200) {
@@ -155,7 +165,7 @@ export default {
           this.$message.error('加载用户数量数据失败，请重试！');
         });
       // 文章数 
-      this.$axios.post(API.NUMBER_ARTICLE, { healthArticleTitle: '' }, {withCredentials: true})
+      this.$axios.post(API.NUMBER_ARTICLE, { healthArticleTitle: '' }, { withCredentials: true })
         .then(response => {
           const { data } = response;
           if (data.code === 200) {
@@ -167,7 +177,7 @@ export default {
           this.$message.error('加载用户数量数据失败，请重试！');
         });
       // 健康指标数
-      this.$axios.post(API.NUMBER_METRIC, { healthMetricName: '' }, {withCredentials: true})
+      this.$axios.post(API.NUMBER_METRIC, { healthMetricName: '' }, { withCredentials: true })
         .then(response => {
           const { data } = response;
           if (data.code === 200) {

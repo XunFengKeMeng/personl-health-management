@@ -11,9 +11,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum NoticeTypeEnum {
-    HEALTH_ALERT(1, "健康指标异常提示"),
+    FORM_ALERT(1, "表单提示"),
     ACTIVITY_NOTICE(2, "活动提示"),
     VERSION_UPDATE(3, "版本更新提示");
+
 
     /**
      * 响应状态码

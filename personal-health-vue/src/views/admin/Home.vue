@@ -41,7 +41,7 @@
     <el-dialog
       :show-close="false"
       :visible.sync="dialogOperaion"
-      width="26%"
+      width="30%"
     >
       <div
         slot="title"
@@ -52,12 +52,12 @@
       <el-row style="padding: 10px 20px 20px 20px;">
         <el-row>
           <p style="font-size: 12px;padding: 3px 0;">
-            <span class="modelName">*账号</span>
+            <span class="modelName">*工号</span>
           </p>
           <input
-            class="input-title"
+            class="modelInput"
             v-model="userInfo.account"
-            placeholder="账号"
+            placeholder="工号"
           >
         </el-row>
         <el-row>
@@ -65,9 +65,31 @@
             <span class="modelName">*用户名</span>
           </p>
           <input
-            class="input-title"
+            class="modelInput"
             v-model="userInfo.name"
             placeholder="用户名"
+          >
+        </el-row>
+        <el-row>
+          <p style="font-size: 12px;padding: 3px 0;">
+            <span class="modelName">*性别</span>
+          </p>
+          <input
+            class="modelInput"
+            type="text"
+            v-model="userInfo.sex"
+            placeholder="性别"
+          >
+        </el-row>
+        <el-row>
+          <p style="font-size: 12px;padding: 3px 0;">
+            <span class="modelName">*部门</span>
+          </p>
+          <input
+            class="modelInput"
+            type="text"
+            v-model="userInfo.departmentName"
+            placeholder="部门"
           >
         </el-row>
         <el-row>
@@ -75,7 +97,7 @@
             <span class="modelName">*邮箱</span>
           </p>
           <input
-            class="input-title"
+            class="modelInput"
             v-model="userInfo.email"
             placeholder="邮箱"
           >
@@ -199,8 +221,9 @@ export default {
           return;
         }
         // 用户信息赋值
-        const { userId: id, userName: name, userRole: role, userEmail: email, userAccount: account } = res.data.data;
-        this.userInfo = { id, name, role, email, account };
+        const { userId: id, userName: name, userRole: role, userEmail: email, userAccount: account, sex: sexCode, departmentName } = res.data.data;
+        const sex = sexCode === 1 ? '男' : '女';
+        this.userInfo = { id, name, role, email, account, sex, departmentName };
         // 根据角色解析路由
         const rolePath = role === 1 ? '/admin' : '/user';
         const targetMenu = router.options.routes.find(route => route.path === rolePath);
@@ -223,7 +246,7 @@ export default {
           userName: this.userInfo.name,
           userEmail: this.userInfo.email
         }
-        const resposne = await this.$axios.post(`/user/updateSelf`, userUpdateDTO, {withCredentials: true});
+        const resposne = await this.$axios.post(`/user/updateSelf`, userUpdateDTO, { withCredentials: true });
         const { data } = resposne;
         if (data.code === 200) {
           this.dialogOperaion = false;
@@ -303,6 +326,13 @@ export default {
       padding: 5px;
       overflow-y: auto;
     }
+  }
+  .modelInput {
+    outline: none;
+    border: none;
+    font-size: 22px;
+    width: 90%;
+    font-weight: 800;
   }
 }
 </style>

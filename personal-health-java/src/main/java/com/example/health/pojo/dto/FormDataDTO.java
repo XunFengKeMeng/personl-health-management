@@ -26,4 +26,9 @@ public class FormDataDTO {
      * 用户输入值
      */
     private String value;
+
+    /**
+     * 表单项样式（0文本框1文件上传）
+     */
+    private Integer style;
 }

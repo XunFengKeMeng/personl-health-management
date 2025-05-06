@@ -47,11 +47,20 @@
                fic.item_name,
                fic.is_required,
                fd.value,
-               tir.sort_order
+               tir.sort_order,
+               fic.style
         FROM form_data fd
         LEFT JOIN template_item_relation tir on tir.template_id = #{tid} AND tir.item_id = fd.item_id
         LEFT JOIN form_item_config fic on fic.item_id = fd.item_id
         WHERE fd.submission_id = #{sid}
+    </select>
+
+    <!--  获取上传文件的URL  -->
+    <select id="getFileUrl" resultType="string">
+        SELECT fd.value
+        FROM form_data fd
+        LEFT JOIN form_item_config fic on fic.item_id = fd.item_id
+        WHERE fic.style = 1 AND fd.submission_id = #{sid}
     </select>
 
     <!--  提交表单项数据视图对象映射  -->
@@ -63,5 +72,6 @@
         <result column="is_required" property="required"/>
         <result column="value" property="value"/>
         <result column="sort_order" property="sortOrder"/>
+        <result column="style" property="style"/>
     </resultMap>
 </mapper>

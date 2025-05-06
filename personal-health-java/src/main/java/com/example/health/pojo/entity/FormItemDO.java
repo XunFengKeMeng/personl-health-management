@@ -42,4 +42,9 @@ public class FormItemDO implements Serializable {
      * 是否必填
      */
     private Boolean required;
+
+    /**
+     * 表单项样式（0文本框1文件上传）
+     */
+    private Integer style;
 }

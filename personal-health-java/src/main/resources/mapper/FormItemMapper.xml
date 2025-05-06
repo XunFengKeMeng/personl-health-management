@@ -7,11 +7,13 @@
         INSERT INTO form_item_config(item_name,
                                      health_metric_id,
                                      placeholder,
-                                     is_required)
+                                     is_required,
+                                     style)
         VALUES (#{itemName},
                 #{healthMetricId},
                 #{placeholder},
-                #{required})
+                #{required},
+                #{style})
     </insert>
 
     <!--  批量删除表单项  -->
@@ -36,7 +38,10 @@
                 placeholder = #{placeholder},
             </if>
             <if test="required != null">
-                is_required = #{required}
+                is_required = #{required},
+            </if>
+            <if test="style != null">
+                style = #{style},
             </if>
         </set>
         WHERE item_id = #{itemId}
@@ -48,7 +53,8 @@
                i.item_name,
                h.health_metric_name,
                i.placeholder,
-               i.is_required
+               i.is_required,
+               i.style
         FROM form_item_config i
         LEFT JOIN health_metric h ON h.health_metric_id = i.health_metric_id
         <where>
@@ -80,5 +86,6 @@
         <result column="health_metric_name" property="healthMetricName"/>
         <result column="placeholder" property="placeholder"/>
         <result column="is_required" property="required"/>
+        <result column="style" property="style"/>
     </resultMap>
 </mapper>

@@ -52,4 +52,9 @@ public class FormDataVO implements Serializable {
      * 表单项排序号
      */
     private Integer sortOrder;
+
+    /**
+     * 表单项样式（0文本框1文件上传）
+     */
+    private Integer style;
 }

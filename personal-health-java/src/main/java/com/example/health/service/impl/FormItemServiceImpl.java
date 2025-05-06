@@ -36,7 +36,8 @@ public class FormItemServiceImpl implements FormItemService {
                 .itemName(formItemDTO.getItemName())
                 .healthMetricId(formItemDTO.getHealthMetricId())
                 .placeholder(formItemDTO.getPlaceholder())
-                .required(formItemDTO.getRequired()).build();
+                .required(formItemDTO.getRequired())
+                .style(formItemDTO.getStyle()).build();
         formItemMapper.saveFormItem(formItemDO);
         return ApiResponse.success("表单项新增成功");
     }
@@ -66,7 +67,8 @@ public class FormItemServiceImpl implements FormItemService {
                 .itemName(formItemDTO.getItemName())
                 .healthMetricId(formItemDTO.getHealthMetricId())
                 .placeholder(formItemDTO.getPlaceholder())
-                .required(formItemDTO.getRequired()).build();
+                .required(formItemDTO.getRequired())
+                .style(formItemDTO.getStyle()).build();
         formItemMapper.updateFormItem(formItemDO);
         return ApiResponse.success("表单项信息更新成功");
     }

@@ -45,4 +45,12 @@ public interface FormDataMapper {
     List<FormDataVO> queryBySubmissionId(
             @Param("sid") Integer submissionId,
             @Param("tid") Integer templateId);
+
+    /**
+     * 查询提交表单中上传文件存储的URL
+     *
+     * @param submissionId 待查询的提交表单ID
+     * @return 空/上传文件存储的URL
+     */
+    String getFileUrl(Integer submissionId);
 }

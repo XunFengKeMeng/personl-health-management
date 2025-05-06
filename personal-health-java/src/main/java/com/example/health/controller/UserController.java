@@ -6,6 +6,7 @@ import com.example.health.pojo.dto.update.UserLoginDTO;
 import com.example.health.pojo.dto.update.UserRegisterDTO;
 import com.example.health.pojo.dto.update.UserUpdateDTO;
 import com.example.health.pojo.entity.UserDO;
+import com.example.health.pojo.vo.HealthStatusStatisticsVO;
 import com.example.health.pojo.vo.UserVO;
 import com.example.health.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -153,5 +154,15 @@ public class UserController {
     @ResponseBody
     public ApiResponse<UserVO> getByUserId(@PathVariable Integer userId) {
         return userService.getByUserId(userId);
+    }
+
+    /**
+     * 获取健康状态码及每个健康状态下的用户数
+     */
+    @GetMapping(value = "/getHealthStatusStatistics")
+    @ResponseBody
+    @RequiresRoles("admin")
+    public ApiResponse<List<HealthStatusStatisticsVO>> getHealthStatusStatistics() {
+        return userService.getHealthStatusStatistics();
     }
 }

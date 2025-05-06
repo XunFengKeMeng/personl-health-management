@@ -42,5 +42,10 @@ mybatis:
 jwt:
   secret-key: "d8c986df-8512-42b5-906f-eeea9b3acf86"  # JWT 密钥
   expiration-time: 604800000  # JWT 有效期（7 天，单位：毫秒）
-
-
+# 文件存储配置
+file:
+  local-path: E:/myProject/personl-health-management/file/  # 本地存储路径
+  url-prefix: /file/  # 对外暴露的URL前缀
+# 指定定静态资源的存放路径
+resources:
+  static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${file.url-prefix}

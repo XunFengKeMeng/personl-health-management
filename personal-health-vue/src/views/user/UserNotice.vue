@@ -284,7 +284,7 @@ export default {
     // 获取通知类型文本
     getTypeText (type) {
       switch (parseInt(type)) {
-        case 1: return '健康指标异常';
+        case 1: return '表单提示';
         case 2: return '活动提示';
         case 3: return '版本更新';
         default: return '其他通知';

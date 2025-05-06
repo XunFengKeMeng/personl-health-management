@@ -39,7 +39,8 @@
                c.item_name,
                c.placeholder,
                c.is_required,
-               r.sort_order
+               r.sort_order,
+               c.style
         FROM template_item_relation r
         LEFT JOIN form_item_config c ON c.item_id = r.item_id
         WHERE r.template_id = #{templateId}
@@ -52,5 +53,6 @@
         <result column="placeholder" property="placeholder"/>
         <result column="is_required" property="required"/>
         <result column="sort_order" property="sortOrder"/>
+        <result column="style" property="style"/>
     </resultMap>
 </mapper>

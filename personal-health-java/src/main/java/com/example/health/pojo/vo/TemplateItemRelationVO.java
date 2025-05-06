@@ -42,4 +42,9 @@ public class TemplateItemRelationVO implements Serializable {
      * 表单项排序号
      */
     private Integer sortOrder;
+
+    /**
+     * 表单项样式
+     */
+    private Integer style;
 }
